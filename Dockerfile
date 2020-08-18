@@ -4,14 +4,14 @@ FROM ubuntu:18.04
 # metadata
 LABEL base_image="ubuntu:18.04"
 LABEL version="1.0.0"
-LABEL software="{software name}"
+LABEL software="gillespy2"
 LABEL software.version="{software verson}"
-LABEL about.summary="{software description}"
-LABEL about.home="{software URL}"
-LABEL about.documentation="{software documentation URL}"
-LABEL about.license_file="{software license URL}"
-LABEL about.license="{SPDX license id (e.g., SPDX:MIT)}"
-LABEL about.tags="{comma-separated list of tags}"
+LABEL about.summary="GillesPy2 is a Python 3 package for stochastic simulation of biochemical systems"
+LABEL about.home="https://github.com/GillesPy2/GillesPy2"
+LABEL about.documentation="https://gillespy2.github.io/GillesPy2/https://gillespy2.github.io/GillesPy2/"
+LABEL about.license_file="https://raw.githubusercontent.com/GillesPy2/GillesPy2/main/LICENSE"
+LABEL about.license="SPDX:GPL-3.0-or-later"
+LABEL about.tags="systems biology,SBML,SED-ML,COMBINE,OMEX"
 LABEL extra.identifiers.biotools="{bio.tools id}"
 LABEL maintainer="{Name} <{email}>"
 
@@ -26,9 +26,9 @@ RUN apt-get update -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy code for command-line interface into image and install it
-COPY . /root/{my_simulator}
-RUN pip3 install /root/{my_simulator}
+COPY . /root/biosimulations_gillespy2
+RUN pip3 install /root/biosimulations_gillespy2
 
 # Entrypoint
-ENTRYPOINT ["{my-simulator}"]
+ENTRYPOINT ["biosimulations_gillespy2"]
 CMD []

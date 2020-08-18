@@ -1,13 +1,13 @@
-""" BioSimulations-compliant command-line interface to the `MySimulator <https://url.for.my.simulator>`_ simulation program.
+""" BioSimulations-compliant command-line interface to the `Gillespy2 <https://github.com/GillesPy2/GillesPy2>`_ simulation program.
 
-:Author: Author name <email@organization>
-:Date: YYYY-MM-DD
-:Copyright: YYYY, Owner
-:License: <License, e.g., MIT>
+:Author: Bilal Shaikj <bilalshaikh42@gmail.com>
+:Date: 2020-08-18
+:Copyright: 2020, Biosimulations Developers
+:License: MIT
 """
 
 from .core import exec_combine_archive
-import my_simulator
+import biosimulations_gillespy2
 import cement
 
 
@@ -17,8 +17,8 @@ class BaseController(cement.Controller):
     class Meta:
         label = 'base'
         description = ("BioSimulations-compliant command-line interface to the "
-                       "<MySimulator> simulation program <https://url.for.my.simulator>.")
-        help = "<my-simulator>"
+                       "<Gillespy2> simulation program <https://github.com/GillesPy2/GillesPy2>.")
+        help = "biosimulations_gillespy2"
         arguments = [
             (['-i', '--archive'], dict(type=str,
                                        required=True,
@@ -27,7 +27,7 @@ class BaseController(cement.Controller):
                                        default='.',
                                        help='Directory to save outputs')),
             (['-v', '--version'], dict(action='version',
-                                       version=my_simulator.__version__)),
+                                       version=biosimulations_gillespy2.__version__)),
         ]
 
     @cement.ex(hide=True)
@@ -39,7 +39,7 @@ class BaseController(cement.Controller):
 class App(cement.App):
     """ Command line application """
     class Meta:
-        label = '<my-simulator>'
+        label = 'biosimulations_gillespy2'
         base_controller = 'base'
         handlers = [
             BaseController,

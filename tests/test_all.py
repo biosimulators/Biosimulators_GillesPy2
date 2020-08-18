@@ -6,9 +6,9 @@
 :License: <License, e.g., MIT>
 """
 
-from Biosimulations_utils.simulator.testing import SbmlSedmlCombineSimulatorValidator
-from my_simulator import __main__
-import my_simulator
+from Biosimulations_utils.simulator.testing import SimulatorValidator
+from biosimulations_gillespy2 import __main__
+import biosimulations_gillespy2
 import capturer
 import docker
 import os
@@ -38,14 +38,14 @@ class CliTestCase(unittest.TestCase):
             with capturer.CaptureOutput(merged=False, relay=False) as captured:
                 with self.assertRaises(SystemExit):
                     app.run()
-                self.assertIn(my_simulator.__version__, captured.stdout.get_text())
+                self.assertIn(biosimulations_gillespy2.__version__, captured.stdout.get_text())
                 self.assertEqual(captured.stderr.get_text(), '')
 
         with __main__.App(argv=['--version']) as app:
             with capturer.CaptureOutput(merged=False, relay=False) as captured:
                 with self.assertRaises(SystemExit):
                     app.run()
-                self.assertIn(my_simulator.__version__, captured.stdout.get_text())
+                self.assertIn(biosimulations_gillespy2.__version__, captured.stdout.get_text())
                 self.assertEqual(captured.stderr.get_text(), '')
 
     def test_sim_short_arg_names(self):
@@ -81,7 +81,8 @@ class CliTestCase(unittest.TestCase):
 
         # run image
         docker_client.containers.run(
-            self.DOCKER_IMAGE
+            image=self.DOCKER_IMAGE,
+            command=['-i', '/root/in/' + os.path.basename(self.EXAMPLE_ARCHIVE_FILENAME), '-o', '/root/out'],
             volumes={
                 in_dir: {
                     'bind': '/root/in',
@@ -92,7 +93,6 @@ class CliTestCase(unittest.TestCase):
                     'mode': 'rw',
                 }
             },
-            command=['-i', '/root/in/' + os.path.basename(self.EXAMPLE_ARCHIVE_FILENAME), '-o', '/root/out'],
             tty=True,
             remove=True)
 
@@ -116,5 +116,5 @@ class CliTestCase(unittest.TestCase):
                 PyPDF2.PdfFileReader(file)
 
     def test_validator(self):
-        validator = SbmlSedmlCombineSimulatorValidator()
+        validator = SimulatorValidator()
         validator.run(self.DOCKER_IMAGE)

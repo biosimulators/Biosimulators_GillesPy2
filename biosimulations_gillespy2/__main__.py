@@ -1,6 +1,6 @@
 """ BioSimulations-compliant command-line interface to the `Gillespy2 <https://github.com/GillesPy2/GillesPy2>`_ simulation program.
 
-:Author: Bilal Shaikj <bilalshaikh42@gmail.com>
+:Author: Bilal Shaikh <bilalshaikh42@gmail.com>
 :Date: 2020-08-18
 :Copyright: 2020, Biosimulations Developers
 :License: MIT

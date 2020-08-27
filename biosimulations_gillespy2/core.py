@@ -148,12 +148,26 @@ def exec_simulation(model_filename, model_sed_urn, simulation, working_dir, out_
     # beginning at `simulation.output_start_time` to `out_filename` in `out_format` format.
     # This should save all of the variables specified by `simulation.model.variables`.
 
-    results = model.run(solver, **solver_params)
+    full_results = model.run(solver, **solver_params)
+    results = []
     print(simulation.model.variables)
     for variable in simulation.model.variables:
         target = variable.target
-        print(target)
-    print(results)
+        # TODO check if other target types are possible
+        target = target.split("@id=")[1][:-1]
+
+        # TODO determine how to handle ensembles, combine files
+    if (out_format == "csv"):
+        print(out_filename)
+        out_filename = out_filename.split("/")
+        filename = out_filename[-1].split(".")[0]
+        print(filename)
+        path = out_filename[:-1]
+        path = "/".join(path)
+        print(path)
+        full_results.to_csv(path=path, nametag=filename, stamp="")
+    else:
+        raise ValueError(out_format)
 
 
 if __name__ == "__main__":

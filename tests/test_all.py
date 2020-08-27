@@ -99,17 +99,18 @@ class CliTestCase(unittest.TestCase):
         self.assert_outputs_created(out_dir)
 
     def assert_outputs_created(self, dirname):
-        self.assertEqual(set(os.listdir(dirname)), set(['ex1', 'ex2']))
-        self.assertEqual(set(os.listdir(os.path.join(dirname, 'ex1'))), set(['BIOMD0000000297']))
-        self.assertEqual(set(os.listdir(os.path.join(dirname, 'ex2'))), set(['BIOMD0000000297']))
-        self.assertEqual(set(os.listdir(os.path.join(dirname, 'ex1', 'BIOMD0000000297'))), set(['plot_1_task1.pdf', 'plot_3_task1.pdf']))
-        self.assertEqual(set(os.listdir(os.path.join(dirname, 'ex2', 'BIOMD0000000297'))), set(['plot_1_task1.pdf', 'plot_3_task1.pdf']))
+        name = "BIOMD0000000297"
+        self.assertEqual(set(os.listdir(dirname)), set(['ex1', 'ex2']))        
+        self.assertEqual(set(os.listdir(os.path.join(dirname, 'ex1'))), set([name]))
+        self.assertEqual(set(os.listdir(os.path.join(dirname, 'ex2'))), set([name]))
+        self.assertEqual(set(os.listdir(os.path.join(dirname, 'ex1', name))), set(['plot_1_task1.pdf', 'plot_3_task1.pdf']))
+        self.assertEqual(set(os.listdir(os.path.join(dirname, 'ex2', name))), set(['plot_1_task1.pdf', 'plot_3_task1.pdf']))
 
         files = [
-            os.path.join(dirname, 'ex1', 'BIOMD0000000297', 'plot_1_task1.pdf'),
-            os.path.join(dirname, 'ex1', 'BIOMD0000000297', 'plot_3_task1.pdf'),
-            os.path.join(dirname, 'ex2', 'BIOMD0000000297', 'plot_1_task1.pdf'),
-            os.path.join(dirname, 'ex2', 'BIOMD0000000297', 'plot_3_task1.pdf'),
+            os.path.join(dirname, 'ex1', name, 'plot_1_task1.pdf'),
+            os.path.join(dirname, 'ex1', name, 'plot_3_task1.pdf'),
+            os.path.join(dirname, 'ex2', name, 'plot_1_task1.pdf'),
+            os.path.join(dirname, 'ex2', name, 'plot_3_task1.pdf'),
         ]
         for file in files:
             with open(file, 'rb') as file:

@@ -1,4 +1,4 @@
-""" BioSimulations-compliant command-line interface to the `Gillespy2 <https://github.com/GillesPy2/GillesPy2>`_ simulation program.
+""" BioSimulators-compliant command-line interface to the `Gillespy2 <https://github.com/GillesPy2/GillesPy2>`_ simulation program.
 
 :Author: Bilal Shaikh <bilalshaikh42@gmail.com>
 :Date: 2020-08-18
@@ -7,7 +7,7 @@
 """
 
 from .core import exec_combine_archive
-import biosimulations_gillespy2
+import Biosimulators_gillespy2
 import cement
 
 
@@ -16,9 +16,9 @@ class BaseController(cement.Controller):
 
     class Meta:
         label = 'base'
-        description = ("BioSimulations-compliant command-line interface to the "
+        description = ("BioSimulators-compliant command-line interface to the "
                        "<Gillespy2> simulation program <https://github.com/GillesPy2/GillesPy2>.")
-        help = "biosimulations_gillespy2"
+        help = "gillespy2"
         arguments = [
             (['-i', '--archive'], dict(type=str,
                                        required=True,
@@ -27,7 +27,7 @@ class BaseController(cement.Controller):
                                        default='.',
                                        help='Directory to save outputs')),
             (['-v', '--version'], dict(action='version',
-                                       version=biosimulations_gillespy2.__version__)),
+                                       version=Biosimulators_gillespy2.__version__)),
         ]
 
     @cement.ex(hide=True)
@@ -39,7 +39,7 @@ class BaseController(cement.Controller):
 class App(cement.App):
     """ Command line application """
     class Meta:
-        label = 'biosimulations_gillespy2'
+        label = 'gillespy2'
         base_controller = 'base'
         handlers = [
             BaseController,

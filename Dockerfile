@@ -11,7 +11,7 @@ LABEL about.home="https://github.com/GillesPy2/GillesPy2"
 LABEL about.documentation="https://gillespy2.github.io/GillesPy2/https://gillespy2.github.io/GillesPy2/"
 LABEL about.license_file="https://raw.githubusercontent.com/GillesPy2/GillesPy2/main/LICENSE"
 LABEL about.license="SPDX:GPL-3.0-or-later"
-LABEL about.tags="systems biology,SBML,SED-ML,COMBINE,OMEX"
+LABEL about.tags="systems biology,biochemical networks,dynamical modeling,stochastic simulation,SBML,SED-ML,COMBINE,OMEX,BioSimulators"
 LABEL extra.identifiers.biotools="{bio.tools id}"
 LABEL maintainer="{Name} <{email}>"
 
@@ -26,9 +26,9 @@ RUN apt-get update -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy code for command-line interface into image and install it
-COPY . /root/biosimulations_gillespy2
-RUN pip3 install /root/biosimulations_gillespy2
+COPY . /root/Biosimulators_gillespy2
+RUN pip3 install /root/Biosimulators_gillespy2
 
 # Entrypoint
-ENTRYPOINT ["biosimulations_gillespy2"]
+ENTRYPOINT ["gillespy2"]
 CMD []

@@ -13,7 +13,9 @@ from gillespy2.sbml import SBMLimport
 from gillespy2 import TauHybridSolver
 
 __all__ = ['exec_combine_archive', 'exec_simulation']
-
+algorithm_map={
+    
+}
 class InputError(Exception):
     def __init__(self, expression, message):
         self.expression = expression
@@ -52,16 +54,26 @@ def exec_simulation(model_filename, model_sed_urn, simulation, working_dir, out_
     file_name=os.path.join(working_dir,model_filename)
     
     # Create a gilespy model
-    model= SBMLimport.convert(file_name,"simulation.model.name")[0]
+    model= SBMLimport.convert(file_name,simulation.model.name)[0]
     if(model is None):
         raise InputError(expression="model", message=model[1])
     
     # Apply the model parameter changes specified by `simulation.model_parameter_changes`
-    parameters= model.get_all_parameters()
-    print(parameters)
-    print(model.timespan)
+    if(simulation.model_parameter_changes):
+
+        for change in simulation.model_parameter_changes:
+            target= change.parameter.target
+            target=target.split(".")[1]
+            # TODO see if this cast should be handled by utils. The value is set as an expression
+            value= str(change.value)
+            model.set_parameter(target,value)
+
+
 
     # Load the algorithm specified by `simulation.algorithm`
+    algorithm_id= simulation.algorithm.kisao_term.id
+    algorithm= algorithm_map.get(algorithm_id)
+    
 
     # Apply the algorithm parameter changes specified by `simulation.algorithm_parameter_changes`
 
@@ -73,6 +85,7 @@ def exec_simulation(model_filename, model_sed_urn, simulation, working_dir, out_
 
     results = model.run(TauHybridSolver)
     print(results)
+    
 if __name__ == "__main__":
   
     exec_simulation("tests/fixtures/BIOMD0000000028.xml", "urn:sedml:language:sbml", "simulation","", "","")

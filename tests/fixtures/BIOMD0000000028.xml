@@ -160,16 +160,16 @@
         <annotation>
           <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqmodel="http://biomodels.net/model-qualifiers/" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/">
             <rdf:Description rdf:about="#metaid_0000009">
-	<bqbiol:is>
-	<rdf:Bag>
-	<rdf:li rdf:resource="http://identifiers.org/uniprot/Q05116"/>
-	</rdf:Bag>
-	</bqbiol:is>
-	</rdf:Description>
+          <bqbiol:is>
+          <rdf:Bag>
+          <rdf:li rdf:resource="http://identifiers.org/uniprot/Q05116"/>
+          </rdf:Bag>
+          </bqbiol:is>
+          </rdf:Description>
 	
           </rdf:RDF>
         </annotation>
-            </species>
+      </species>
       <species compartment="cell" id="MKP3" initialConcentration="100" metaid="metaid_0000010" name="MKP3">
         <annotation>
           <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqmodel="http://biomodels.net/model-qualifiers/" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/">

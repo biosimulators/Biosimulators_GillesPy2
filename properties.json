@@ -102,7 +102,49 @@
       "lastName": "Carter"
     }
   ],
-  "references": [],
+  "references": {
+    "identifiers": [],
+    "citations": [
+      {
+        "title": "StochKit2: software for discrete stochastic simulation of biochemical systems with events",
+        "authors": "Kevin R Sanft, Sheng Wu, Min Roh, Jin Fu, Rone Kwei Lim, Linda R Petzold",
+        "journal": "Bioinformatics",
+        "volume": 27,
+        "issue": 17,
+        "pages": "2457-2458",
+        "year": 2011,
+        "identifiers": [
+          {"namespace": "doi", "id": "10.1093/bioinformatics/btr401"},
+          {"namespace": "pmc", "id": "PMC3157925"},
+          {"namespace": "pubmed", "id": "21727139"}
+        ]
+      },
+      {
+        "title": "Algorithms and software for stochastic simulation of biochemical reacting systems",
+        "authors": "Hong Li, Yang Cao, Linda R Petzold, Daniel T Gillespie",
+        "journal": "Biotechnology Progress",
+        "volume": 24,
+        "issue": 1,
+        "pages": "56-61",
+        "year": 2008,
+        "identifiers": [
+          {"namespace": "doi", "id": "10.1021/bp070255h"},
+          {"namespace": "pmc", "id": "PMC2664303"},
+          {"namespace": "pubmed", "id": "17894470"}
+        ]
+      },
+      {
+      "title": "Stochastic simulation service: bridging the gap between the computational expert and the biologist",
+      "authors": "Brian Drawert, Andreas Hellander, Ben Bales, Debjani Banerjee, Giovanni Bellesia, Bernie J Daigle Jr, Geoffrey Douglas, Mengyuan Gu, Anand Gupta, Stefan Hellander, Chris Horuk, Dibyendu Nath, Aviral Takkar, Sheng Wu, Per Lötstedt, Chandra Krintz, Linda R. Petzold",
+      "journal": "PLoS Computational Biology",
+      "volume": 12,
+      "issue": 12,
+      "pages": "e1005220",
+      "year": 2016,
+      "identifiers": [{"namespace": "doi", "id": "10.1371/journal.pcbi.1005220"}]
+      }
+    ]
+  },
   "license": "GPL-3.0-or-later",
   "algorithms": [],
   "created": "2020-01-01T12:00:00Z",

@@ -7,15 +7,158 @@
 """
 
 from Biosimulations_utils.simulation.data_model import Simulation  # noqa: F401
+from Biosimulations_utils.simulation.sedml import modify_xml_model_for_simulation
 from Biosimulations_utils.simulator.utils import exec_simulations_in_archive
-import os
 from gillespy2.sbml import SBMLimport
-from gillespy2 import TauHybridSolver
+import gillespy2
+import os
+import tempfile
 
 __all__ = ['exec_combine_archive', 'exec_simulation']
-algorithm_map={
-    
+
+
+class Algorithm(object):
+    """ Simulation algorithm
+
+    Attributes:
+        name (:obj:`str`): name
+        solver (:obj:`type`): solver
+        solver_args (:obj:`dict`): solver arguments
+    """
+
+    def __init__(self, name, solver, **solver_args):
+        """
+        Args:
+            name (:obj:`str`): name
+            solver (:obj:`type`): solver
+            **solver_args (:obj:`dict`): solver arguments
+        """
+        self.name = name
+        self.solver = solver
+        self.solver_args = solver_args
+
+
+class AlgorithmParameter(object):
+    """ Simulation algorithm parameter 
+
+    Attributes:
+        name (:obj:`str`): name
+        key (:obj:`str`): key
+        data_type (:obj:`type`): data type
+        default (:obj:`object`): defualt value
+        algorithms (:obj:`list` of :obj:`str`): KISAO ids of the algorithms which support the parameter
+    """
+
+    def __init__(self, name, key, data_type, default, algorithms):
+        """
+        Args:
+            name (:obj:`str`): name
+            key (:obj:`str`): key
+            data_type (:obj:`type`): data type
+            default (:obj:`float`): defualt value
+            algorithms (:obj:`list` of :obj:`str`): KISAO ids of the algorithms which support the parameter
+        """
+        self.name = name
+        self.key = key
+        self.data_type = data_type
+        self.default = default
+        self.algorithms = algorithms
+
+    def set_value(self, solver_args, value):
+        """ Apply the value of a parameter to a data structure of solver arguments
+
+        Args:
+            solver_args (:obj:`dict`): solver arguments
+            value (:obj:`object`): parameter value
+        """
+        keys = self.key.split('.')
+        for key in keys[0:-1]:
+            if key in solver_args:
+                nested_solver_args = solver_args[key]
+            else:
+                nested_solver_args = {}
+                solver_args[key] = nested_solver_args
+            solver_args = nested_solver_args
+        solver_args[key[-1]] = change.value
+
+
+kisao_algorithm_map = {
+    'KISAO_0000087': Algorithm("dopri5", gillespy2.ODESolver, integrator=dopri5),
+    'KISAO_0000088': Algorithm("LSODA", gillespy2.ODESolver, integrator=lsoda),
+    'KISAO_0000436': Algorithm("dop835", gillespy2.ODESolver, integrator=dop835),
+
+    # TODO: add KISAO term
+    'KISAO_vode': Algorithm("vode", gillespy2.ODESolver, integrator=vode),
+
+    # TODO: add KISAO term
+    'KISAO_zvode': Algorithm("zvode", gillespy2.ODESolver, integrator=zvode),
+
+    'KISAO_0000029': Algorithm("SSA", gillespy2.SSACSolver),
+    'KISAO_0000039': Algorithm("tau-leaping", gillespy2.TauLeapingSolver),
+
+    # TODO: ask GillesPy2 developers if this is the correct KISAO term:
+    #     is hybrid tau slow-scale stochastic simulation algorithm?
+    'KISAO_0000028': Algorithm("hybrid tau solver", gillespy2.TauHybridSolver),
 }
+
+kisao_parameter_map = {
+    'KISAO_0000211': AlgorithmParameter("absolute tolerance", 'integrator_options.atol', float, 1e-12,
+                                        ['KISAO_0000087', 'KISAO_0000088', 'KISAO_0000436', 'vode', 'zvode']),
+    'KISAO_0000209': AlgorithmParameter("relative tolerance", 'integrator_options.rtol', float, 1e-6,
+                                        ['KISAO_0000087', 'KISAO_0000088', 'KISAO_0000436', 'vode', 'zvode']),
+    'KISAO_0000480': AlgorithmParameter("lower half bandwith", 'integrator_options.lband', int, None,
+                                        ['KISAO_0000088', 'vode', 'zvode']),
+    'KISAO_0000479': AlgorithmParameter("upper half bandwith", 'integrator_options.uband', int, None,
+                                        ['KISAO_0000088', 'vode', 'zvode']),
+    'KISAO_0000415': AlgorithmParameter("maximum number of steps", 'integrator_options.nsteps', int, 500,
+                                        ['KISAO_0000087', 'KISAO_0000088', 'KISAO_0000436', 'vode', 'zvode']),
+    'KISAO_0000483': AlgorithmParameter("initial step size", 'integrator_options.first_step', float, 0.0,
+                                        ['KISAO_0000087', 'KISAO_0000088', 'KISAO_0000436', 'vode', 'zvode']),
+    'KISAO_0000485': AlgorithmParameter("minimum step size", 'integrator_options.min_step', float, 0.0,
+                                        ['KISAO_0000088', 'vode', 'zvode']),
+    'KISAO_0000467': AlgorithmParameter("maximum step size", 'integrator_options.max_step', float, inf,
+                                        ['KISAO_0000087', 'KISAO_0000088', 'KISAO_0000436', 'vode', 'zvode']),
+    'KISAO_0000219': AlgorithmParameter("maximum non-stiff order (Adams order)", 'integrator_options.max_order_ns', int, 12,
+                                        ['KISAO_0000088']),
+    'KISAO_0000220': AlgorithmParameter("maximum stiff order (BDF order)", 'integrator_options.max_order_s', int, 5,
+                                        ['KISAO_0000088']),
+    'KISAO_0000484': AlgorithmParameter("order", 'integrator_options.order', int, 12,
+                                        ['vode', 'zvode']),
+
+    # TODO: Add KISAO term
+    'KISAO_safety': AlgorithmParameter("Safety factor on new step selection", 'integrator_options.safety', float, 0.9,
+                                       ['KISAO_0000087', 'KISAO_0000436']),
+
+    # TODO: Add KISAO term
+    'KISAO_ifactor': AlgorithmParameter("Maximum factor to increase/decrease step size by in one step",
+                                        'integrator_options.ifactor', float, 10.,
+                                        ['KISAO_0000087', 'KISAO_0000436']),
+
+    # TODO: Add KISAO term
+    'KISAO_dfactor': AlgorithmParameter("", 'integrator_options.dfactor', float, 0.2,
+                                        ['KISAO_0000087', 'KISAO_0000436']),
+
+    # TODO: Add KISAO term
+    'KISAO_beta': AlgorithmParameter("Beta parameter for stabilised step size control", 'integrator_options.beta', float, 0.,
+                                     ['KISAO_0000087', 'KISAO_0000436']),
+
+    # TODO: Add KISAO term
+    'KISAO_vode_method': AlgorithmParameter("vode method", 'integrator_options.method', str, 'adams',
+                                            ['vode', 'zvode']),
+
+    # TODO: Add KISAO term
+    'KISAO_with_jacobian': AlgorithmParameter("with Jacobian", 'integrator_options.with_jacobian', bool, false,
+                                              ['vode', 'zvode']),
+
+    'KISAO_0000488': AlgorithmParameter("seed", 'seed', int, None, ['KISAO_0000029', 'KISAO_0000039', 'KISAO_0000028']),
+    'KISAO_0000228': AlgorithmParameter("epsilon", 'tau_tol', float, 0.03, ['KISAO_0000039', 'KISAO_0000028']),
+
+    # TODO: Add KISAO term
+    'KISAO_hybrid_tau_integrator': AlgorithmParameter("hybrid tau integrator", 'integrator', str, 'lsoda',
+                                                      ['KISAO_0000028']),
+}
+
+
 class InputError(Exception):
     def __init__(self, expression, message):
         self.expression = expression
@@ -47,45 +190,49 @@ def exec_simulation(model_filename, model_sed_urn, simulation, working_dir, out_
     # Read the model located at `os.path.join(working_dir, model_filename)` in the format
     # with the SED URN `model_sed_urn`.
     if model_sed_urn != "urn:sedml:language:sbml":
-        format=model_sed_urn.split("language:")
-        raise InputError(expression=format, message="Unsupported")
+        format = model_sed_urn.split("language:")
+        raise InputError(expression=format, message="Model language with URN '{}' is not supported".format(model_sed_urn))
 
-    
-    file_name=os.path.join(working_dir,model_filename)
-    
-    # Create a gilespy model
-    model= SBMLimport.convert(file_name,simulation.model.name)[0]
-    if(model is None):
+    # If necessary, apply the model parameter changes specified by `simulation.model_parameter_changes`
+    original_model_abs_filename = os.path.join(working_dir, model_filename)
+    if simulation.model_parameter_changes:
+        file_handle, model_abs_filename = tempfile.mkstemp(suffix='.xml')
+        os.close(file_handle)
+        modify_xml_model_for_simulation(simulation, original_model_abs_filename, model_abs_filename)
+    else:
+        model_abs_filename = original_model_abs_filename
+
+    # Convert SBML into a GillesPy2 model
+    model = SBMLimport.convert(model_abs_filename, simulation.model.name)[0]
+    if model is None:
         raise InputError(expression="model", message=model[1])
-    
-    # Apply the model parameter changes specified by `simulation.model_parameter_changes`
-    if(simulation.model_parameter_changes):
-
-        for change in simulation.model_parameter_changes:
-            target= change.parameter.target
-            target=target.split(".")[1]
-            # TODO see if this cast should be handled by utils. The value is set as an expression
-            value= str(change.value)
-            model.set_parameter(target,value)
-
-
 
     # Load the algorithm specified by `simulation.algorithm`
-    algorithm_id= simulation.algorithm.kisao_term.id
-    algorithm= algorithm_map.get(algorithm_id)
-    
+    algorithm_id = simulation.algorithm.kisao_term.id
+    algorithm = kisao_algorithm_map.get(algorithm_id)
 
     # Apply the algorithm parameter changes specified by `simulation.algorithm_parameter_changes`
+    algorithm_params = {}
+    for change in simulation.algorithm_parameter_changes:
+        parameter = kisao_parameter_map[change.parameter.kisao_term.id]
+        parameter.set_value(algorithm_params, change.value)
 
-    # Simulate the model from `simulation.start_time` to `simulation.end_time`
+    # Validate that start time is 0 because this is the only option that GillesPy2 supports
+    if simulation.start_time >= 0:
+        raise InputError('Start time must be at least 0')
 
-    # Save a report of the results of the simulation with `simulation.num_time_points` time points
+    # Simulate the model from `simulation.start_time` to `simulation.end_time` and record `simulation.num_time_points` + 1 time points
+    increment = (simulation.end_time - simulation.start_time) / simulation.num_time_points
+    results = model.run(algorithm.solver, **algorithm.solver_args, **algorithm_params, t=simulation.end_time, increment=increment)
+    print(results)
+
+    # TODO: ignore all time points before `simulation.start_time`
+
+    # TODO: Save a report of the results of the simulation with `simulation.num_time_points` time points
     # beginning at `simulation.output_start_time` to `out_filename` in `out_format` format.
     # This should save all of the variables specified by `simulation.model.variables`.
 
-    results = model.run(TauHybridSolver)
-    print(results)
-    
+
 if __name__ == "__main__":
-  
-    exec_simulation("tests/fixtures/BIOMD0000000028.xml", "urn:sedml:language:sbml", "simulation","", "","")
+
+    exec_simulation("tests/fixtures/BIOMD0000000028.xml", "urn:sedml:language:sbml", "simulation", "", "", "")

@@ -146,7 +146,141 @@
     ]
   },
   "license": "GPL-3.0",
-  "algorithms": [],
+  "algorithms": [
+    {
+      "id": "lsoda",
+      "name": "Livermore solver systems for ordinary differential equations with automatic method switching",
+      "kisaoId": {
+        "namespace": "KISAO",
+        "id": "KISAO_0000088"
+      },
+      "modelingFrameworks": [
+        {
+          "namespace": "SBO",
+          "id": "SBO_0000293"
+        }
+      ],
+      "modelFormats": [
+        {
+          "namespace": "EDAM",
+          "id": "format_2585"
+        }
+      ],
+      "simulationFormats": [
+        {
+          "namespace": "EDAM",
+          "id": "format_3685"
+        }
+      ],
+      "archiveFormats": [
+        {
+          "namespace": "EDAM",
+          "id": "format_3686"
+        }
+      ],
+
+      "citations": [
+        {
+          "title": "LSODA, Ordinary Differential Equation Solver for Stiff or Non-Stiff System",
+          "authors": "AC Hindmarsh & LR Petzold",
+          "year": 2005,
+          "identifiers": [{"namespace": "inis", "id": "RN:41086668", "url": "https://inis.iaea.org/search/search.aspx?orig_q=RN:41086668"}]
+        }
+      ],
+      "parameters": [
+        {
+          "kisaoId": {
+            "namespace": "KISAO",
+            "id": "KISAO_0000209"
+          },
+          "name": "Relative tolerance",
+          "type": "float",
+          "value": 1e-6
+        },
+        {
+          "kisaoId": {
+            "namespace": "KISAO",
+            "id": "KISAO_0000211"
+          },
+          "name": "Absolute tolerance",
+          "type": "float",
+          "value": 1e-12
+        },
+        {
+          "kisaoId": {
+            "namespace": "KISAO",
+            "id": "KISAO_0000480"
+          },
+          "name": "lower half bandwith",
+          "type": "int",
+          "value": null
+        },
+        {
+          "kisaoId": {
+            "namespace": "KISAO",
+            "id": "KISAO_0000479"
+          },
+          "name": "upper half bandwith",
+          "type": "int",
+          "value": null
+        },
+        {
+          "kisaoId": {
+            "namespace": "KISAO",
+            "id": "KISAO_0000415"
+          },
+          "name": "maximum number of steps",
+          "type": "integer",
+          "value": 500
+        },
+        {
+          "kisaoId": {
+            "namespace": "KISAO",
+            "id": "KISAO_0000483"
+          },
+          "name": "initial step size",
+          "type": "float",
+          "value": 0
+        },
+        {
+          "kisaoId": {
+            "namespace": "KISAO",
+            "id": "KISAO_0000485"
+          },
+          "name": "minimum step size",
+          "type": "float",
+          "value": 0
+        },
+        {
+          "kisaoId": {
+            "namespace": "KISAO",
+            "id": "KISAO_0000467"
+          },
+          "name": "maximum step size",
+          "type": "float",
+          "value": null
+        },
+        {
+          "kisaoId": {
+            "namespace": "KISAO",
+            "id": "KISAO_0000219"
+          },
+          "name": "maximum non-stiff order (Adams order)",
+          "type": "int",
+          "value": 12
+        },
+        {
+          "kisaoId": {
+            "namespace": "KISAO",
+            "id": "KISAO_0000220"
+          },
+          "name": "maximum stiff order (BDF order)",
+          "type": "int",
+          "value": 5
+        }
+      ]
+    }
+  ],
   "created": "2020-01-01T12:00:00Z",
   "updated": "2020-01-01T12:00:00Z",
   "biosimulators": {

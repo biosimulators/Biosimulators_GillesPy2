@@ -1,0 +1,9 @@
+{
+    "kisaoId": {
+        "namespace": "KISAO",
+        "id": "KISAO_0000XXX"
+    },
+    "name": "integrator",
+    "type": "enum('KISAO_0000088', 'KISAO_0000288', 'KISAO_0000304', 'KISAO_0000032')",
+    "value": "KISAO_0000088"
+}

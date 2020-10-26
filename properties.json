@@ -10,8 +10,7 @@
     "version": "1.2",
     "spec_url": "https://github.com/moby/moby/blob/master/image/spec/v1.2.md"
   },
-  "authors": [
-    {
+  "authors": [{
       "firstName": "Brian",
       "middleName": null,
       "lastName": "Drawert"
@@ -104,8 +103,7 @@
   ],
   "references": {
     "identifiers": [],
-    "citations": [
-      {
+    "citations": [{
         "title": "StochKit2: software for discrete stochastic simulation of biochemical systems with events",
         "authors": "Kevin R Sanft, Sheng Wu, Min Roh, Jin Fu, Rone Kwei Lim, Linda R Petzold",
         "journal": "Bioinformatics",
@@ -113,10 +111,21 @@
         "issue": 17,
         "pages": "2457-2458",
         "year": 2011,
-        "identifiers": [
-          {"namespace": "doi", "id": "10.1093/bioinformatics/btr401"},
-          {"namespace": "pmc", "id": "PMC3157925"},
-          {"namespace": "pubmed", "id": "21727139"}
+        "identifiers": [{
+            "namespace": "doi",
+            "id": "10.1093/bioinformatics/btr401",
+            "url": "https://doi.org/10.1093/bioinformatics/btr401"
+          },
+          {
+            "namespace": "pmc",
+            "id": "PMC3157925",
+            "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3157925/"
+          },
+          {
+            "namespace": "pubmed",
+            "id": "21727139",
+            "url": "https://pubmed.ncbi.nlm.nih.gov/21727139/"
+          }
         ]
       },
       {
@@ -127,73 +136,79 @@
         "issue": 1,
         "pages": "56-61",
         "year": 2008,
-        "identifiers": [
-          {"namespace": "doi", "id": "10.1021/bp070255h"},
-          {"namespace": "pmc", "id": "PMC2664303"},
-          {"namespace": "pubmed", "id": "17894470"}
+        "identifiers": [{
+            "namespace": "doi",
+            "id": "10.1021/bp070255h",
+            "url": "https://doi.org/10.1021/bp070255h"
+          },
+          {
+            "namespace": "pmc",
+            "id": "PMC2664303",
+            "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2664303/"
+          },
+          {
+            "namespace": "pubmed",
+            "id": "17894470",
+            "url": "https://pubmed.ncbi.nlm.nih.gov/17894470"
+          }
         ]
       },
       {
-      "title": "Stochastic simulation service: bridging the gap between the computational expert and the biologist",
-      "authors": "Brian Drawert, Andreas Hellander, Ben Bales, Debjani Banerjee, Giovanni Bellesia, Bernie J Daigle Jr, Geoffrey Douglas, Mengyuan Gu, Anand Gupta, Stefan Hellander, Chris Horuk, Dibyendu Nath, Aviral Takkar, Sheng Wu, Per Lötstedt, Chandra Krintz, Linda R. Petzold",
-      "journal": "PLoS Computational Biology",
-      "volume": 12,
-      "issue": 12,
-      "pages": "e1005220",
-      "year": 2016,
-      "identifiers": [{"namespace": "doi", "id": "10.1371/journal.pcbi.1005220"}]
+        "title": "Stochastic simulation service: bridging the gap between the computational expert and the biologist",
+        "authors": "Brian Drawert, Andreas Hellander, Ben Bales, Debjani Banerjee, Giovanni Bellesia, Bernie J Daigle Jr, Geoffrey Douglas, Mengyuan Gu, Anand Gupta, Stefan Hellander, Chris Horuk, Dibyendu Nath, Aviral Takkar, Sheng Wu, Per Lötstedt, Chandra Krintz, Linda R. Petzold",
+        "journal": "PLoS Computational Biology",
+        "volume": 12,
+        "issue": 12,
+        "pages": "e1005220",
+        "year": 2016,
+        "identifiers": [{
+          "namespace": "doi",
+          "id": "10.1371/journal.pcbi.1005220",
+          "url": "https://doi.org/10.1371/journal.pcbi.1005220"
+        }]
       }
     ]
   },
   "license": "GPL-3.0",
-  "algorithms": [
-    {
+  "algorithms": [{
       "id": "lsoda",
       "name": "Livermore solver systems for ordinary differential equations with automatic method switching",
       "kisaoId": {
         "namespace": "KISAO",
         "id": "KISAO_0000088"
       },
-      "modelingFrameworks": [
-        {
-          "namespace": "SBO",
-          "id": "SBO_0000293"
-        }
-      ],
-      "modelFormats": [
-        {
-          "namespace": "EDAM",
-          "id": "format_2585"
-        }
-      ],
-      "simulationFormats": [
-        {
-          "namespace": "EDAM",
-          "id": "format_3685"
-        }
-      ],
-      "archiveFormats": [
-        {
-          "namespace": "EDAM",
-          "id": "format_3686"
-        }
-      ],
-
-      "citations": [
-        {
-          "title": "LSODA, Ordinary Differential Equation Solver for Stiff or Non-Stiff System",
-          "authors": "AC Hindmarsh & LR Petzold",
-          "year": 2005,
-          "identifiers": [{"namespace": "inis", "id": "RN:41086668", "url": "https://inis.iaea.org/search/search.aspx?orig_q=RN:41086668"}]
-        }
-      ],
-      "parameters": [
-        {
+      "modelingFrameworks": [{
+        "namespace": "SBO",
+        "id": "SBO_0000293"
+      }],
+      "modelFormats": [{
+        "namespace": "EDAM",
+        "id": "format_2585"
+      }],
+      "simulationFormats": [{
+        "namespace": "EDAM",
+        "id": "format_3685"
+      }],
+      "archiveFormats": [{
+        "namespace": "EDAM",
+        "id": "format_3686"
+      }],
+      "citations": [{
+        "title": "LSODA, ordinary differential equation solver for stiff or non-stiff system",
+        "authors": "AC Hindmarsh & LR Petzold",
+        "year": 2005,
+        "identifiers": [{
+          "namespace": "inis",
+          "id": "RN:41086668",
+          "url": "https://inis.iaea.org/search/search.aspx?orig_q=RN:41086668"
+        }]
+      }],
+      "parameters": [{
           "kisaoId": {
             "namespace": "KISAO",
             "id": "KISAO_0000209"
           },
-          "name": "Relative tolerance",
+          "name": "relative tolerance",
           "type": "float",
           "value": 1e-6
         },
@@ -202,7 +217,7 @@
             "namespace": "KISAO",
             "id": "KISAO_0000211"
           },
-          "name": "Absolute tolerance",
+          "name": "absolute tolerance",
           "type": "float",
           "value": 1e-12
         },
@@ -277,6 +292,335 @@
           "name": "maximum stiff order (BDF order)",
           "type": "int",
           "value": 5
+        }
+      ]
+    },
+    {
+      "id": "dopri5",
+      "name": "Dormand-Prince method",
+      "kisaoId": {
+        "namespace": "KISAO",
+        "id": "KISAO_0000087"
+      },
+      "modelingFrameworks": [{
+        "namespace": "SBO",
+        "id": "SBO_0000293"
+      }],
+      "modelFormats": [{
+        "namespace": "EDAM",
+        "id": "format_2585"
+      }],
+      "simulationFormats": [{
+        "namespace": "EDAM",
+        "id": "format_3685"
+      }],
+      "archiveFormats": [{
+        "namespace": "EDAM",
+        "id": "format_3686"
+      }],
+      "citations": [{
+        "title": "A family of embedded Runge-Kutta formulae",
+        "authors": "John R Dormand and Peter J Prince",
+        "journal": "Journal of Computational and Applied Mathematics",
+        "volume": 6,
+        "issue": 1,
+        "pages": "19-26",
+        "year": 1980,
+        "identifiers": [{
+          "namespace": "doi",
+          "id": "10.1016/0771-050X(80)90013-3",
+          "url": "https://doi.org/10.1016/0771-050X(80)90013-3"
+        }]
+      }],
+      "parameters": [{
+          "kisaoId": {
+            "namespace": "KISAO",
+            "id": "KISAO_0000209"
+          },
+          "name": "relative tolerance",
+          "type": "float",
+          "value": 1e-6
+        },
+        {
+          "kisaoId": {
+            "namespace": "KISAO",
+            "id": "KISAO_0000211"
+          },
+          "name": "absolute tolerance",
+          "type": "float",
+          "value": 1e-12
+        },
+        {
+          "kisaoId": {
+            "namespace": "KISAO",
+            "id": "KISAO_0000415"
+          },
+          "name": "maximum number of steps",
+          "type": "integer",
+          "value": 500
+        },
+        {
+          "kisaoId": {
+            "namespace": "KISAO",
+            "id": "KISAO_0000483"
+          },
+          "name": "initial step size",
+          "type": "float",
+          "value": 0
+        },
+        {
+          "kisaoId": {
+            "namespace": "KISAO",
+            "id": "KISAO_0000467"
+          },
+          "name": "maximum step size",
+          "type": "float",
+          "value": null
+        }
+      ]
+    },
+    {
+      "id": "dop835",
+      "name": "Dormand-Prince 8(5,3) method",
+      "kisaoId": {
+        "namespace": "KISAO",
+        "id": "KISAO_0000436"
+      },
+      "modelingFrameworks": [{
+        "namespace": "SBO",
+        "id": "SBO_0000293"
+      }],
+      "modelFormats": [{
+        "namespace": "EDAM",
+        "id": "format_2585"
+      }],
+      "simulationFormats": [{
+        "namespace": "EDAM",
+        "id": "format_3685"
+      }],
+      "archiveFormats": [{
+        "namespace": "EDAM",
+        "id": "format_3686"
+      }],
+      "citations": [{
+        "title": "A family of embedded Runge-Kutta formulae",
+        "authors": "John R Dormand and Peter J Prince",
+        "journal": "Journal of Computational and Applied Mathematics",
+        "volume": 6,
+        "issue": 1,
+        "pages": "19-26",
+        "year": 1980,
+        "identifiers": [{
+          "namespace": "doi",
+          "id": "10.1016/0771-050X(80)90013-3",
+          "url": "https://doi.org/10.1016/0771-050X(80)90013-3"
+        }]
+      }],
+      "parameters": [{
+          "kisaoId": {
+            "namespace": "KISAO",
+            "id": "KISAO_0000209"
+          },
+          "name": "relative tolerance",
+          "type": "float",
+          "value": 1e-6
+        },
+        {
+          "kisaoId": {
+            "namespace": "KISAO",
+            "id": "KISAO_0000211"
+          },
+          "name": "absolute tolerance",
+          "type": "float",
+          "value": 1e-12
+        },
+        {
+          "kisaoId": {
+            "namespace": "KISAO",
+            "id": "KISAO_0000415"
+          },
+          "name": "maximum number of steps",
+          "type": "integer",
+          "value": 500
+        },
+        {
+          "kisaoId": {
+            "namespace": "KISAO",
+            "id": "KISAO_0000483"
+          },
+          "name": "initial step size",
+          "type": "float",
+          "value": 0
+        },
+        {
+          "kisaoId": {
+            "namespace": "KISAO",
+            "id": "KISAO_0000467"
+          },
+          "name": "maximum step size",
+          "type": "float",
+          "value": null
+        }
+      ]
+    },
+    {
+      "id": "ssa",
+      "name": "Stochastic Simulation Algorithm",
+      "kisaoId": {
+        "namespace": "KISAO",
+        "id": "KISAO_0000029"
+      },
+      "modelingFrameworks": [{
+        "namespace": "SBO",
+        "id": "SBO_0000295"
+      }],
+      "modelFormats": [{
+        "namespace": "EDAM",
+        "id": "format_2585"
+      }],
+      "simulationFormats": [{
+        "namespace": "EDAM",
+        "id": "format_3685"
+      }],
+      "archiveFormats": [{
+        "namespace": "EDAM",
+        "id": "format_3686"
+      }],
+      "citations": [{
+        "title": "Exact stochastic simulation of coupled chemical reactions",
+        "authors": "Daniel T Gillespie",
+        "journal": "The Journal of Physical Chemistry",
+        "volume": 81,
+        "issue": 25,
+        "pages": "2340-2361",
+        "year": 1977,
+        "identifiers": [{
+          "namespace": "doi",
+          "id": "10.1021/j100540a008",
+          "url": "https://doi.org/10.1021/j100540a008"
+        }]
+      }],
+      "parameters": [{
+        "kisaoId": {
+          "namespace": "KISAO",
+          "id": "KISAO_0000488"
+        },
+        "name": "seed",
+        "type": "integer",
+        "value": null
+      }]
+    },
+    {
+      "id": "ssa",
+      "name": "tau-leaping method",
+      "kisaoId": {
+        "namespace": "KISAO",
+        "id": "KISAO_0000039"
+      },
+      "modelingFrameworks": [{
+        "namespace": "SBO",
+        "id": "SBO_0000295"
+      }],
+      "modelFormats": [{
+        "namespace": "EDAM",
+        "id": "format_2585"
+      }],
+      "simulationFormats": [{
+        "namespace": "EDAM",
+        "id": "format_3685"
+      }],
+      "archiveFormats": [{
+        "namespace": "EDAM",
+        "id": "format_3686"
+      }],
+      "citations": [{
+        "title": "Approximate accelerated stochastic simulation of chemically reacting systems",
+        "authors": "Daniel T Gillespie",
+        "journal": "The Journal of Chemical Physics",
+        "volume": 115,
+        "issue": 4,
+        "pages": "1716–1733",
+        "year": 2001,
+        "identifiers": [{
+          "namespace": "doi",
+          "id": "10.1063/1.1378322",
+          "url": "https://doi.org/10.1063/1.1378322"
+        }]
+      }],
+      "parameters": [{
+          "kisaoId": {
+            "namespace": "KISAO",
+            "id": "KISAO_0000488"
+          },
+          "name": "seed",
+          "type": "integer",
+          "value": null
+        },
+        {
+          "kisaoId": {
+            "namespace": "KISAO",
+            "id": "KISAO_0000228"
+          },
+          "name": "epsilon",
+          "type": "float",
+          "value": 0.03
+        }
+      ]
+    },
+    {
+      "id": "slow-scale SSA",
+      "name": "slow-scale stochastic simulation algorithm",
+      "kisaoId": {
+        "namespace": "KISAO",
+        "id": "KISAO_0000028"
+      },
+      "modelingFrameworks": [{
+        "namespace": "SBO",
+        "id": "SBO_0000295"
+      }],
+      "modelFormats": [{
+        "namespace": "EDAM",
+        "id": "format_2585"
+      }],
+      "simulationFormats": [{
+        "namespace": "EDAM",
+        "id": "format_3685"
+      }],
+      "archiveFormats": [{
+        "namespace": "EDAM",
+        "id": "format_3686"
+      }],
+      "citations": [{
+        "title": "Approximate accelerated stochastic simulation of chemically reacting systems",
+        "authors": "Daniel T Gillespie",
+        "journal": "The Journal of Chemical Physics",
+        "volume": 115,
+        "issue": 4,
+        "pages": "1716–1733",
+        "year": 2001,
+        "identifiers": [{
+          "namespace": "doi",
+          "id": "10.1063/1.1378322",
+          "url": "https://doi.org/10.1063/1.1378322"
+        }]
+      }],
+      "parameters": [{
+          "kisaoId": {
+            "namespace": "KISAO",
+            "id": "KISAO_0000488"
+          },
+          "name": "seed",
+          "type": "integer",
+          "value": null
+        },
+        {
+          "kisaoId": {
+            "namespace": "KISAO",
+            "id": "KISAO_0000228"
+          },
+          "name": "epsilon",
+          "type": "float",
+          "value": 0.03
         }
       ]
     }

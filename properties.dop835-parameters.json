@@ -1,0 +1,37 @@
+[{
+    "kisaoId": {
+      "namespace": "KISAO",
+      "id": "KISAO_0000XXX"
+    },
+    "name": "safety",
+    "type": "float",
+    "value": 0.9
+  },
+  {
+    "kisaoId": {
+      "namespace": "KISAO",
+      "id": "KISAO_0000XXX"
+    },
+    "name": "ifactor",
+    "type": "float",
+    "value": 6.0
+  },
+  {
+    "kisaoId": {
+      "namespace": "KISAO",
+      "id": "KISAO_0000XXX"
+    },
+    "name": "dfactor",
+    "type": "float",
+    "value": 0.333
+  },
+  {
+    "kisaoId": {
+      "namespace": "KISAO",
+      "id": "KISAO_0000XXX"
+    },
+    "name": "beta",
+    "type": "float",
+    "value": 0.0
+  }
+]

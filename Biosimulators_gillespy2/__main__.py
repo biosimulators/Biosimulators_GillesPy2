@@ -2,7 +2,7 @@
 
 :Author: Bilal Shaikh <bilalshaikh42@gmail.com>
 :Date: 2020-08-18
-:Copyright: 2020, Biosimulations Developers
+:Copyright: 2020, BioSimulators Team
 :License: MIT
 """
 

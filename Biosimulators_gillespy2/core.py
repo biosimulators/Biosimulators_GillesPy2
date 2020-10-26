@@ -1,9 +1,10 @@
 """ Methods for executing SED tasks in COMBINE archives and saving their outputs
 
-:Author: Author name <email@organization>
-:Date: YYYY-MM-DD
-:Copyright: YYYY, Owner
-:License: <License, e.g., MIT>
+:Author: Bilal Shaikh <bilalshaikh42@gmail.com>
+:Author: Jonathan Karr <karr@mssm.edu>
+:Date: 2020-10-26
+:Copyright: 2020, Center for Reproducible Biomedical Modeling
+:License: MIT
 """
 
 from Biosimulations_utils.simulation.data_model import Simulation  # noqa: F401
@@ -90,7 +91,7 @@ class AlgorithmParameter(object):
             try:
                 value = self.data_type(value).name
             except ValueError:
-                raise InputError(expression=value, 
+                raise InputError(expression=value,
                                  message="{} option '{}' is not supported".format(self.data_type.__name__, value))
 
         solver_args[key[-1]] = value

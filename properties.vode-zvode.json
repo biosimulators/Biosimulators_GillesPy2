@@ -38,11 +38,12 @@
     "parameters": [{
         "kisaoId": {
           "namespace": "KISAO",
-          "id": "KISAO_0000XXX"
+          "id": "KISAO_0000475"
         },
         "name": "method",
-        "type": "enum('KISAO_0000288', KISAO_0000289')",
-        "value": "KISAO_0000289"
+        "type": "string",
+        "value": "KISAO_0000289",
+        "recommendedRange": ["KISAO_0000288", "KISAO_0000289"]
       },
       {
         "kisaoId": {
@@ -176,11 +177,12 @@
     "parameters": [{
         "kisaoId": {
           "namespace": "KISAO",
-          "id": "KISAO_0000XXX"
+          "id": "KISAO_0000475"
         },
         "name": "method",
-        "type": "enum('KISAO_0000288', KISAO_0000289')",
-        "value": "KISAO_0000289"
+        "type": "string",
+        "value": "KISAO_0000289",
+        "recommendedRange": ["KISAO_0000288", "KISAO_0000289"]
       },
       {
         "kisaoId": {

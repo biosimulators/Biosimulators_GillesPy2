@@ -621,6 +621,16 @@
           "name": "epsilon",
           "type": "float",
           "value": 0.03
+        },
+        {
+          "kisaoId": {
+            "namespace": "KISAO",
+            "id": "KISAO_0000475"
+          },
+          "name": "integrator",
+          "type": "string",
+          "value": "KISAO_0000088",
+          "recommendedRange": ["KISAO_0000088", "KISAO_0000288", "KISAO_0000304", "KISAO_0000032"]
         }
       ]
     }

@@ -10,11 +10,17 @@ from Biosimulations_utils.simulation.data_model import Simulation  # noqa: F401
 from Biosimulations_utils.simulation.sedml import modify_xml_model_for_simulation
 from Biosimulations_utils.simulator.utils import exec_simulations_in_archive
 from gillespy2.sbml import SBMLimport
+import enum
 import gillespy2
 import os
 import tempfile
 
-__all__ = ['exec_combine_archive', 'exec_simulation']
+__all__ = [
+    'Algorithm', 'AlgorithmParameter', 'VodeMethod', 'HybridTauIntegrationMethod',
+    'kisao_algorithm_map', 'kisao_algorithm_map',
+    'InputError'
+    'exec_combine_archive', 'exec_simulation',
+]
 
 
 class Algorithm(object):
@@ -79,7 +85,30 @@ class AlgorithmParameter(object):
                 nested_solver_args = {}
                 solver_args[key] = nested_solver_args
             solver_args = nested_solver_args
-        solver_args[key[-1]] = change.value
+
+        if isinstance(self.data_type, enum.Enum):
+            try:
+                value = self.data_type(value).name
+            except ValueError:
+                raise InputError(expression=value, 
+                                 message="{} option '{}' is not supported".format(self.data_type.__name__, value))
+
+        solver_args[key[-1]] = value
+
+
+class VodeMethod(str, enum.Enum):
+    """ VODE method """
+    bdf = 'KISAO_0000288'  # stiff
+    adams = 'KISAO_0000289'  # non-stiff
+
+
+class HybridTauIntegrationMethod(str, enum.Enum):
+    """ Hybrid tau integration method """
+    BDF = 'KISAO_0000288'
+    LSODA = 'KISAO_0000088'
+    Radau = 'KISAO_0000304'
+    RK23 = 'KISAO_0000XXX'  # TODO: add KISAO term
+    RK45 = 'KISAO_0000032'
 
 
 kisao_algorithm_map = {
@@ -126,16 +155,17 @@ kisao_parameter_map = {
                                         ['vode', 'zvode']),
 
     # TODO: Add KISAO term
-    'KISAO_safety': AlgorithmParameter("Safety factor on new step selection", 'integrator_options.safety', float, 0.9,
+    'KISAO_safety': AlgorithmParameter("safety factor on new step selection", 'integrator_options.safety', float, 0.9,
                                        ['KISAO_0000087', 'KISAO_0000436']),
 
     # TODO: Add KISAO term
-    'KISAO_ifactor': AlgorithmParameter("Maximum factor to increase/decrease step size by in one step",
+    'KISAO_ifactor': AlgorithmParameter("maximum factor to increase/decrease step size by in one step",
                                         'integrator_options.ifactor', float, 10.,
                                         ['KISAO_0000087', 'KISAO_0000436']),
 
     # TODO: Add KISAO term
-    'KISAO_dfactor': AlgorithmParameter("", 'integrator_options.dfactor', float, 0.2,
+    'KISAO_dfactor': AlgorithmParameter("minimum factor to increase/decrease step size by in one step",
+                                        'integrator_options.dfactor', float, 0.2,
                                         ['KISAO_0000087', 'KISAO_0000436']),
 
     # TODO: Add KISAO term
@@ -143,7 +173,7 @@ kisao_parameter_map = {
                                      ['KISAO_0000087', 'KISAO_0000436']),
 
     # TODO: Add KISAO term
-    'KISAO_vode_method': AlgorithmParameter("vode method", 'integrator_options.method', str, 'adams',
+    'KISAO_vode_method': AlgorithmParameter("vode method", 'integrator_options.method', VodeMethod, VodeMethod.adams,
                                             ['vode', 'zvode']),
 
     # TODO: Add KISAO term
@@ -154,7 +184,8 @@ kisao_parameter_map = {
     'KISAO_0000228': AlgorithmParameter("epsilon", 'tau_tol', float, 0.03, ['KISAO_0000039', 'KISAO_0000028']),
 
     # TODO: Add KISAO term
-    'KISAO_hybrid_tau_integrator': AlgorithmParameter("hybrid tau integrator", 'integrator', str, 'lsoda',
+    'KISAO_hybrid_tau_integrator': AlgorithmParameter("hybrid tau integrator",
+                                                      'integrator', HybridTauIntegrationMethod, HybridTauIntegrationMethod.LSODA,
                                                       ['KISAO_0000028']),
 }
 
@@ -209,17 +240,23 @@ def exec_simulation(model_filename, model_sed_urn, simulation, working_dir, out_
 
     # Load the algorithm specified by `simulation.algorithm`
     algorithm_id = simulation.algorithm.kisao_term.id
-    algorithm = kisao_algorithm_map.get(algorithm_id)
+    algorithm = kisao_algorithm_map.get(algorithm_id, None)
+    if algorithm is None:
+        raise InputError(expression=algorithm_id, message="Algorithm with KISAO id '{}' is not supported".format(algorithm_id))
 
     # Apply the algorithm parameter changes specified by `simulation.algorithm_parameter_changes`
     algorithm_params = {}
     for change in simulation.algorithm_parameter_changes:
-        parameter = kisao_parameter_map[change.parameter.kisao_term.id]
+        parameter = kisao_parameter_map.get(change.parameter.kisao_term.id, None)
+        if parameter is None:
+            raise InputError(
+                expression=change.parameter.kisao_term.id,
+                message="Algorithm parameter with KISAO id '{}' is not supported".format(change.parameter.kisao_term.id))
         parameter.set_value(algorithm_params, change.value)
 
     # Validate that start time is 0 because this is the only option that GillesPy2 supports
     if simulation.start_time >= 0:
-        raise InputError('Start time must be at least 0')
+        raise InputError(expression=simulation.start_time, message='Start time must be at least 0')
 
     # Simulate the model from `simulation.start_time` to `simulation.end_time` and record `simulation.num_time_points` + 1 time points
     increment = (simulation.end_time - simulation.start_time) / simulation.num_time_points

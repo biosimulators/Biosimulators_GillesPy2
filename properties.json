@@ -168,7 +168,10 @@
       }
     ]
   },
-  "license": "GPL-3.0",
+  "license": {
+    "namespace": "SPDX",
+    "id": "GPL-3.0-only"
+  },
   "algorithms": [{
       "id": "lsoda",
       "name": "Livermore solver systems for ordinary differential equations with automatic method switching",
@@ -226,7 +229,7 @@
             "id": "KISAO_0000480"
           },
           "name": "lower half bandwith",
-          "type": "int",
+          "type": "integer",
           "value": null
         },
         {
@@ -235,7 +238,7 @@
             "id": "KISAO_0000479"
           },
           "name": "upper half bandwith",
-          "type": "int",
+          "type": "integer",
           "value": null
         },
         {
@@ -280,7 +283,7 @@
             "id": "KISAO_0000219"
           },
           "name": "maximum non-stiff order (Adams order)",
-          "type": "int",
+          "type": "integer",
           "value": 12
         },
         {
@@ -289,7 +292,7 @@
             "id": "KISAO_0000220"
           },
           "name": "maximum stiff order (BDF order)",
-          "type": "int",
+          "type": "integer",
           "value": 5
         }
       ]

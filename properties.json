@@ -4,11 +4,10 @@
   "version": "1.5.3",
   "description": "GillesPy2 is a Python 3 package for stochastic simulation of biochemical systems.",
   "url": "https://github.com/GillesPy2/GillesPy2",
-  "dockerHubImageId": "docker.io/biosimulators/gillespy2:1.5.3",
+  "image": "docker.io/biosimulators/gillespy2:1.5.3",
   "format": {
-    "name": "Docker Image",
-    "version": "1.2",
-    "spec_url": "https://github.com/moby/moby/blob/master/image/spec/v1.2.md"
+    "namespace": "EDAM",
+    "id": "format_3973"
   },
   "authors": [{
       "firstName": "Brian",

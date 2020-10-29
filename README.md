@@ -17,7 +17,7 @@ pip install git+https://github.com/biosimulators/Biosimulators_GillesPy2
 
 ### Install Docker image
 ```
-docker pull biosimulators/gillespy2
+docker pull ghcr.io/biosimulators/gillespy2
 ```
 
 ## Local usage

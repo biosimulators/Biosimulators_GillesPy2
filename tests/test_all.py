@@ -1,9 +1,9 @@
 """ Tests of the command-line interface
 
-:Author: Author name <email@organization>
-:Date: YYYY-MM-DD
-:Copyright: YYYY, Owner
-:License: <License, e.g., MIT>
+:Author: Jonathan Karr <karr@mssm.edu>
+:Date: 2020-10-29
+:Copyright: 2020, Center for Reproducible Biomedical Modeling
+:License: MIT
 """
 
 from Biosimulations_utils.simulator.testing import SimulatorValidator
@@ -20,7 +20,7 @@ import unittest
 
 class CliTestCase(unittest.TestCase):
     EXAMPLE_ARCHIVE_FILENAME = 'tests/fixtures/BIOMD0000000297.omex'
-    DOCKER_IMAGE = '<organization>/<repository>'
+    DOCKER_IMAGE = 'ghcr.io/biosimulators/gillespy2'
 
     def setUp(self):
         self.dirname = tempfile.mkdtemp()

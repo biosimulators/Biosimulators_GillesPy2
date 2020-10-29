@@ -253,7 +253,7 @@
         {
           "kisaoId": {
             "namespace": "KISAO",
-            "id": "KISAO_0000483"
+            "id": "KISAO_0000559"
           },
           "name": "initial step size",
           "type": "float",
@@ -364,7 +364,7 @@
         {
           "kisaoId": {
             "namespace": "KISAO",
-            "id": "KISAO_0000483"
+            "id": "KISAO_0000559"
           },
           "name": "initial step size",
           "type": "float",
@@ -382,7 +382,7 @@
         {
           "kisaoId": {
             "namespace": "KISAO",
-            "id": "KISAO_0000XXX"
+            "id": "KISAO_0000538"
           },
           "name": "safety",
           "type": "float",
@@ -391,7 +391,7 @@
         {
           "kisaoId": {
             "namespace": "KISAO",
-            "id": "KISAO_0000XXX"
+            "id": "KISAO_0000540"
           },
           "name": "ifactor",
           "type": "float",
@@ -400,7 +400,7 @@
         {
           "kisaoId": {
             "namespace": "KISAO",
-            "id": "KISAO_0000XXX"
+            "id": "KISAO_0000539"
           },
           "name": "dfactor",
           "type": "float",
@@ -409,7 +409,7 @@
         {
           "kisaoId": {
             "namespace": "KISAO",
-            "id": "KISAO_0000XXX"
+            "id": "KISAO_0000541"
           },
           "name": "beta",
           "type": "float",
@@ -484,7 +484,7 @@
         {
           "kisaoId": {
             "namespace": "KISAO",
-            "id": "KISAO_0000483"
+            "id": "KISAO_0000559"
           },
           "name": "initial step size",
           "type": "float",
@@ -502,7 +502,7 @@
         {
           "kisaoId": {
             "namespace": "KISAO",
-            "id": "KISAO_0000XXX"
+            "id": "KISAO_0000538"
           },
           "name": "safety",
           "type": "float",
@@ -511,7 +511,7 @@
         {
           "kisaoId": {
             "namespace": "KISAO",
-            "id": "KISAO_0000XXX"
+            "id": "KISAO_0000540"
           },
           "name": "ifactor",
           "type": "float",
@@ -520,7 +520,7 @@
         {
           "kisaoId": {
             "namespace": "KISAO",
-            "id": "KISAO_0000XXX"
+            "id": "KISAO_0000539"
           },
           "name": "dfactor",
           "type": "float",
@@ -529,7 +529,7 @@
         {
           "kisaoId": {
             "namespace": "KISAO",
-            "id": "KISAO_0000XXX"
+            "id": "KISAO_0000541"
           },
           "name": "beta",
           "type": "float",
@@ -713,7 +713,7 @@
       "name": "Real-valued Variable-coefficient Ordinary Differential Equation solver, with fixed-leading-coefficient implementation",
       "kisaoId": {
         "namespace": "KISAO",
-        "id": "KISAO_0000XXX"
+        "id": "KISAO_0000535"
       },
       "modelingFrameworks": [{
         "namespace": "SBO",
@@ -758,7 +758,7 @@
         {
           "kisaoId": {
             "namespace": "KISAO",
-            "id": "KISAO_0000XXX"
+            "id": "KISAO_0000542"
           },
           "name": "with Jacobian",
           "type": "boolean",
@@ -839,7 +839,7 @@
         {
           "kisaoId": {
             "namespace": "KISAO",
-            "id": "KISAO_0000483"
+            "id": "KISAO_0000559"
           },
           "name": "initial step size",
           "type": "float",
@@ -852,7 +852,7 @@
       "name": "Complex-valued Variable-coefficient Ordinary Differential Equation solver, with fixed-leading-coefficient implementation",
       "kisaoId": {
         "namespace": "KISAO",
-        "id": "KISAO_0000XXX"
+        "id": "KISAO_0000536"
       },
       "modelingFrameworks": [{
         "namespace": "SBO",
@@ -897,7 +897,7 @@
         {
           "kisaoId": {
             "namespace": "KISAO",
-            "id": "KISAO_0000XXX"
+            "id": "KISAO_0000542"
           },
           "name": "with Jacobian",
           "type": "boolean",
@@ -978,7 +978,7 @@
         {
           "kisaoId": {
             "namespace": "KISAO",
-            "id": "KISAO_0000483"
+            "id": "KISAO_0000559"
           },
           "name": "initial step size",
           "type": "float",

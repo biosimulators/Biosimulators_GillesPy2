@@ -112,7 +112,7 @@ class HybridTauIntegrationMethod(str, enum.Enum):
 
 
 kisao_algorithm_map = {
-    'KISAO_0000088': Algorithm("LSODA", gillespy2.ODESolver, integrator=lsoda, parameters={
+    'KISAO_0000088': Algorithm("LSODA", gillespy2.ODESolver, integrator="lsoda", parameters={
         'KISAO_0000211': AlgorithmParameter("absolute tolerance", 'integrator_options.atol', float, 1e-12),
         'KISAO_0000209': AlgorithmParameter("relative tolerance", 'integrator_options.rtol', float, 1e-6),
         'KISAO_0000480': AlgorithmParameter("lower half bandwith", 'integrator_options.lband', int, None),
@@ -120,16 +120,16 @@ kisao_algorithm_map = {
         'KISAO_0000415': AlgorithmParameter("maximum number of steps", 'integrator_options.nsteps', int, 500),
         'KISAO_0000483': AlgorithmParameter("initial step size", 'integrator_options.first_step', float, 0.0),
         'KISAO_0000485': AlgorithmParameter("minimum step size", 'integrator_options.min_step', float, 0.0),
-        'KISAO_0000467': AlgorithmParameter("maximum step size", 'integrator_options.max_step', float, inf),
+        'KISAO_0000467': AlgorithmParameter("maximum step size", 'integrator_options.max_step', float, float("inf")),
         'KISAO_0000219': AlgorithmParameter("maximum non-stiff order (Adams order)", 'integrator_options.max_order_ns', int, 12),
         'KISAO_0000220': AlgorithmParameter("maximum stiff order (BDF order)", 'integrator_options.max_order_s', int, 5),
     }),
-    'KISAO_0000087': Algorithm("dopri5", gillespy2.ODESolver, integrator=dopri5, parameters={
+    'KISAO_0000087': Algorithm("dopri5", gillespy2.ODESolver, integrator="dopri5", parameters={
         'KISAO_0000211': AlgorithmParameter("absolute tolerance", 'integrator_options.atol', float, 1e-12),
         'KISAO_0000209': AlgorithmParameter("relative tolerance", 'integrator_options.rtol', float, 1e-6),
         'KISAO_0000415': AlgorithmParameter("maximum number of steps", 'integrator_options.nsteps', int, 500),
         'KISAO_0000483': AlgorithmParameter("initial step size", 'integrator_options.first_step', float, 0.0),
-        'KISAO_0000467': AlgorithmParameter("maximum step size", 'integrator_options.max_step', float, inf),
+        'KISAO_0000467': AlgorithmParameter("maximum step size", 'integrator_options.max_step', float, float("inf")),
         # TODO: Add KISAO term
         'KISAO_safety': AlgorithmParameter("safety factor on new step selection", 'integrator_options.safety', float, 0.9),
         # TODO: Add KISAO term
@@ -143,12 +143,12 @@ kisao_algorithm_map = {
         # TODO: Add KISAO term
         'KISAO_beta': AlgorithmParameter("Beta parameter for stabilised step size control", 'integrator_options.beta', float, 0.),
     }),
-    'KISAO_0000436': Algorithm("dop835", gillespy2.ODESolver, integrator=dop835, parameters={
+    'KISAO_0000436': Algorithm("dop835", gillespy2.ODESolver, integrator="dop835", parameters={
         'KISAO_0000211': AlgorithmParameter("absolute tolerance", 'integrator_options.atol', float, 1e-12),
         'KISAO_0000209': AlgorithmParameter("relative tolerance", 'integrator_options.rtol', float, 1e-6),
         'KISAO_0000415': AlgorithmParameter("maximum number of steps", 'integrator_options.nsteps', int, 500),
         'KISAO_0000483': AlgorithmParameter("initial step size", 'integrator_options.first_step', float, 0.0),
-        'KISAO_0000467': AlgorithmParameter("maximum step size", 'integrator_options.max_step', float, inf),
+        'KISAO_0000467': AlgorithmParameter("maximum step size", 'integrator_options.max_step', float, float("inf")),
         # TODO: Add KISAO term
         'KISAO_safety': AlgorithmParameter("safety factor on new step selection", 'integrator_options.safety', float, 0.9),
         # TODO: Add KISAO term
@@ -164,7 +164,7 @@ kisao_algorithm_map = {
     }),
 
     # TODO: add KISAO term
-    'KISAO_vode': Algorithm("vode", gillespy2.ODESolver, integrator=vode, parameters={
+    'KISAO_vode': Algorithm("vode", gillespy2.ODESolver, integrator="vode", parameters={
         'KISAO_0000211': AlgorithmParameter("absolute tolerance", 'integrator_options.atol', float, 1e-12),
         'KISAO_0000209': AlgorithmParameter("relative tolerance", 'integrator_options.rtol', float, 1e-6),
         'KISAO_0000480': AlgorithmParameter("lower half bandwith", 'integrator_options.lband', int, None),
@@ -172,16 +172,16 @@ kisao_algorithm_map = {
         'KISAO_0000415': AlgorithmParameter("maximum number of steps", 'integrator_options.nsteps', int, 500),
         'KISAO_0000483': AlgorithmParameter("initial step size", 'integrator_options.first_step', float, 0.0),
         'KISAO_0000485': AlgorithmParameter("minimum step size", 'integrator_options.min_step', float, 0.0),
-        'KISAO_0000467': AlgorithmParameter("maximum step size", 'integrator_options.max_step', float, inf),
+        'KISAO_0000467': AlgorithmParameter("maximum step size", 'integrator_options.max_step', float, float("inf")),
         'KISAO_0000484': AlgorithmParameter("order", 'integrator_options.order', int, 12),
         'KISAO_0000475': AlgorithmParameter("integration method", 'integrator_options.method', VodeMethod, VodeMethod.adams),
 
         # TODO: Add KISAO term
-        'KISAO_with_jacobian': AlgorithmParameter("with Jacobian", 'integrator_options.with_jacobian', bool, false),
+        'KISAO_with_jacobian': AlgorithmParameter("with Jacobian", 'integrator_options.with_jacobian', bool, False),
     }),
 
     # TODO: add KISAO term
-    'KISAO_zvode': Algorithm("zvode", gillespy2.ODESolver, integrator=zvode, parameters={
+    'KISAO_zvode': Algorithm("zvode", gillespy2.ODESolver, integrator="zvode", parameters={
         'KISAO_0000211': AlgorithmParameter("absolute tolerance", 'integrator_options.atol', float, 1e-12),
         'KISAO_0000209': AlgorithmParameter("relative tolerance", 'integrator_options.rtol', float, 1e-6),
         'KISAO_0000480': AlgorithmParameter("lower half bandwith", 'integrator_options.lband', int, None),
@@ -189,12 +189,12 @@ kisao_algorithm_map = {
         'KISAO_0000415': AlgorithmParameter("maximum number of steps", 'integrator_options.nsteps', int, 500),
         'KISAO_0000483': AlgorithmParameter("initial step size", 'integrator_options.first_step', float, 0.0),
         'KISAO_0000485': AlgorithmParameter("minimum step size", 'integrator_options.min_step', float, 0.0),
-        'KISAO_0000467': AlgorithmParameter("maximum step size", 'integrator_options.max_step', float, inf),
+        'KISAO_0000467': AlgorithmParameter("maximum step size", 'integrator_options.max_step', float, float("inf")),
         'KISAO_0000484': AlgorithmParameter("order", 'integrator_options.order', int, 12),
         'KISAO_0000475': AlgorithmParameter("integration method", 'integrator_options.method', VodeMethod, VodeMethod.adams),
 
         # TODO: Add KISAO term
-        'KISAO_with_jacobian': AlgorithmParameter("with Jacobian", 'integrator_options.with_jacobian', bool, false),
+        'KISAO_with_jacobian': AlgorithmParameter("with Jacobian", 'integrator_options.with_jacobian', bool, False),
     }),
 
     'KISAO_0000029': Algorithm("SSA", gillespy2.SSACSolver, parameters={
@@ -249,14 +249,16 @@ def exec_simulation(model_filename, model_sed_urn, simulation, working_dir, out_
     # with the SED URN `model_sed_urn`.
     if model_sed_urn != "urn:sedml:language:sbml":
         format = model_sed_urn.split("language:")
-        raise InputError(expression=format, message="Model language with URN '{}' is not supported".format(model_sed_urn))
+        raise InputError(
+            expression=format, message="Model language with URN '{}' is not supported".format(model_sed_urn))
 
     # If necessary, apply the model parameter changes specified by `simulation.model_parameter_changes`
     original_model_abs_filename = os.path.join(working_dir, model_filename)
     if simulation.model_parameter_changes:
         file_handle, model_abs_filename = tempfile.mkstemp(suffix='.xml')
         os.close(file_handle)
-        modify_xml_model_for_simulation(simulation, original_model_abs_filename, model_abs_filename)
+        modify_xml_model_for_simulation(
+            simulation, original_model_abs_filename, model_abs_filename)
     else:
         model_abs_filename = original_model_abs_filename
 
@@ -269,12 +271,14 @@ def exec_simulation(model_filename, model_sed_urn, simulation, working_dir, out_
     algorithm_id = simulation.algorithm.kisao_term.id
     algorithm = kisao_algorithm_map.get(algorithm_id, None)
     if algorithm is None:
-        raise InputError(expression=algorithm_id, message="Algorithm with KISAO id '{}' is not supported".format(algorithm_id))
+        raise InputError(expression=algorithm_id,
+                         message="Algorithm with KISAO id '{}' is not supported".format(algorithm_id))
 
     # Apply the algorithm parameter changes specified by `simulation.algorithm_parameter_changes`
     algorithm_params = {}
     for change in simulation.algorithm_parameter_changes:
-        parameter = algorithm.parameters.get(change.parameter.kisao_term.id, None)
+        parameter = algorithm.parameters.get(
+            change.parameter.kisao_term.id, None)
         if parameter is None:
             raise InputError(
                 expression=change.parameter.kisao_term.id,
@@ -283,11 +287,14 @@ def exec_simulation(model_filename, model_sed_urn, simulation, working_dir, out_
 
     # Validate that start time is 0 because this is the only option that GillesPy2 supports
     if simulation.start_time >= 0:
-        raise InputError(expression=simulation.start_time, message='Start time must be at least 0')
+        raise InputError(expression=simulation.start_time,
+                         message='Start time must be at least 0')
 
     # Simulate the model from `simulation.start_time` to `simulation.end_time` and record `simulation.num_time_points` + 1 time points
-    increment = (simulation.end_time - simulation.start_time) / simulation.num_time_points
-    results = model.run(algorithm.solver, **algorithm.solver_args, **algorithm_params, t=simulation.end_time, increment=increment)
+    increment = (simulation.end_time - simulation.start_time) / \
+        simulation.num_time_points
+    results = model.run(algorithm.solver, **algorithm.solver_args,
+                        **algorithm_params, t=simulation.end_time, increment=increment)
     print(results)
 
     # TODO: ignore all time points before `simulation.start_time`
@@ -299,4 +306,5 @@ def exec_simulation(model_filename, model_sed_urn, simulation, working_dir, out_
 
 if __name__ == "__main__":
 
-    exec_simulation("tests/fixtures/BIOMD0000000028.xml", "urn:sedml:language:sbml", "simulation", "", "", "")
+    exec_simulation("tests/fixtures/BIOMD0000000028.xml",
+                    "urn:sedml:language:sbml", "simulation", "", "", "")

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<sedML xmlns="http://sed-ml.org/sed-ml/level1/version3" xmlns:addedPrefix="http://sed-ml.org/sed-ml/level1/version2" level="1" version="3">
-<listOfSimulations>
+<sedML xmlns="http://sed-ml.org/sed-ml/level1/version3"
+   xmlns:addedPrefix="http://sed-ml.org/sed-ml/level1/version2" level="1" version="3">
+   <listOfSimulations>
       <uniformTimeCourse id="simulation_1" initialTime="0" outputStartTime="0" outputEndTime="10" numberOfPoints="100">
-         <algorithm kisaoID="KISAO:0000088">
+         <algorithm kisaoID="KISAO:0000029">
             <annotation>
                <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
                   <rdf:Description>
@@ -36,7 +37,7 @@
    <listOfModels>
       <model id="model_0000001" language="urn:sedml:language:sbml" source="BIOMD0000000028.xml">
          <listOfChanges>
-            <changeAttribute target="parameters.k_1.value" newValue="1.0">
+            <changeAttribute target="/sbml:sbml/sbml:model/sbml:listOfParameters/sbml:parameter[@id=&apos;k_1&apos;]/@value" newValue="1.0">
                <annotation>
                   <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
                      <rdf:Description>
@@ -60,7 +61,7 @@
             <ci>var_time</ci>
          </math>
       </dataGenerator>
-      
+
    </listOfDataGenerators>
 
 </sedML>

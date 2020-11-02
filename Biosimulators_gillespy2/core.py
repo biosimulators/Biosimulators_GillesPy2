@@ -269,7 +269,13 @@ def exec_simulation(model_filename, model_sed_urn, simulation, working_dir, out_
 
     # Load the algorithm specified by `simulation.algorithm`
     algorithm_id = simulation.algorithm.kisao_term.id
+
+    # Todo remove this when Biosimulations_utils/pull/24 is merged
+    if (len(algorithm_id) == 7):
+        algorithm_id = "KISAO_" + algorithm_id
+
     algorithm = kisao_algorithm_map.get(algorithm_id, None)
+
     if algorithm is None:
         raise InputError(expression=algorithm_id,
                          message="Algorithm with KISAO id '{}' is not supported".format(algorithm_id))
@@ -286,7 +292,7 @@ def exec_simulation(model_filename, model_sed_urn, simulation, working_dir, out_
         parameter.set_value(algorithm_params, change.value)
 
     # Validate that start time is 0 because this is the only option that GillesPy2 supports
-    if simulation.start_time >= 0:
+    if simulation.start_time > 0:
         raise InputError(expression=simulation.start_time,
                          message='Start time must be at least 0')
 

@@ -15,7 +15,7 @@ except (subprocess.CalledProcessError, AssertionError):
 import os
 import pkg_utils
 
-name = 'biosimulations_gillespy2'
+name = 'biosimulators_gillespy2'
 dirname = os.path.dirname(__file__)
 
 # get package metadata
@@ -25,13 +25,13 @@ md = pkg_utils.get_package_metadata(dirname, name)
 setuptools.setup(
     name=name,
     version=md.version,
-    description=("BioSimulations-compliant command-line interface to "
-                 "the [Gillespy2 simulation program <https://github.com/GillesPy2/GillesPy2>."),
+    description=("BioSimulators-compliant command-line interface to "
+                 "the GillesPy2 simulation program."),
     long_description=md.long_description,
-    url="https://github.com/reproducible-biomedical-modeling/Biosimulations_GillesPy2",
-    download_url="https://github.com/reproducible-biomedical-modeling/Biosimulations_GillesPy2",
-    author='Biosimulations Developers',
-    author_email="info@biosimulations.org",
+    url="https://github.com/biosimulators/Biosimulators_GillesPy2",
+    download_url="https://github.com/biosimulators/Biosimulators_GillesPy2",
+    author='Biosimulators Team',
+    author_email="info@biosimulators.org",
     license="MIT",
     keywords='',
     packages=setuptools.find_packages(exclude=['tests', 'tests.*']),
@@ -47,7 +47,7 @@ setuptools.setup(
     ],
     entry_points={
         'console_scripts': [
-            'biosimulations_gillespy2 = biosimulations_gillespy2.__main__:main',
+            'gillespy2 = biosimulators_gillespy2.__main__:main',
         ],
     },
 )

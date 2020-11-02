@@ -1,14 +1,14 @@
 """ Tests of the command-line interface
 
-:Author: Author name <email@organization>
-:Date: YYYY-MM-DD
-:Copyright: YYYY, Owner
-:License: <License, e.g., MIT>
+:Author: Jonathan Karr <karr@mssm.edu>
+:Date: 2020-10-29
+:Copyright: 2020, Center for Reproducible Biomedical Modeling
+:License: MIT
 """
 
 from Biosimulations_utils.simulator.testing import SimulatorValidator
-from biosimulations_gillespy2 import __main__
-import biosimulations_gillespy2
+from Biosimulators_gillespy2 import __main__
+import Biosimulators_gillespy2
 import capturer
 import docker
 import os
@@ -20,7 +20,7 @@ import unittest
 
 class CliTestCase(unittest.TestCase):
     EXAMPLE_ARCHIVE_FILENAME = 'tests/fixtures/BIOMD0000000297.omex'
-    DOCKER_IMAGE = '<organization>/<repository>'
+    DOCKER_IMAGE = 'ghcr.io/biosimulators/gillespy2'
 
     def setUp(self):
         self.dirname = tempfile.mkdtemp()
@@ -38,14 +38,14 @@ class CliTestCase(unittest.TestCase):
             with capturer.CaptureOutput(merged=False, relay=False) as captured:
                 with self.assertRaises(SystemExit):
                     app.run()
-                self.assertIn(biosimulations_gillespy2.__version__, captured.stdout.get_text())
+                self.assertIn(Biosimulators_gillespy2.__version__, captured.stdout.get_text())
                 self.assertEqual(captured.stderr.get_text(), '')
 
         with __main__.App(argv=['--version']) as app:
             with capturer.CaptureOutput(merged=False, relay=False) as captured:
                 with self.assertRaises(SystemExit):
                     app.run()
-                self.assertIn(biosimulations_gillespy2.__version__, captured.stdout.get_text())
+                self.assertIn(Biosimulators_gillespy2.__version__, captured.stdout.get_text())
                 self.assertEqual(captured.stderr.get_text(), '')
 
     def test_sim_short_arg_names(self):

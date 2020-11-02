@@ -1,5 +1,5 @@
-# Biosimulations_GillesPy2
-BioSimulations-compliant command-line interface to the [Gillespy2](https://github.com/GillesPy2/GillesPy2) simulation program.
+# Biosimulators_GillesPy2
+BioSimulators-compliant command-line interface and Docker image for the [Gillespy2](https://stochss.github.io/GillesPy2) simulation program.
 
 ## Contents
 * [Installation](#installation)
@@ -12,19 +12,19 @@ BioSimulations-compliant command-line interface to the [Gillespy2](https://githu
 
 ### Install Python package
 ```
-pip install git+https://github.com/reproducible-biomedical-modeling/Biosimulations_GillesPy2
+pip install git+https://github.com/biosimulators/Biosimulators_GillesPy2
 ```
 
 ### Install Docker image
 ```
-docker pull <crbm>/<Biosimulations_GillesPy2>
+docker pull ghcr.io/biosimulators/gillespy2
 ```
 
 ## Local usage
 ```
-usage: <my-simulator> [-h] [-d] [-q] -i ARCHIVE [-o OUT_DIR] [-v]
+usage: gillespy2 [-h] [-d] [-q] -i ARCHIVE [-o OUT_DIR] [-v]
 
-BioSimulations-compliant command-line interface to the [Gillespy2](https://github.com/GillesPy2/GillesPy2) simulation program.
+BioSimulators-compliant command-line interface to the Gillespy2 <https://stochss.github.io/GillesPy2> simulation program.
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -45,7 +45,7 @@ docker run \
   --rm \
   --mount type=bind,source="$(pwd)"/tests/fixtures,target=/root/in,readonly \
   --mount type=bind,source="$(pwd)"/tests/results,target=/root/out \
-  <organization>/<repository>:latest \
+  ghcr.io/biosimulators/gillespy2:latest \
     -i /root/in/BIOMD0000000297.omex \
     -o /root/out
 ```
@@ -54,7 +54,7 @@ docker run \
 This package is released under the [MIT](LICENSE).
 
 ## Development team
-This package was developed by the [Karr Lab](https://www.karrlab.org) at the Icahn School of Medicine at Mount Sinai, and the [Biosimulations Developers](http://Biosimulations.org).
+This package was developed by the [Karr Lab](https://www.karrlab.org) at the Icahn School of Medicine at Mount Sinai and the [Center for Reproducible Biomedical Modeling](http://reproduciblebiomodels.org/).
 
 ## Questions and comments
-Please contact  [Bilal Shaikh](mailto:<BilalSgaikh42@gmail.com>)  or the [Biosimulations Developers](mailto:<info@biosimulations.org>) with any questions or comments.
+Please contact [Bilal Shaikh](mailto:BilalShaikh42@gmail.com) or the [BioSimulators Team](mailto:info@biosimulators.org) with any questions or comments.

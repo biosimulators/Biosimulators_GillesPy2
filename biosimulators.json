@@ -702,7 +702,7 @@
             "id": "KISAO_0000475"
           },
           "name": "integrator",
-          "type": "string",
+          "type": "kisaoId",
           "value": "KISAO_0000088",
           "recommendedRange": ["KISAO_0000088", "KISAO_0000288", "KISAO_0000304", "KISAO_0000032", "KISAO_0000537"]
         }
@@ -751,7 +751,7 @@
             "id": "KISAO_0000475"
           },
           "name": "method",
-          "type": "string",
+          "type": "kisaoId",
           "value": "KISAO_0000289",
           "recommendedRange": ["KISAO_0000288", "KISAO_0000289"]
         },
@@ -890,7 +890,7 @@
             "id": "KISAO_0000475"
           },
           "name": "method",
-          "type": "string",
+          "type": "kisaoId",
           "value": "KISAO_0000289",
           "recommendedRange": ["KISAO_0000288", "KISAO_0000289"]
         },

@@ -47,7 +47,7 @@ setuptools.setup(
     ],
     entry_points={
         'console_scripts': [
-            'gillespy2 = Biosimulators_gillespy2.__main__:main',
+            'gillespy2 = biosimulators_gillespy2.__main__:main',
         ],
     },
 )

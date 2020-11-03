@@ -7,8 +7,8 @@
 """
 
 from Biosimulations_utils.simulator.testing import SimulatorValidator
-from Biosimulators_gillespy2 import __main__
-import Biosimulators_gillespy2
+from biosimulators_gillespy2 import __main__
+import biosimulators_gillespy2
 import capturer
 import docker
 import os
@@ -38,14 +38,14 @@ class CliTestCase(unittest.TestCase):
             with capturer.CaptureOutput(merged=False, relay=False) as captured:
                 with self.assertRaises(SystemExit):
                     app.run()
-                self.assertIn(Biosimulators_gillespy2.__version__, captured.stdout.get_text())
+                self.assertIn(biosimulators_gillespy2.__version__, captured.stdout.get_text())
                 self.assertEqual(captured.stderr.get_text(), '')
 
         with __main__.App(argv=['--version']) as app:
             with capturer.CaptureOutput(merged=False, relay=False) as captured:
                 with self.assertRaises(SystemExit):
                     app.run()
-                self.assertIn(Biosimulators_gillespy2.__version__, captured.stdout.get_text())
+                self.assertIn(biosimulators_gillespy2.__version__, captured.stdout.get_text())
                 self.assertEqual(captured.stderr.get_text(), '')
 
     def test_sim_short_arg_names(self):

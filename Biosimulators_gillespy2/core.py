@@ -39,7 +39,7 @@ class Algorithm(object):
             name (:obj:`str`): name
             solver (:obj:`type`): solver
             **solver_args (:obj:`dict`): solver arguments
-            parameters (:obj:`dict`): dictionary that maps KISAO ids to :obj:`AlgorithmParameter`s
+            parameters (:obj:`dict`): dictionary that maps KiSAO ids to :obj:`AlgorithmParameter`s
         """
         self.name = name
         self.solver = solver
@@ -244,7 +244,7 @@ def exec_simulation(model_filename, model_sed_urn, simulation, working_dir, out_
     algorithm_id = simulation.algorithm.kisao_term.id
     algorithm = kisao_algorithm_map.get(algorithm_id, None)
     if algorithm is None:
-        raise InputError(expression=algorithm_id, message="Algorithm with KISAO id '{}' is not supported".format(algorithm_id))
+        raise InputError(expression=algorithm_id, message="Algorithm with KiSAO id '{}' is not supported".format(algorithm_id))
 
     # Apply the algorithm parameter changes specified by `simulation.algorithm_parameter_changes`
     algorithm_params = {}
@@ -253,7 +253,7 @@ def exec_simulation(model_filename, model_sed_urn, simulation, working_dir, out_
         if parameter is None:
             raise InputError(
                 expression=change.parameter.kisao_term.id,
-                message="Algorithm parameter with KISAO id '{}' is not supported".format(change.parameter.kisao_term.id))
+                message="Algorithm parameter with KiSAO id '{}' is not supported".format(change.parameter.kisao_term.id))
         parameter.set_value(algorithm_params, change.value)
 
     # Validate that start time is 0 because this is the only option that GillesPy2 supports

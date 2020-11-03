@@ -987,8 +987,6 @@
       ]
     }
   ],
-  "created": "2020-01-01T12:00:00Z",
-  "updated": "2020-01-01T12:00:00Z",
   "biosimulators": {
     "specificationsVersion": "1.0.0",
     "imageVersion": "1.0.0"

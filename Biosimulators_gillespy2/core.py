@@ -129,7 +129,7 @@ kisao_algorithm_map = {
         'KISAO_0000209': AlgorithmParameter("relative tolerance", 'integrator_options.rtol', float, 1e-6),
         'KISAO_0000415': AlgorithmParameter("maximum number of steps", 'integrator_options.nsteps', int, 500),
         'KISAO_0000559': AlgorithmParameter("initial step size", 'integrator_options.first_step', float, 0.0),
-        'KISAO_0000467': AlgorithmParameter("maximum step size", 'integrator_options.max_step', float, inf),
+        'KISAO_0000467': AlgorithmParameter("maximum step size", 'integrator_options.max_step', float, float("inf")),
         'KISAO_0000538': AlgorithmParameter("safety factor on new step selection", 'integrator_options.safety', float, 0.9),
         'KISAO_0000540': AlgorithmParameter("maximum factor to increase/decrease step size by in one step",                          'integrator_options.ifactor', float, 10.),
         'KISAO_0000539': AlgorithmParameter("minimum factor to increase/decrease step size by in one step",
@@ -142,7 +142,7 @@ kisao_algorithm_map = {
         'KISAO_0000415': AlgorithmParameter("maximum number of steps", 'integrator_options.nsteps', int, 500),
 
         'KISAO_0000559': AlgorithmParameter("initial step size", 'integrator_options.first_step', float, 0.0),
-        'KISAO_0000467': AlgorithmParameter("maximum step size", 'integrator_options.max_step', float, inf),
+        'KISAO_0000467': AlgorithmParameter("maximum step size", 'integrator_options.max_step', float, float("inf")),
         'KISAO_0000538': AlgorithmParameter("safety factor on new step selection", 'integrator_options.safety', float, 0.9),
         'KISAO_0000540': AlgorithmParameter("maximum factor to increase/decrease step size by in one step",
 
@@ -152,7 +152,7 @@ kisao_algorithm_map = {
         'KISAO_0000541': AlgorithmParameter("Beta parameter for stabilised step size control", 'integrator_options.beta', float, 0.),
     }),
 
-    'KISAO_0000535': Algorithm("vode", gillespy2.ODESolver, integrator=vode, parameters={
+    'KISAO_0000535': Algorithm("vode", gillespy2.ODESolver, integrator="vode", parameters={
 
         'KISAO_0000211': AlgorithmParameter("absolute tolerance", 'integrator_options.atol', float, 1e-12),
         'KISAO_0000209': AlgorithmParameter("relative tolerance", 'integrator_options.rtol', float, 1e-6),
@@ -165,9 +165,9 @@ kisao_algorithm_map = {
         'KISAO_0000484': AlgorithmParameter("order", 'integrator_options.order', int, 12),
         'KISAO_0000475': AlgorithmParameter("integration method", 'integrator_options.method', VodeMethod, VodeMethod.adams),
 
-        'KISAO_0000542': AlgorithmParameter("with Jacobian", 'integrator_options.with_jacobian', bool, false),
+        'KISAO_0000542': AlgorithmParameter("with Jacobian", 'integrator_options.with_jacobian', bool, False),
     }),
-    'KISAO_0000536': Algorithm("zvode", gillespy2.ODESolver, integrator=zvode, parameters={
+    'KISAO_0000536': Algorithm("zvode", gillespy2.ODESolver, integrator="zvode", parameters={
 
         'KISAO_0000211': AlgorithmParameter("absolute tolerance", 'integrator_options.atol', float, 1e-12),
         'KISAO_0000209': AlgorithmParameter("relative tolerance", 'integrator_options.rtol', float, 1e-6),
@@ -180,7 +180,7 @@ kisao_algorithm_map = {
         'KISAO_0000484': AlgorithmParameter("order", 'integrator_options.order', int, 12),
         'KISAO_0000475': AlgorithmParameter("integration method", 'integrator_options.method', VodeMethod, VodeMethod.adams),
 
-        'KISAO_0000542': AlgorithmParameter("with Jacobian", 'integrator_options.with_jacobian', bool, false),
+        'KISAO_0000542': AlgorithmParameter("with Jacobian", 'integrator_options.with_jacobian', bool, False),
 
     }),
     'KISAO_0000029': Algorithm("SSA", gillespy2.SSACSolver, parameters={
@@ -257,6 +257,7 @@ def exec_simulation(model_filename, model_sed_urn, simulation, working_dir, out_
         algorithm_id = "KISAO_" + algorithm_id
 
     algorithm = kisao_algorithm_map.get(algorithm_id, None)
+    print(algorithm_id)
 
     if algorithm is None:
 
@@ -278,12 +279,12 @@ def exec_simulation(model_filename, model_sed_urn, simulation, working_dir, out_
     if simulation.start_time > 0:
         raise InputError(expression=simulation.start_time,
                          message='Start time must be at least 0')
-
+    print(simulation.end_time)
     # Simulate the model from `simulation.start_time` to `simulation.end_time` and record `simulation.num_time_points` + 1 time points
     increment = (simulation.end_time - simulation.start_time) / \
         simulation.num_time_points
     results = model.run(algorithm.solver, **algorithm.solver_args,
-                        **algorithm_params, t=simulation.end_time, increment=increment)
+                        **algorithm_params, t=simulation.end_time)
     print(results)
 
     # TODO: ignore all time points before `simulation.start_time`

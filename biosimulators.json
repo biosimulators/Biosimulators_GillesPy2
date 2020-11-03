@@ -704,7 +704,7 @@
           "name": "integrator",
           "type": "string",
           "value": "KISAO_0000088",
-          "recommendedRange": ["KISAO_0000088", "KISAO_0000288", "KISAO_0000304", "KISAO_0000032", "RK23"]
+          "recommendedRange": ["KISAO_0000088", "KISAO_0000288", "KISAO_0000304", "KISAO_0000032", "KISAO_0000537"]
         }
       ]
     },

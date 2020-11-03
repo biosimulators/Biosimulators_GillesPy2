@@ -101,11 +101,7 @@
     }
   ],
   "references": {
-    "identifiers": [{
-      "namespace": "pypi",
-      "id": "gillespy2",
-      "url": "https://pypi.org/project/gillespy2/"
-    }],
+    "identifiers": [],
     "citations": [{
         "title": "StochKit2: software for discrete stochastic simulation of biochemical systems with events",
         "authors": "Kevin R. Sanft, Sheng Wu, Min Roh, Jin Fu, Rone Kwei Lim & Linda R. Petzold",
@@ -173,7 +169,7 @@
     ]
   },
   "license": {
-    "namespace": "SPDX",
+    "namespace": "SPDX", 
     "id": "GPL-3.0-only"
   },
   "algorithms": [{
@@ -257,7 +253,7 @@
         {
           "kisaoId": {
             "namespace": "KISAO",
-            "id": "KISAO_0000483"
+            "id": "KISAO_0000559"
           },
           "name": "initial step size",
           "type": "float",
@@ -368,7 +364,7 @@
         {
           "kisaoId": {
             "namespace": "KISAO",
-            "id": "KISAO_0000483"
+            "id": "KISAO_0000559"
           },
           "name": "initial step size",
           "type": "float",
@@ -382,6 +378,42 @@
           "name": "maximum step size",
           "type": "float",
           "value": null
+        },
+        {
+          "kisaoId": {
+            "namespace": "KISAO",
+            "id": "KISAO_0000538"
+          },
+          "name": "safety",
+          "type": "float",
+          "value": 0.9
+        },
+        {
+          "kisaoId": {
+            "namespace": "KISAO",
+            "id": "KISAO_0000540"
+          },
+          "name": "ifactor",
+          "type": "float",
+          "value": 10.0
+        },
+        {
+          "kisaoId": {
+            "namespace": "KISAO",
+            "id": "KISAO_0000539"
+          },
+          "name": "dfactor",
+          "type": "float",
+          "value": 0.2
+        },
+        {
+          "kisaoId": {
+            "namespace": "KISAO",
+            "id": "KISAO_0000541"
+          },
+          "name": "beta",
+          "type": "float",
+          "value": 0.0
         }
       ]
     },
@@ -452,7 +484,7 @@
         {
           "kisaoId": {
             "namespace": "KISAO",
-            "id": "KISAO_0000483"
+            "id": "KISAO_0000559"
           },
           "name": "initial step size",
           "type": "float",
@@ -466,6 +498,42 @@
           "name": "maximum step size",
           "type": "float",
           "value": null
+        },
+        {
+          "kisaoId": {
+            "namespace": "KISAO",
+            "id": "KISAO_0000538"
+          },
+          "name": "safety",
+          "type": "float",
+          "value": 0.9
+        },
+        {
+          "kisaoId": {
+            "namespace": "KISAO",
+            "id": "KISAO_0000540"
+          },
+          "name": "ifactor",
+          "type": "float",
+          "value": 6.0
+        },
+        {
+          "kisaoId": {
+            "namespace": "KISAO",
+            "id": "KISAO_0000539"
+          },
+          "name": "dfactor",
+          "type": "float",
+          "value": 0.333
+        },
+        {
+          "kisaoId": {
+            "namespace": "KISAO",
+            "id": "KISAO_0000541"
+          },
+          "name": "beta",
+          "type": "float",
+          "value": 0.0
         }
       ]
     },
@@ -634,17 +702,293 @@
             "id": "KISAO_0000475"
           },
           "name": "integrator",
-          "type": "string",
+          "type": "kisaoId",
           "value": "KISAO_0000088",
-          "recommendedRange": ["KISAO_0000088", "KISAO_0000288", "KISAO_0000304", "KISAO_0000032"]
+          "recommendedRange": ["KISAO_0000088", "KISAO_0000288", "KISAO_0000304", "KISAO_0000032", "KISAO_0000537"]
+        }
+      ]
+    },
+    {
+      "id": "vode",
+      "name": "Real-valued Variable-coefficient Ordinary Differential Equation solver, with fixed-leading-coefficient implementation",
+      "kisaoId": {
+        "namespace": "KISAO",
+        "id": "KISAO_0000535"
+      },
+      "modelingFrameworks": [{
+        "namespace": "SBO",
+        "id": "SBO_0000293"
+      }],
+      "modelFormats": [{
+        "namespace": "EDAM",
+        "id": "format_2585"
+      }],
+      "simulationFormats": [{
+        "namespace": "EDAM",
+        "id": "format_3685"
+      }],
+      "archiveFormats": [{
+        "namespace": "EDAM",
+        "id": "format_3686"
+      }],
+      "citations": [{
+        "title": "VODE: a variable-coefficient ODE solver",
+        "authors": "Peter N. Brown, George D. Byrne & Alan C. Hindmarsh",
+        "journal": "SIAM Journal on Scientific and Statistical Computing",
+        "volume": 10,
+        "issue": 5,
+        "pages": "1038-1051",
+        "year": 1989,
+        "identifiers": [{
+          "namespace": "doi",
+          "id": "10.1137/0910062",
+          "url": "https://doi.org/10.1137/0910062"
+        }]
+      }],
+      "parameters": [{
+          "kisaoId": {
+            "namespace": "KISAO",
+            "id": "KISAO_0000475"
+          },
+          "name": "method",
+          "type": "kisaoId",
+          "value": "KISAO_0000289",
+          "recommendedRange": ["KISAO_0000288", "KISAO_0000289"]
+        },
+        {
+          "kisaoId": {
+            "namespace": "KISAO",
+            "id": "KISAO_0000542"
+          },
+          "name": "with Jacobian",
+          "type": "boolean",
+          "value": false
+        },
+        {
+          "kisaoId": {
+            "namespace": "KISAO",
+            "id": "KISAO_0000211"
+          },
+          "name": "absolute tolerance",
+          "type": "float",
+          "value": 1e-12
+        },
+        {
+          "kisaoId": {
+            "namespace": "KISAO",
+            "id": "KISAO_0000209"
+          },
+          "name": "relative tolerance",
+          "type": "float",
+          "value": 1e-6
+        },
+        {
+          "kisaoId": {
+            "namespace": "KISAO",
+            "id": "KISAO_0000480"
+          },
+          "name": "lower half bandwith",
+          "type": "integer",
+          "value": null
+        },
+        {
+          "kisaoId": {
+            "namespace": "KISAO",
+            "id": "KISAO_0000479"
+          },
+          "name": "upper half bandwith",
+          "type": "integer",
+          "value": null
+        },
+        {
+          "kisaoId": {
+            "namespace": "KISAO",
+            "id": "KISAO_0000484"
+          },
+          "name": "maximum order",
+          "type": "integer",
+          "value": 12
+        },
+        {
+          "kisaoId": {
+            "namespace": "KISAO",
+            "id": "KISAO_0000415"
+          },
+          "name": "maximum number of steps",
+          "type": "integer",
+          "value": 500
+        },
+        {
+          "kisaoId": {
+            "namespace": "KISAO",
+            "id": "KISAO_0000467"
+          },
+          "name": "maximum step size",
+          "type": "float",
+          "value": null
+        },
+        {
+          "kisaoId": {
+            "namespace": "KISAO",
+            "id": "KISAO_0000485"
+          },
+          "name": "minimum step size",
+          "type": "float",
+          "value": 0.0
+        },
+        {
+          "kisaoId": {
+            "namespace": "KISAO",
+            "id": "KISAO_0000559"
+          },
+          "name": "initial step size",
+          "type": "float",
+          "value": 0.0
+        }
+      ]
+    },
+    {
+      "id": "zvode",
+      "name": "Complex-valued Variable-coefficient Ordinary Differential Equation solver, with fixed-leading-coefficient implementation",
+      "kisaoId": {
+        "namespace": "KISAO",
+        "id": "KISAO_0000536"
+      },
+      "modelingFrameworks": [{
+        "namespace": "SBO",
+        "id": "SBO_0000293"
+      }],
+      "modelFormats": [{
+        "namespace": "EDAM",
+        "id": "format_2585"
+      }],
+      "simulationFormats": [{
+        "namespace": "EDAM",
+        "id": "format_3685"
+      }],
+      "archiveFormats": [{
+        "namespace": "EDAM",
+        "id": "format_3686"
+      }],
+      "citations": [{
+        "title": "VODE: a variable-coefficient ODE solver",
+        "authors": "Peter N. Brown, George D. Byrne & Alan C. Hindmarsh",
+        "journal": "SIAM Journal on Scientific and Statistical Computing",
+        "volume": 10,
+        "issue": 5,
+        "pages": "1038-1051",
+        "year": 1989,
+        "identifiers": [{
+          "namespace": "doi",
+          "id": "10.1137/0910062",
+          "url": "https://doi.org/10.1137/0910062"
+        }]
+      }],
+      "parameters": [{
+          "kisaoId": {
+            "namespace": "KISAO",
+            "id": "KISAO_0000475"
+          },
+          "name": "method",
+          "type": "kisaoId",
+          "value": "KISAO_0000289",
+          "recommendedRange": ["KISAO_0000288", "KISAO_0000289"]
+        },
+        {
+          "kisaoId": {
+            "namespace": "KISAO",
+            "id": "KISAO_0000542"
+          },
+          "name": "with Jacobian",
+          "type": "boolean",
+          "value": false
+        },
+        {
+          "kisaoId": {
+            "namespace": "KISAO",
+            "id": "KISAO_0000211"
+          },
+          "name": "absolute tolerance",
+          "type": "float",
+          "value": 1e-12
+        },
+        {
+          "kisaoId": {
+            "namespace": "KISAO",
+            "id": "KISAO_0000209"
+          },
+          "name": "relative tolerance",
+          "type": "float",
+          "value": 1e-6
+        },
+        {
+          "kisaoId": {
+            "namespace": "KISAO",
+            "id": "KISAO_0000480"
+          },
+          "name": "lower half bandwith",
+          "type": "integer",
+          "value": null
+        },
+        {
+          "kisaoId": {
+            "namespace": "KISAO",
+            "id": "KISAO_0000479"
+          },
+          "name": "upper half bandwith",
+          "type": "integer",
+          "value": null
+        },
+        {
+          "kisaoId": {
+            "namespace": "KISAO",
+            "id": "KISAO_0000484"
+          },
+          "name": "maximum order",
+          "type": "integer",
+          "value": 12
+        },
+        {
+          "kisaoId": {
+            "namespace": "KISAO",
+            "id": "KISAO_0000415"
+          },
+          "name": "maximum number of steps",
+          "type": "integer",
+          "value": 500
+        },
+        {
+          "kisaoId": {
+            "namespace": "KISAO",
+            "id": "KISAO_0000467"
+          },
+          "name": "maximum step size",
+          "type": "float",
+          "value": null
+        },
+        {
+          "kisaoId": {
+            "namespace": "KISAO",
+            "id": "KISAO_0000485"
+          },
+          "name": "minimum step size",
+          "type": "float",
+          "value": 0.0
+        },
+        {
+          "kisaoId": {
+            "namespace": "KISAO",
+            "id": "KISAO_0000559"
+          },
+          "name": "initial step size",
+          "type": "float",
+          "value": 0.0
         }
       ]
     }
   ],
-  "created": "2020-01-01T12:00:00Z",
-  "updated": "2020-01-01T12:00:00Z",
   "biosimulators": {
-    "schemaVersion": "1.0.0",
+    "specificationsVersion": "1.0.0",
     "imageVersion": "1.0.0"
   }
 }

@@ -39,7 +39,7 @@ class Algorithm(object):
             name (:obj:`str`): name
             solver (:obj:`type`): solver
             **solver_args (:obj:`dict`): solver arguments
-            parameters (:obj:`dict`): dictionary that maps KISAO ids to :obj:`AlgorithmParameter`s
+            parameters (:obj:`dict`): dictionary that maps KiSAO ids to :obj:`AlgorithmParameter`s
         """
         self.name = name
         self.solver = solver
@@ -107,7 +107,7 @@ class HybridTauIntegrationMethod(str, enum.Enum):
     BDF = 'KISAO_0000288'
     LSODA = 'KISAO_0000088'
     Radau = 'KISAO_0000304'
-    RK23 = 'KISAO_0000XXX'  # TODO: add KISAO term
+    RK23 = 'KISAO_0000537'
     RK45 = 'KISAO_0000032'
 
 
@@ -118,7 +118,7 @@ kisao_algorithm_map = {
         'KISAO_0000480': AlgorithmParameter("lower half bandwith", 'integrator_options.lband', int, None),
         'KISAO_0000479': AlgorithmParameter("upper half bandwith", 'integrator_options.uband', int, None),
         'KISAO_0000415': AlgorithmParameter("maximum number of steps", 'integrator_options.nsteps', int, 500),
-        'KISAO_0000483': AlgorithmParameter("initial step size", 'integrator_options.first_step', float, 0.0),
+        'KISAO_0000559': AlgorithmParameter("initial step size", 'integrator_options.first_step', float, 0.0),
         'KISAO_0000485': AlgorithmParameter("minimum step size", 'integrator_options.min_step', float, 0.0),
         'KISAO_0000467': AlgorithmParameter("maximum step size", 'integrator_options.max_step', float, float("inf")),
         'KISAO_0000219': AlgorithmParameter("maximum non-stiff order (Adams order)", 'integrator_options.max_order_ns', int, 12),
@@ -128,86 +128,68 @@ kisao_algorithm_map = {
         'KISAO_0000211': AlgorithmParameter("absolute tolerance", 'integrator_options.atol', float, 1e-12),
         'KISAO_0000209': AlgorithmParameter("relative tolerance", 'integrator_options.rtol', float, 1e-6),
         'KISAO_0000415': AlgorithmParameter("maximum number of steps", 'integrator_options.nsteps', int, 500),
-        'KISAO_0000483': AlgorithmParameter("initial step size", 'integrator_options.first_step', float, 0.0),
-        'KISAO_0000467': AlgorithmParameter("maximum step size", 'integrator_options.max_step', float, float("inf")),
-        # TODO: Add KISAO term
-        'KISAO_safety': AlgorithmParameter("safety factor on new step selection", 'integrator_options.safety', float, 0.9),
-        # TODO: Add KISAO term
-        'KISAO_ifactor': AlgorithmParameter("maximum factor to increase/decrease step size by in one step",
-                                            'integrator_options.ifactor', float, 10.),
-
-        # TODO: Add KISAO term
-        'KISAO_dfactor': AlgorithmParameter("minimum factor to increase/decrease step size by in one step",
+        'KISAO_0000559': AlgorithmParameter("initial step size", 'integrator_options.first_step', float, 0.0),
+        'KISAO_0000467': AlgorithmParameter("maximum step size", 'integrator_options.max_step', float, inf),
+        'KISAO_0000538': AlgorithmParameter("safety factor on new step selection", 'integrator_options.safety', float, 0.9),
+        'KISAO_0000540': AlgorithmParameter("maximum factor to increase/decrease step size by in one step",                          'integrator_options.ifactor', float, 10.),
+        'KISAO_0000539': AlgorithmParameter("minimum factor to increase/decrease step size by in one step",
                                             'integrator_options.dfactor', float, 0.2),
-
-        # TODO: Add KISAO term
-        'KISAO_beta': AlgorithmParameter("Beta parameter for stabilised step size control", 'integrator_options.beta', float, 0.),
+        'KISAO_0000541': AlgorithmParameter("Beta parameter for stabilised step size control", 'integrator_options.beta', float, 0.),
     }),
     'KISAO_0000436': Algorithm("dop835", gillespy2.ODESolver, integrator="dop835", parameters={
         'KISAO_0000211': AlgorithmParameter("absolute tolerance", 'integrator_options.atol', float, 1e-12),
         'KISAO_0000209': AlgorithmParameter("relative tolerance", 'integrator_options.rtol', float, 1e-6),
         'KISAO_0000415': AlgorithmParameter("maximum number of steps", 'integrator_options.nsteps', int, 500),
-        'KISAO_0000483': AlgorithmParameter("initial step size", 'integrator_options.first_step', float, 0.0),
-        'KISAO_0000467': AlgorithmParameter("maximum step size", 'integrator_options.max_step', float, float("inf")),
-        # TODO: Add KISAO term
-        'KISAO_safety': AlgorithmParameter("safety factor on new step selection", 'integrator_options.safety', float, 0.9),
-        # TODO: Add KISAO term
-        'KISAO_ifactor': AlgorithmParameter("maximum factor to increase/decrease step size by in one step",
+
+        'KISAO_0000559': AlgorithmParameter("initial step size", 'integrator_options.first_step', float, 0.0),
+        'KISAO_0000467': AlgorithmParameter("maximum step size", 'integrator_options.max_step', float, inf),
+        'KISAO_0000538': AlgorithmParameter("safety factor on new step selection", 'integrator_options.safety', float, 0.9),
+        'KISAO_0000540': AlgorithmParameter("maximum factor to increase/decrease step size by in one step",
+
                                             'integrator_options.ifactor', float, 6.),
-
-        # TODO: Add KISAO term
-        'KISAO_dfactor': AlgorithmParameter("minimum factor to increase/decrease step size by in one step",
+        'KISAO_0000539': AlgorithmParameter("minimum factor to increase/decrease step size by in one step",
                                             'integrator_options.dfactor', float, 0.333),
-
-        # TODO: Add KISAO term
-        'KISAO_beta': AlgorithmParameter("Beta parameter for stabilised step size control", 'integrator_options.beta', float, 0.),
+        'KISAO_0000541': AlgorithmParameter("Beta parameter for stabilised step size control", 'integrator_options.beta', float, 0.),
     }),
 
-    # TODO: add KISAO term
-    'KISAO_vode': Algorithm("vode", gillespy2.ODESolver, integrator="vode", parameters={
+    'KISAO_0000535': Algorithm("vode", gillespy2.ODESolver, integrator=vode, parameters={
+
         'KISAO_0000211': AlgorithmParameter("absolute tolerance", 'integrator_options.atol', float, 1e-12),
         'KISAO_0000209': AlgorithmParameter("relative tolerance", 'integrator_options.rtol', float, 1e-6),
         'KISAO_0000480': AlgorithmParameter("lower half bandwith", 'integrator_options.lband', int, None),
         'KISAO_0000479': AlgorithmParameter("upper half bandwith", 'integrator_options.uband', int, None),
         'KISAO_0000415': AlgorithmParameter("maximum number of steps", 'integrator_options.nsteps', int, 500),
-        'KISAO_0000483': AlgorithmParameter("initial step size", 'integrator_options.first_step', float, 0.0),
+        'KISAO_0000559': AlgorithmParameter("initial step size", 'integrator_options.first_step', float, 0.0),
         'KISAO_0000485': AlgorithmParameter("minimum step size", 'integrator_options.min_step', float, 0.0),
         'KISAO_0000467': AlgorithmParameter("maximum step size", 'integrator_options.max_step', float, float("inf")),
         'KISAO_0000484': AlgorithmParameter("order", 'integrator_options.order', int, 12),
         'KISAO_0000475': AlgorithmParameter("integration method", 'integrator_options.method', VodeMethod, VodeMethod.adams),
 
-        # TODO: Add KISAO term
-        'KISAO_with_jacobian': AlgorithmParameter("with Jacobian", 'integrator_options.with_jacobian', bool, False),
+        'KISAO_0000542': AlgorithmParameter("with Jacobian", 'integrator_options.with_jacobian', bool, false),
     }),
+    'KISAO_0000536': Algorithm("zvode", gillespy2.ODESolver, integrator=zvode, parameters={
 
-    # TODO: add KISAO term
-    'KISAO_zvode': Algorithm("zvode", gillespy2.ODESolver, integrator="zvode", parameters={
         'KISAO_0000211': AlgorithmParameter("absolute tolerance", 'integrator_options.atol', float, 1e-12),
         'KISAO_0000209': AlgorithmParameter("relative tolerance", 'integrator_options.rtol', float, 1e-6),
         'KISAO_0000480': AlgorithmParameter("lower half bandwith", 'integrator_options.lband', int, None),
         'KISAO_0000479': AlgorithmParameter("upper half bandwith", 'integrator_options.uband', int, None),
         'KISAO_0000415': AlgorithmParameter("maximum number of steps", 'integrator_options.nsteps', int, 500),
-        'KISAO_0000483': AlgorithmParameter("initial step size", 'integrator_options.first_step', float, 0.0),
+        'KISAO_0000559': AlgorithmParameter("initial step size", 'integrator_options.first_step', float, 0.0),
         'KISAO_0000485': AlgorithmParameter("minimum step size", 'integrator_options.min_step', float, 0.0),
         'KISAO_0000467': AlgorithmParameter("maximum step size", 'integrator_options.max_step', float, float("inf")),
         'KISAO_0000484': AlgorithmParameter("order", 'integrator_options.order', int, 12),
         'KISAO_0000475': AlgorithmParameter("integration method", 'integrator_options.method', VodeMethod, VodeMethod.adams),
 
-        # TODO: Add KISAO term
-        'KISAO_with_jacobian': AlgorithmParameter("with Jacobian", 'integrator_options.with_jacobian', bool, False),
-    }),
+        'KISAO_0000542': AlgorithmParameter("with Jacobian", 'integrator_options.with_jacobian', bool, false),
 
+    }),
     'KISAO_0000029': Algorithm("SSA", gillespy2.SSACSolver, parameters={
         'KISAO_0000488': AlgorithmParameter("seed", 'seed', int, None),
     }),
-
     'KISAO_0000039': Algorithm("tau-leaping", gillespy2.TauLeapingSolver, parameters={
         'KISAO_0000488': AlgorithmParameter("seed", 'seed', int, None),
         'KISAO_0000228': AlgorithmParameter("epsilon", 'tau_tol', float, 0.03),
     }),
-
-    # TODO: ask GillesPy2 developers if this is the correct KISAO term:
-    #     is hybrid tau slow-scale stochastic simulation algorithm?
     'KISAO_0000028': Algorithm("hybrid tau solver", gillespy2.TauHybridSolver, parameters={
         'KISAO_0000488': AlgorithmParameter("seed", 'seed', int, None),
         'KISAO_0000228': AlgorithmParameter("epsilon", 'tau_tol', float, 0.03),
@@ -277,6 +259,7 @@ def exec_simulation(model_filename, model_sed_urn, simulation, working_dir, out_
     algorithm = kisao_algorithm_map.get(algorithm_id, None)
 
     if algorithm is None:
+
         raise InputError(expression=algorithm_id,
                          message="Algorithm with KISAO id '{}' is not supported".format(algorithm_id))
 
@@ -288,7 +271,7 @@ def exec_simulation(model_filename, model_sed_urn, simulation, working_dir, out_
         if parameter is None:
             raise InputError(
                 expression=change.parameter.kisao_term.id,
-                message="Algorithm parameter with KISAO id '{}' is not supported".format(change.parameter.kisao_term.id))
+                message="Algorithm parameter with KiSAO id '{}' is not supported".format(change.parameter.kisao_term.id))
         parameter.set_value(algorithm_params, change.value)
 
     # Validate that start time is 0 because this is the only option that GillesPy2 supports

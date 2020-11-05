@@ -131,7 +131,8 @@ kisao_algorithm_map = {
         'KISAO_0000559': AlgorithmParameter("initial step size", 'integrator_options.first_step', float, 0.0),
         'KISAO_0000467': AlgorithmParameter("maximum step size", 'integrator_options.max_step', float, float("inf")),
         'KISAO_0000538': AlgorithmParameter("safety factor on new step selection", 'integrator_options.safety', float, 0.9),
-        'KISAO_0000540': AlgorithmParameter("maximum factor to increase/decrease step size by in one step",                          'integrator_options.ifactor', float, 10.),
+        'KISAO_0000540': AlgorithmParameter("maximum factor to increase/decrease step size by in one step",
+                                            'integrator_options.ifactor', float, 10.),
         'KISAO_0000539': AlgorithmParameter("minimum factor to increase/decrease step size by in one step",
                                             'integrator_options.dfactor', float, 0.2),
         'KISAO_0000541': AlgorithmParameter("Beta parameter for stabilised step size control", 'integrator_options.beta', float, 0.),
@@ -212,7 +213,7 @@ def exec_combine_archive(archive_file, out_dir):
         archive_file (:obj:`str`): path to COMBINE archive
         out_dir (:obj:`str`): directory to store the outputs of the tasks
     """
-    exec_simulations_in_archive(archive_file, exec_simulation, out_dir)
+    exec_simulations_in_archive(archive_file, exec_simulation, out_dir, apply_model_changes=True)
 
 
 def exec_simulation(model_filename, model_sed_urn, simulation, working_dir, out_filename, out_format):
@@ -234,18 +235,12 @@ def exec_simulation(model_filename, model_sed_urn, simulation, working_dir, out_
         raise InputError(
             expression=format, message="Model language with URN '{}' is not supported".format(model_sed_urn))
 
-    # If necessary, apply the model parameter changes specified by `simulation.model_parameter_changes`
-    original_model_abs_filename = os.path.join(working_dir, model_filename)
+    # Not necessary to apply model parameter changes becuase they have already been handled by :obj:`exec_simulations_in_archive`
     if simulation.model_parameter_changes:
-        file_handle, model_abs_filename = tempfile.mkstemp(suffix='.xml')
-        os.close(file_handle)
-        modify_xml_model_for_simulation(
-            simulation, original_model_abs_filename, model_abs_filename)
-    else:
-        model_abs_filename = original_model_abs_filename
+        raise InputError('Model parameter changes are not supported')
 
     # Convert SBML into a GillesPy2 model
-    model = SBMLimport.convert(model_abs_filename, simulation.model.name)[0]
+    model = SBMLimport.convert(model_filename, simulation.model.name)[0]
     if model is None:
         raise InputError(expression="model", message=model[1])
 
@@ -260,7 +255,6 @@ def exec_simulation(model_filename, model_sed_urn, simulation, working_dir, out_
     print(algorithm_id)
 
     if algorithm is None:
-
         raise InputError(expression=algorithm_id,
                          message="Algorithm with KISAO id '{}' is not supported".format(algorithm_id))
 

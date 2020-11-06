@@ -3,7 +3,7 @@
   "name": "GillesPy2",
   "version": "1.5.6",
   "description": "GillesPy2 is a Python 3 package for stochastic simulation of biochemical systems.",
-  "url": "https://github.com/GillesPy2/GillesPy2",
+  "url": "https://github.com/StochSS/GillesPy2",
   "image": "ghcr.io/biosimulators/gillespy2:1.5.6",
   "format": {
     "namespace": "EDAM",
@@ -664,19 +664,7 @@
         "namespace": "EDAM",
         "id": "format_3686"
       }],
-      "citations": [{
-        "title": "Approximate accelerated stochastic simulation of chemically reacting systems",
-        "authors": "Daniel T. Gillespie",
-        "journal": "Journal of Chemical Physics",
-        "volume": 115,
-        "issue": 4,
-        "pages": "1716–1733",
-        "year": 2001,
-        "identifiers": [{
-          "namespace": "doi",
-          "id": "10.1063/1.1378322",
-          "url": "https://doi.org/10.1063/1.1378322"
-        }]
+      "citations": []
       }],
       "parameters": [{
           "kisaoId": {

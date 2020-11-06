@@ -1,4 +1,4 @@
-""" BioSimulators-compliant command-line interface to the `Gillespy2 <https://github.com/GillesPy2/GillesPy2>`_ simulation program.
+""" BioSimulators-compliant command-line interface to the `Gillespy2 <https://github.com/StochSS/GillesPy2>`_ simulation program.
 
 :Author: Bilal Shaikh <bilalshaikh42@gmail.com>
 :Date: 2020-08-18
@@ -17,7 +17,7 @@ class BaseController(cement.Controller):
     class Meta:
         label = 'base'
         description = ("BioSimulators-compliant command-line interface to the "
-                       "<Gillespy2> simulation program <https://github.com/GillesPy2/GillesPy2>.")
+                       "<Gillespy2> simulation program <https://github.com/StochSS/GillesPy2>.")
         help = "gillespy2"
         arguments = [
             (['-i', '--archive'], dict(type=str,

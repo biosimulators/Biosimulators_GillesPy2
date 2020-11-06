@@ -46,7 +46,7 @@ docker run \
   --mount type=bind,source="$(pwd)"/tests/fixtures,target=/root/in,readonly \
   --mount type=bind,source="$(pwd)"/tests/results,target=/root/out \
   ghcr.io/biosimulators/gillespy2:latest \
-    -i /root/in/BIOMD0000000297.omex \
+    -i /root/in/BIOMD0000000297.edited.omex \
     -o /root/out
 ```
 

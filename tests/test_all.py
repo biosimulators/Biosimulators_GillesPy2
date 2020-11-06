@@ -19,7 +19,7 @@ import unittest
 
 
 class CliTestCase(unittest.TestCase):
-    EXAMPLE_ARCHIVE_FILENAME = 'tests/fixtures/BIOMD0000000297.omex'
+    EXAMPLE_ARCHIVE_FILENAME = 'tests/fixtures/BIOMD0000000297.edited.omex'
     DOCKER_IMAGE = 'ghcr.io/biosimulators/gillespy2'
 
     def setUp(self):

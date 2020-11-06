@@ -1,3 +1,5 @@
 cement
 Biosimulations_utils
 gillespy2
+numpy
+pandas

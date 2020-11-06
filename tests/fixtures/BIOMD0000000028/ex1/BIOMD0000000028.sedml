@@ -61,12 +61,13 @@
             <ci>var_time</ci>
          </math>
       </dataGenerator>
-      <dataGenerator id="test" name="Test">
+
+      <dataGenerator id="M" name="M">
          <listOfVariables>
-            <variable id="test" name="H" target="/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id=&apos;MpY&apos;]" taskReference="simulation_1"/>
+            <variable id="M" name="M" target="/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id=&apos;M&apos;]" taskReference="simulation_1"/>
          </listOfVariables>
          <math xmlns="http://www.w3.org/1998/Math/MathML">
-            <ci> p1_H_task1 </ci>
+            <ci> M </ci>
          </math>
       </dataGenerator>
 

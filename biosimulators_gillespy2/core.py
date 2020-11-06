@@ -263,8 +263,8 @@ def exec_simulation(model_filename, model_sed_urn, simulation, working_dir, out_
     model, errors = gillespy2.import_SBML(model_filename, simulation.model.metadata.name)
     if model is None or errors:
         raise InputError(expression=model_filename,
-                         message='Model at {} could not be imported:\n- {}'.format(
-                             model_filename, '\n- '.join(message for message, code in errors)))
+                         message='Model at {} could not be imported:\n  - {}'.format(
+                             model_filename, '\n  - '.join(message for message, code in errors)))
 
     # Load the algorithm specified by `simulation.algorithm`
     algorithm_id = simulation.algorithm.kisao_term.id
@@ -296,20 +296,24 @@ def exec_simulation(model_filename, model_sed_urn, simulation, working_dir, out_
     results_dict = model.run(algorithm.solver, **algorithm.solver_args, **algorithm_params)[0]
 
     # transform the results to data frame
-    times = results_dict.pop('time')
-    species = sorted(results_dict.keys())
+    variables = sorted([var.id for var in simulation.model.variables])
+    variables.insert(0, 'time')
+    unpredicted_variables = set(variables).difference(set(results_dict.keys()))
+    if unpredicted_variables:
+        raise InputError(expression=unpredicted_variables,
+                         message='Simulation did not record the following required outputs:\n  - {}'.format(
+                             '\n  - '.join(sorted(unpredicted_variables))))
 
-    results_matrix = numpy.zeros((len(times), len(species) + 1))
-    results_matrix[:, 0] = times
-    for i_specie, specie in enumerate(species):
-        results_matrix[:, i_specie + 1] = results_dict[specie]
+    results_matrix = numpy.zeros((len(results_dict['time']), len(variables)))
+    for i_specie, specie in enumerate(variables):
+        results_matrix[:, i_specie] = results_dict[specie]
 
-    results_df = pandas.DataFrame(results_matrix, columns=['time'] + species)
+    results_df = pandas.DataFrame(results_matrix, columns=variables)
 
     # Save a report of the results of the simulation with `simulation.num_time_points` time points
     # beginning at `simulation.output_start_time` to `out_filename` in `out_format` format.
     # This should save all of the variables specified by `simulation.model.variables`.
-    results_df.to_csv(out_filename)
+    results_df.to_csv(out_filename, index=False)
 
     # return results
     return results_df

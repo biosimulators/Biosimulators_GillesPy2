@@ -9,7 +9,6 @@
 
 from Biosimulations_utils.simulation.data_model import Simulation  # noqa: F401
 from Biosimulations_utils.simulator.utils import exec_simulations_in_archive
-from gillespy2.sbml import SBMLimport
 import enum
 import gillespy2
 import os
@@ -250,20 +249,17 @@ def exec_simulation(model_filename, model_sed_urn, simulation, working_dir, out_
         raise InputError(message='Model parameter changes are not supported')
 
     # Convert SBML into a GillesPy2 model
-    model = SBMLimport.convert(model_filename, simulation.model.name)[0]
-    if model is None:
-        raise InputError(expression="model", message=model[1])
+    model, errors = gillespy2.import_SBML(model_filename, simulation.model.metadata.name)
+    if model is None or errors:
+        raise InputError(expression=model_filename,
+                         message='Model at {} could not be imported:\n- {}'.format(
+                             model_filename, '\n- '.join(message for message, code in errors)))
 
     # Load the algorithm specified by `simulation.algorithm`
     algorithm_id = simulation.algorithm.kisao_term.id
-
-    # Todo remove this when Biosimulations_utils/pull/24 is merged
-    if (len(algorithm_id) == 7):
-        algorithm_id = "KISAO_" + algorithm_id
-
-    algorithm = kisao_algorithm_map.get(algorithm_id, None)
     print(algorithm_id)
 
+    algorithm = kisao_algorithm_map.get(algorithm_id, None)
     if algorithm is None:
         raise InputError(expression=algorithm_id,
                          message="Algorithm with KISAO id '{}' is not supported".format(algorithm_id))

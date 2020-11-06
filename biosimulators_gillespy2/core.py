@@ -200,7 +200,18 @@ kisao_algorithm_map = {
 
 
 class InputError(Exception):
+    """ An error with a COMBINE/OMEX archive that prevents its parsing and/or simulation
+
+    Attributes:
+        expression (:obj:`object`): Python object which triggered the error
+    """
+
     def __init__(self, message, expression):
+        """
+        Args:
+            message (:obj:`str`): error message
+            expression (:obj:`object`): Python object which triggered the error
+        """
         super(InputError, self).__init__(message)
         self.expression = expression
 

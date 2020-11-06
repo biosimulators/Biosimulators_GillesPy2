@@ -200,9 +200,9 @@ kisao_algorithm_map = {
 
 
 class InputError(Exception):
-    def __init__(self, expression, message):
+    def __init__(self, message, expression):
+        super(InputError, self).__init__(message)
         self.expression = expression
-        self.message = message
 
 
 def exec_combine_archive(archive_file, out_dir):
@@ -236,7 +236,7 @@ def exec_simulation(model_filename, model_sed_urn, simulation, working_dir, out_
 
     # Not necessary to apply model parameter changes becuase they have already been handled by :obj:`exec_simulations_in_archive`
     if simulation.model_parameter_changes:
-        raise InputError('Model parameter changes are not supported')
+        raise InputError(message='Model parameter changes are not supported')
 
     # Convert SBML into a GillesPy2 model
     model = SBMLimport.convert(model_filename, simulation.model.name)[0]

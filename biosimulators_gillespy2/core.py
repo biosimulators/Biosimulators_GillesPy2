@@ -8,7 +8,6 @@
 """
 
 from Biosimulations_utils.simulation.data_model import Simulation  # noqa: F401
-from Biosimulations_utils.simulation.sedml import modify_xml_model_for_simulation
 from Biosimulations_utils.simulator.utils import exec_simulations_in_archive
 from gillespy2.sbml import SBMLimport
 import enum

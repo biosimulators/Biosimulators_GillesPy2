@@ -7,7 +7,7 @@ This command-line interface and Docker image enable users to use GillesPy2 to ex
 
 A list of the algorithms and algorithm parameters supported by GillesPy2 is available at `BioSimulators <https://biosimulators.org/simulators/gillespy2>`_.
 
-A simple web application and web service for using GillesPy2 to execute COMBINE/OMEX archives is also available at `runBioSimulations <http://run.biosimulations.org>`_.
+A simple web application and web service for using GillesPy2 to execute COMBINE/OMEX archives is also available at `runBioSimulations <https://run.biosimulations.org>`_.
 
 Contents
 --------

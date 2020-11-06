@@ -1,6 +1,12 @@
 # Biosimulators_GillesPy2
 BioSimulators-compliant command-line interface and Docker image for the [Gillespy2](https://stochss.github.io/GillesPy2) simulation program.
 
+This command-line interface and Docker image enable users to use GillesPy2 to execute [COMBINE/OMEX archives](https://combinearchive.org/) that describe one or more simulation experiments (in [SED-ML format](https://sed-ml.org)) of one or more models (in [SBML format](http://sbml.org])).
+
+A list of the algorithms and algorithm parameters supported by GillesPy2 is available at [BioSimulators](https://biosimulators.org/simulators/gillespy2).
+
+A simple web application and web service for using GillesPy2 to execute COMBINE/OMEX archives is also available at [runBioSimulations](https://run.biosimulations.org).
+
 ## Contents
 * [Installation](#installation)
 * [Usage](#usage)
@@ -46,7 +52,7 @@ docker run \
   --mount type=bind,source="$(pwd)"/tests/fixtures,target=/root/in,readonly \
   --mount type=bind,source="$(pwd)"/tests/results,target=/root/out \
   ghcr.io/biosimulators/gillespy2:latest \
-    -i /root/in/BIOMD0000000297.edited.omex \
+    -i /root/in/modeling-study.omex \
     -o /root/out
 ```
 
@@ -54,7 +60,7 @@ docker run \
 This package is released under the [MIT](LICENSE).
 
 ## Development team
-This package was developed by the [Karr Lab](https://www.karrlab.org) at the Icahn School of Medicine at Mount Sinai and the [Center for Reproducible Biomedical Modeling](http://reproduciblebiomodels.org/).
+This package was developed by the [Karr Lab](https://www.karrlab.org) at the Icahn School of Medicine at Mount Sinai and the [Center for Reproducible Biomedical Modeling](https://reproduciblebiomodels.org/).
 
 ## Questions and comments
 Please contact [Bilal Shaikh](mailto:BilalShaikh42@gmail.com) or the [BioSimulators Team](mailto:info@biosimulators.org) with any questions or comments.

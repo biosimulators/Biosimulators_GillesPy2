@@ -7,7 +7,7 @@ This package is released under the `MIT License <https://github.com/biosimulator
 
 Development team
 ----------------
-This package was developed by the `Karr Lab <https://www.karrlab.org>`_ at the Icahn School of Medicine at Mount Sinai and the `Center for Reproducible Biomedical Modeling <http://reproduciblebiomodels.org/>`_. GillesPy2 was developed by the `Drawert Lab <http://www.cs.unca.edu/~drawert/>`_ at the University of North Carolina, Asheville.
+This package was developed by the `Karr Lab <https://www.karrlab.org>`_ at the Icahn School of Medicine at Mount Sinai and the `Center for Reproducible Biomedical Modeling <https://reproduciblebiomodels.org/>`_. GillesPy2 was developed by the `Drawert Lab <http://www.cs.unca.edu/~drawert/>`_ at the University of North Carolina, Asheville.
 
 Questions and comments
 -------------------------

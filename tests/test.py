@@ -2,6 +2,7 @@ from gillespy2.core import Model, Species, Reaction, Parameter
 import numpy as np
 from gillespy2 import TauHybridSolver
 
+
 class MichaelisMenten(Model):
     def __init__(self, parameter_values=None):
         # initialize Model
@@ -29,7 +30,8 @@ class MichaelisMenten(Model):
         self.add_reaction([r1, r2, r3])
         self.timespan(np.linspace(0, 100, 101))
 
+
 if __name__ == "__main__":
     model = MichaelisMenten()
-    results= model.run(TauHybridSolver)
+    results = model.run(TauHybridSolver)
     print(results)

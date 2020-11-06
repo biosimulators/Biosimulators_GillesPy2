@@ -12,14 +12,12 @@ from Biosimulations_utils.simulator.utils import exec_simulations_in_archive
 import enum
 import gillespy2
 import numpy
-import os
 import pandas
-import tempfile
 
 __all__ = [
     'Algorithm', 'AlgorithmParameter', 'VodeMethod', 'HybridTauIntegrationMethod',
     'kisao_algorithm_map',
-    'InputError'
+    'InputError',
     'exec_combine_archive', 'exec_simulation',
 ]
 
@@ -48,7 +46,7 @@ class Algorithm(object):
 
 
 class AlgorithmParameter(object):
-    """ Simulation algorithm parameter 
+    """ Simulation algorithm parameter
 
     Attributes:
         name (:obj:`str`): name
@@ -248,7 +246,7 @@ def exec_simulation(model_filename, model_sed_urn, simulation, working_dir, out_
             start time is not zero
     '''
 
-    # Read the model located at `os.path.join(working_dir, model_filename)` in the format
+    # Read the model located at `model_filename` in the format
     # with the SED URN `model_sed_urn`.
     if model_sed_urn != "urn:sedml:language:sbml":
         format = model_sed_urn.split("language:")

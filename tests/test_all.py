@@ -100,7 +100,7 @@ class CliTestCase(unittest.TestCase):
 
     def assert_outputs_created(self, dirname):
         name = "BIOMD0000000297"
-        self.assertEqual(set(os.listdir(dirname)), set(['ex1', 'ex2']))        
+        self.assertEqual(set(os.listdir(dirname)), set(['ex1', 'ex2']))
         self.assertEqual(set(os.listdir(os.path.join(dirname, 'ex1'))), set([name]))
         self.assertEqual(set(os.listdir(os.path.join(dirname, 'ex2'))), set([name]))
         self.assertEqual(set(os.listdir(os.path.join(dirname, 'ex1', name))), set(['plot_1_task1.pdf', 'plot_3_task1.pdf']))

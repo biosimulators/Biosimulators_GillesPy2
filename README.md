@@ -1,4 +1,4 @@
-# Biosimulators_GillesPy2
+# BioSimulators-GillesPy2
 BioSimulators-compliant command-line interface and Docker image for the [Gillespy2](https://stochss.github.io/GillesPy2) simulation program.
 
 This command-line interface and Docker image enable users to use GillesPy2 to execute [COMBINE/OMEX archives](https://combinearchive.org/) that describe one or more simulation experiments (in [SED-ML format](https://sed-ml.org)) of one or more models (in [SBML format](http://sbml.org])).

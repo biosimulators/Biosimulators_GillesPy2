@@ -93,7 +93,7 @@ class AlgorithmParameter(object):
                 raise InputError(expression=value,
                                  message="{} option '{}' is not supported".format(self.data_type.__name__, value))
 
-        solver_args[key[-1]] = value
+        solver_args[keys[-1]] = value
 
 
 class VodeMethod(str, enum.Enum):

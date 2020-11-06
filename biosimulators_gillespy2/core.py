@@ -11,7 +11,9 @@ from Biosimulations_utils.simulation.data_model import Simulation  # noqa: F401
 from Biosimulations_utils.simulator.utils import exec_simulations_in_archive
 import enum
 import gillespy2
+import numpy
 import os
+import pandas
 import tempfile
 
 __all__ = [
@@ -235,6 +237,15 @@ def exec_simulation(model_filename, model_sed_urn, simulation, working_dir, out_
        working_dir (:obj:`str`): directory of the SED-ML file
        out_filename (:obj:`str`): path to save the results of the simulation
        out_format (:obj:`str`): format to save the results of the simulation (e.g., `csv`)
+
+    Returns:
+        :obj:`pandas.DataFrame`: predicted species counts/concentrations;
+            rows: species, columns: time points
+
+    Raises:
+        :obj:`InputError`: if the simulation uses an unsupported format, the model could not be imported,
+            the simulation requires an unsupported algorithm or algorithm parameter, or the simulation
+            start time is not zero
     '''
 
     # Read the model located at `os.path.join(working_dir, model_filename)` in the format
@@ -257,8 +268,6 @@ def exec_simulation(model_filename, model_sed_urn, simulation, working_dir, out_
 
     # Load the algorithm specified by `simulation.algorithm`
     algorithm_id = simulation.algorithm.kisao_term.id
-    print(algorithm_id)
-
     algorithm = kisao_algorithm_map.get(algorithm_id, None)
     if algorithm is None:
         raise InputError(expression=algorithm_id,
@@ -276,22 +285,34 @@ def exec_simulation(model_filename, model_sed_urn, simulation, working_dir, out_
         parameter.set_value(algorithm_params, change.value)
 
     # Validate that start time is 0 because this is the only option that GillesPy2 supports
-    if simulation.start_time > 0:
+    if simulation.start_time != 0:
         raise InputError(expression=simulation.start_time,
-                         message='Start time must be at least 0')
-    print(simulation.end_time)
+                         message='Start time must be 0')
+
+    # set the simulation time span
+    model.timespan(numpy.linspace(simulation.start_time, simulation.end_time, simulation.num_time_points + 1))
+
     # Simulate the model from `simulation.start_time` to `simulation.end_time` and record `simulation.num_time_points` + 1 time points
-    increment = (simulation.end_time - simulation.start_time) / \
-        simulation.num_time_points
-    results = model.run(algorithm.solver, **algorithm.solver_args,
-                        **algorithm_params, t=simulation.end_time)
-    print(results)
+    results_dict = model.run(algorithm.solver, **algorithm.solver_args, **algorithm_params)[0]
 
-    # TODO: ignore all time points before `simulation.start_time`
+    # transform the results to data frame
+    times = results_dict.pop('time')
+    species = sorted(results_dict.keys())
 
-    # TODO: Save a report of the results of the simulation with `simulation.num_time_points` time points
+    results_matrix = numpy.zeros((len(times), len(species) + 1))
+    results_matrix[:, 0] = times
+    for i_specie, specie in enumerate(species):
+        results_matrix[:, i_specie + 1] = results_dict[specie]
+
+    results_df = pandas.DataFrame(results_matrix, columns=['time'] + species)
+
+    # Save a report of the results of the simulation with `simulation.num_time_points` time points
     # beginning at `simulation.output_start_time` to `out_filename` in `out_format` format.
     # This should save all of the variables specified by `simulation.model.variables`.
+    results_df.to_csv(out_filename)
+
+    # return results
+    return results_df
 
 
 if __name__ == "__main__":

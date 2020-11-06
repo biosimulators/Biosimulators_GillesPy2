@@ -664,8 +664,7 @@
         "namespace": "EDAM",
         "id": "format_3686"
       }],
-      "citations": []
-      }],
+      "citations": [],
       "parameters": [{
           "kisaoId": {
             "namespace": "KISAO",

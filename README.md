@@ -1,3 +1,10 @@
+![Latest version](https://img.shields.io/github/v/tag/biosimulators/Biosimulators_GillesPy2)
+[![PyPI](https://img.shields.io/pypi/v/biosimulators_gillespy2)](https://pypi.org/project/biosimulators_gillespy2/)
+[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/biosimulators/Biosimulators_GillesPy2/workflow-id)](https://github.com/biosimulators/Biosimulators_GillesPy2/actions?query=workflow%3Aworkflow-id)
+[![Documentation](https://img.shields.io/github/license/biosimulators/Biosimulators_GillesPy2?badges-awesome-green.svg)](https://biosimulators.github.io/Biosimulators_GillesPy2/)
+[![Issues](https://img.shields.io/github/issues/biosimulators/Biosimulators_GillesPy2)](https://github.com/biosimulators/Biosimulators_GillesPy2/issues)
+[![License](https://img.shields.io/github/license/biosimulators/Biosimulators_GillesPy2?badges-awesome-green.svg)](https://github.com/biosimulators/Biosimulators_GillesPy2/blob/dev/LICENSE)
+
 # BioSimulators-GillesPy2
 BioSimulators-compliant command-line interface and Docker image for the [Gillespy2](https://stochss.github.io/GillesPy2) simulation program.
 
@@ -10,6 +17,7 @@ A simple web application and web service for using GillesPy2 to execute COMBINE/
 ## Contents
 * [Installation](#installation)
 * [Usage](#usage)
+* [Documentation](#documentation)
 * [License](#license)
 * [Development team](#development-team)
 * [Questions and comments](#questions-and-comments)
@@ -26,7 +34,9 @@ pip install git+https://github.com/biosimulators/Biosimulators_GillesPy2
 docker pull ghcr.io/biosimulators/gillespy2
 ```
 
-## Local usage
+## Usage
+
+### Local usage
 ```
 usage: gillespy2 [-h] [-d] [-q] -i ARCHIVE [-o OUT_DIR] [-v]
 
@@ -44,7 +54,7 @@ optional arguments:
   -v, --version         show program's version number and exit
 ```
 
-## Usage through Docker container
+### Usage through Docker container
 ```
 docker run \
   --tty \
@@ -55,6 +65,9 @@ docker run \
     -i /root/in/modeling-study.omex \
     -o /root/out
 ```
+
+## Documentation
+Documentation is available at https://biosimulators.github.io/Biosimulators_GillesPy2/.
 
 ## License
 This package is released under the [MIT](LICENSE).

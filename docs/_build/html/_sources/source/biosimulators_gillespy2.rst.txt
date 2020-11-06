@@ -1,0 +1,186 @@
+biosimulators_gillespy2 package
+
+Submodules
+
+biosimulators_gillespy2.core module
+
+Methods for executing SED tasks in COMBINE archives and saving their
+outputs
+
+Author:
+   Bilal Shaikh <
+
+   bilalshaikh42@gmail.com
+
+   >
+
+Author:
+   Jonathan Karr <
+
+   karr@mssm.edu
+
+   >
+
+Date:
+   2020-10-26
+
+Copyright:
+   2020, Center for Reproducible Biomedical Modeling
+
+License:
+   MIT
+
+class biosimulators_gillespy2.core.Algorithm(name, solver, parameters=None, **solver_args)
+
+   Bases: "object"
+
+   Simulation algorithm
+
+   name
+
+      name
+
+      Type:
+         "str"
+
+   solver
+
+      solver
+
+      Type:
+         "type"
+
+   solver_args
+
+      solver arguments
+
+      Type:
+         "dict"
+
+class biosimulators_gillespy2.core.AlgorithmParameter(name, key, data_type, default)
+
+   Bases: "object"
+
+   Simulation algorithm parameter
+
+   name
+
+      name
+
+      Type:
+         "str"
+
+   key
+
+      key
+
+      Type:
+         "str"
+
+   data_type
+
+      data type
+
+      Type:
+         "type"
+
+   default
+
+      defualt value
+
+      Type:
+         "object"
+
+   set_value(solver_args, value)
+
+      Apply the value of a parameter to a data structure of solver
+      arguments
+
+      Parameters:
+         solver_args (dict) -- solver arguments
+
+         value (object) -- parameter value
+
+class biosimulators_gillespy2.core.HybridTauIntegrationMethod(value)
+
+   Bases: "str", "enum.Enum"
+
+   Hybrid tau integration method
+
+   BDF = 'KISAO_0000288'
+
+   LSODA = 'KISAO_0000088'
+
+   RK23 = 'KISAO_0000537'
+
+   RK45 = 'KISAO_0000032'
+
+   Radau = 'KISAO_0000304'
+
+exception biosimulators_gillespy2.core.InputError(message, expression)
+
+   Bases: "Exception"
+
+   An error with a COMBINE/OMEX archive that prevents its parsing
+   and/or simulation
+
+   expression
+
+      Python object which triggered the error
+
+      Type:
+         "object"
+
+class biosimulators_gillespy2.core.VodeMethod(value)
+
+   Bases: "str", "enum.Enum"
+
+   VODE method
+
+   adams = 'KISAO_0000289'
+
+   bdf = 'KISAO_0000288'
+
+biosimulators_gillespy2.core.exec_combine_archive(archive_file, out_dir)
+
+   Execute the SED tasks defined in a COMBINE archive and save the
+   outputs
+
+   Parameters:
+      archive_file (str) -- path to COMBINE archive
+
+      out_dir (str) -- directory to store the outputs of the tasks
+
+biosimulators_gillespy2.core.exec_simulation(model_filename, model_sed_urn, simulation, working_dir, out_filename, out_format)
+
+   Execute a simulation and save its results
+
+   Parameters:
+      model_filename (str) -- path to the model
+
+      model_sed_urn (str) -- SED URN for the format of the model
+      (e.g., urn:sedml:language:sbml)
+
+      simulation (Simulation) -- simulation
+
+      working_dir (str) -- directory of the SED-ML file
+
+      out_filename (str) -- path to save the results of the simulation
+
+      out_format (str) -- format to save the results of the simulation
+      (e.g., csv)
+
+   Returns:
+      predicted species counts/concentrations;
+         rows: species, columns: time points
+
+   Return type:
+      "pandas.DataFrame"
+
+   Raises:
+      InputError
+
+       -- if the simulation uses an unsupported format, the model
+      could not be imported,     the simulation requires an
+      unsupported algorithm or algorithm parameter, or the simulation
+      start time is not zero

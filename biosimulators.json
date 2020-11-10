@@ -101,7 +101,23 @@
     }
   ],
   "references": {
-    "identifiers": [],
+    "identifiers": [
+      {
+        "namespace": "pypi",
+        "id": "gillespy2",
+        "url": "https://pypi.org/project/gillespy2/"
+      },
+      {
+        "namespace": "pypi",
+        "id": "biosimulators-gillespy2",
+        "url": "https://pypi.org/project/biosimulators-gillespy2/"
+      },
+      {
+        "namespace": "StochSS",
+        "id": "2.0",
+        "url": "https://stochss.org/"
+      }
+    ],
     "citations": [{
         "title": "StochKit2: software for discrete stochastic simulation of biochemical systems with events",
         "authors": "Kevin R. Sanft, Sheng Wu, Min Roh, Jin Fu, Rone Kwei Lim & Linda R. Petzold",
@@ -976,6 +992,7 @@
   ],
   "biosimulators": {
     "specificationsVersion": "1.0.0",
-    "imageVersion": "1.0.0"
+    "imageVersion": "1.0.0",
+    "validated": false
   }
 }

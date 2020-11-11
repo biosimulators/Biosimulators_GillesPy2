@@ -4,7 +4,7 @@
   "version": "1.5.6",
   "description": "GillesPy2 is a Python 3 package for stochastic simulation of biochemical systems.",
   "url": "https://github.com/StochSS/GillesPy2",
-  "image": "ghcr.io/biosimulators/gillespy2:1.5.6",
+  "image": "ghcr.io/biosimulators/biosimulators_gillespy2/gillespy2:1.5.6",
   "format": {
     "namespace": "EDAM",
     "id": "format_3973"

@@ -288,7 +288,9 @@ def exec_simulation(model_filename, model_sed_urn, simulation, working_dir, out_
                          message='Start time must be 0')
 
     # set the simulation time span
-    model.timespan(numpy.linspace(simulation.start_time, simulation.end_time, simulation.num_time_points + 1))
+    num_time_points = (simulation.end_time - simulation.start_time) / (simulation.end_time -
+                                                                       simulation.output_start_time) * simulation.num_time_points
+    model.timespan(numpy.linspace(simulation.start_time, simulation.end_time, num_time_points + 1))
 
     # Simulate the model from `simulation.start_time` to `simulation.end_time` and record `simulation.num_time_points` + 1 time points
     results_dict = model.run(algorithm.solver, **algorithm.solver_args, **algorithm_params)[0]
@@ -302,9 +304,9 @@ def exec_simulation(model_filename, model_sed_urn, simulation, working_dir, out_
                          message='Simulation did not record the following required outputs:\n  - {}'.format(
                              '\n  - '.join(sorted(unpredicted_variables))))
 
-    results_matrix = numpy.zeros((len(results_dict['time']), len(variables)))
+    results_matrix = numpy.zeros((simulation.num_time_points + 1, len(variables)))
     for i_specie, specie in enumerate(variables):
-        results_matrix[:, i_specie] = results_dict[specie]
+        results_matrix[:, i_specie] = results_dict[specie][-(simulation.num_time_points + 1):]
 
     results_df = pandas.DataFrame(results_matrix, columns=variables)
 

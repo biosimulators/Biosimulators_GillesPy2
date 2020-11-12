@@ -291,8 +291,8 @@ def exec_simulation(model_filename, model_sed_urn, simulation, working_dir, out_
                          message='Start time must be 0')
 
     # set the simulation time span
-    num_time_points = (simulation.end_time - simulation.start_time) / (simulation.end_time -
-                                                                       simulation.output_start_time) * simulation.num_time_points
+    num_time_points = (simulation.end_time - simulation.start_time) / \
+        (simulation.end_time - simulation.output_start_time) * simulation.num_time_points
     model.timespan(numpy.linspace(simulation.start_time, simulation.end_time, num_time_points + 1))
 
     # Simulate the model from `simulation.start_time` to `simulation.end_time` and record `simulation.num_time_points` + 1 time points

@@ -7,7 +7,7 @@
 :License: MIT
 """
 
-from Biosimulations_utils.simulation.data_model import Simulation  # noqa: F401
+from Biosimulations_utils.simulation.data_model import TimecourseSimulation
 from Biosimulations_utils.simulator.utils import exec_simulations_in_archive
 import enum
 import gillespy2
@@ -231,7 +231,7 @@ def exec_simulation(model_filename, model_sed_urn, simulation, working_dir, out_
     Args:
        model_filename (:obj:`str`): path to the model
        model_sed_urn (:obj:`str`): SED URN for the format of the model (e.g., `urn:sedml:language:sbml`)
-       simulation (:obj:`Simulation`): simulation
+       simulation (:obj:`TimecourseSimulation`): simulation
        working_dir (:obj:`str`): directory of the SED-ML file
        out_filename (:obj:`str`): path to save the results of the simulation
        out_format (:obj:`str`): format to save the results of the simulation (e.g., `csv`)
@@ -245,6 +245,13 @@ def exec_simulation(model_filename, model_sed_urn, simulation, working_dir, out_
             the simulation requires an unsupported algorithm or algorithm parameter, or the simulation
             start time is not zero
     '''
+    # check that simulation is a time course simulation
+    if not isinstance(simulation, TimecourseSimulation):
+        raise InputError(expression=simulation.__class__, message='{} is not supported'.format(simulation.__class__.__name__))
+
+    # check that model parameter changes have already been applied (because handled by :obj:`exec_simulations_in_archive`)
+    if simulation.model_parameter_changes:
+        raise InputError(expression=simulation.model_parameter_changes, message='Model parameter changes are not supported')
 
     # Read the model located at `model_filename` in the format
     # with the SED URN `model_sed_urn`.
@@ -252,10 +259,6 @@ def exec_simulation(model_filename, model_sed_urn, simulation, working_dir, out_
         format = model_sed_urn.split("language:")
         raise InputError(
             expression=format, message="Model language with URN '{}' is not supported".format(model_sed_urn))
-
-    # Not necessary to apply model parameter changes becuase they have already been handled by :obj:`exec_simulations_in_archive`
-    if simulation.model_parameter_changes:
-        raise InputError(message='Model parameter changes are not supported')
 
     # Convert SBML into a GillesPy2 model
     model, errors = gillespy2.import_SBML(model_filename, simulation.model.metadata.name)

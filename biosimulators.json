@@ -228,7 +228,7 @@
           },
           "name": "relative tolerance",
           "type": "float",
-          "value": 1e-6
+          "value": "1e-6"
         },
         {
           "kisaoId": {
@@ -237,7 +237,7 @@
           },
           "name": "absolute tolerance",
           "type": "float",
-          "value": 1e-12
+          "value": "1e-12"
         },
         {
           "kisaoId": {
@@ -264,7 +264,7 @@
           },
           "name": "maximum number of steps",
           "type": "integer",
-          "value": 500
+          "value": "500"
         },
         {
           "kisaoId": {
@@ -273,7 +273,7 @@
           },
           "name": "initial step size",
           "type": "float",
-          "value": 0
+          "value": null
         },
         {
           "kisaoId": {
@@ -282,7 +282,7 @@
           },
           "name": "minimum step size",
           "type": "float",
-          "value": 0
+          "value": null
         },
         {
           "kisaoId": {
@@ -300,7 +300,7 @@
           },
           "name": "maximum non-stiff order (Adams order)",
           "type": "integer",
-          "value": 12
+          "value": "12"
         },
         {
           "kisaoId": {
@@ -309,7 +309,7 @@
           },
           "name": "maximum stiff order (BDF order)",
           "type": "integer",
-          "value": 5
+          "value": "5"
         }
       ]
     },
@@ -357,7 +357,7 @@
           },
           "name": "relative tolerance",
           "type": "float",
-          "value": 1e-6
+          "value": "1e-6"
         },
         {
           "kisaoId": {
@@ -366,7 +366,7 @@
           },
           "name": "absolute tolerance",
           "type": "float",
-          "value": 1e-12
+          "value": "1e-12"
         },
         {
           "kisaoId": {
@@ -375,7 +375,7 @@
           },
           "name": "maximum number of steps",
           "type": "integer",
-          "value": 500
+          "value": "500"
         },
         {
           "kisaoId": {
@@ -384,7 +384,7 @@
           },
           "name": "initial step size",
           "type": "float",
-          "value": 0
+          "value": null
         },
         {
           "kisaoId": {
@@ -402,7 +402,7 @@
           },
           "name": "safety",
           "type": "float",
-          "value": 0.9
+          "value": "0.9"
         },
         {
           "kisaoId": {
@@ -411,7 +411,7 @@
           },
           "name": "ifactor",
           "type": "float",
-          "value": 10.0
+          "value": "10.0"
         },
         {
           "kisaoId": {
@@ -420,7 +420,7 @@
           },
           "name": "dfactor",
           "type": "float",
-          "value": 0.2
+          "value": "0.2"
         },
         {
           "kisaoId": {
@@ -429,7 +429,7 @@
           },
           "name": "beta",
           "type": "float",
-          "value": 0.0
+          "value": "0.0"
         }
       ]
     },
@@ -477,7 +477,7 @@
           },
           "name": "relative tolerance",
           "type": "float",
-          "value": 1e-6
+          "value": "1e-6"
         },
         {
           "kisaoId": {
@@ -486,7 +486,7 @@
           },
           "name": "absolute tolerance",
           "type": "float",
-          "value": 1e-12
+          "value": "1e-12"
         },
         {
           "kisaoId": {
@@ -495,7 +495,7 @@
           },
           "name": "maximum number of steps",
           "type": "integer",
-          "value": 500
+          "value": "500"
         },
         {
           "kisaoId": {
@@ -504,7 +504,7 @@
           },
           "name": "initial step size",
           "type": "float",
-          "value": 0
+          "value": null
         },
         {
           "kisaoId": {
@@ -522,7 +522,7 @@
           },
           "name": "safety",
           "type": "float",
-          "value": 0.9
+          "value": "0.9"
         },
         {
           "kisaoId": {
@@ -531,7 +531,7 @@
           },
           "name": "ifactor",
           "type": "float",
-          "value": 6.0
+          "value": "6.0"
         },
         {
           "kisaoId": {
@@ -540,7 +540,7 @@
           },
           "name": "dfactor",
           "type": "float",
-          "value": 0.333
+          "value": "0.333"
         },
         {
           "kisaoId": {
@@ -549,7 +549,7 @@
           },
           "name": "beta",
           "type": "float",
-          "value": 0.0
+          "value": "0.0"
         }
       ]
     },
@@ -653,7 +653,7 @@
           },
           "name": "epsilon",
           "type": "float",
-          "value": 0.03
+          "value": "0.03"
         }
       ]
     },
@@ -697,7 +697,7 @@
           },
           "name": "epsilon",
           "type": "float",
-          "value": 0.03
+          "value": "0.03"
         },
         {
           "kisaoId": {
@@ -765,7 +765,7 @@
           },
           "name": "with Jacobian",
           "type": "boolean",
-          "value": false
+          "value": "false"
         },
         {
           "kisaoId": {
@@ -774,7 +774,7 @@
           },
           "name": "absolute tolerance",
           "type": "float",
-          "value": 1e-12
+          "value": "1e-12"
         },
         {
           "kisaoId": {
@@ -783,7 +783,7 @@
           },
           "name": "relative tolerance",
           "type": "float",
-          "value": 1e-6
+          "value": "1e-6"
         },
         {
           "kisaoId": {
@@ -810,7 +810,7 @@
           },
           "name": "maximum order",
           "type": "integer",
-          "value": 12
+          "value": "12"
         },
         {
           "kisaoId": {
@@ -819,7 +819,7 @@
           },
           "name": "maximum number of steps",
           "type": "integer",
-          "value": 500
+          "value": "500"
         },
         {
           "kisaoId": {
@@ -837,7 +837,7 @@
           },
           "name": "minimum step size",
           "type": "float",
-          "value": 0.0
+          "value": null
         },
         {
           "kisaoId": {
@@ -846,7 +846,7 @@
           },
           "name": "initial step size",
           "type": "float",
-          "value": 0.0
+          "value": null
         }
       ]
     },
@@ -904,7 +904,7 @@
           },
           "name": "with Jacobian",
           "type": "boolean",
-          "value": false
+          "value": "false"
         },
         {
           "kisaoId": {
@@ -913,7 +913,7 @@
           },
           "name": "absolute tolerance",
           "type": "float",
-          "value": 1e-12
+          "value": "1e-12"
         },
         {
           "kisaoId": {
@@ -922,7 +922,7 @@
           },
           "name": "relative tolerance",
           "type": "float",
-          "value": 1e-6
+          "value": "1e-6"
         },
         {
           "kisaoId": {
@@ -949,7 +949,7 @@
           },
           "name": "maximum order",
           "type": "integer",
-          "value": 12
+          "value": "12"
         },
         {
           "kisaoId": {
@@ -958,7 +958,7 @@
           },
           "name": "maximum number of steps",
           "type": "integer",
-          "value": 500
+          "value": "500"
         },
         {
           "kisaoId": {
@@ -976,7 +976,7 @@
           },
           "name": "minimum step size",
           "type": "float",
-          "value": 0.0
+          "value": null
         },
         {
           "kisaoId": {
@@ -985,7 +985,7 @@
           },
           "name": "initial step size",
           "type": "float",
-          "value": 0.0
+          "value": null
         }
       ]
     }

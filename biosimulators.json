@@ -8,8 +8,9 @@
     "url": "ghcr.io/biosimulators/biosimulators_gillespy2/gillespy2:1.5.6",
     "format": {
       "namespace": "EDAM",
-      "id": "format_3973", "version": null
-    }
+      "id": "format_3973", "version": null, "supportedFeatures": []
+    },
+    "operatingSystemType": "Linux"
   },
   "authors": [{
       "firstName": "Brian",
@@ -221,15 +222,15 @@
       }],
       "modelFormats": [{
         "namespace": "EDAM",
-        "id": "format_2585", "version": null
+        "id": "format_2585", "version": null, "supportedFeatures": []
       }],
       "simulationFormats": [{
         "namespace": "EDAM",
-        "id": "format_3685", "version": null
+        "id": "format_3685", "version": null, "supportedFeatures": []
       }],
       "archiveFormats": [{
         "namespace": "EDAM",
-        "id": "format_3686", "version": null
+        "id": "format_3686", "version": null, "supportedFeatures": []
       }],
       "citations": [{
         "title": "LSODA, ordinary differential equation solver for stiff or non-stiff system",
@@ -352,7 +353,14 @@
                     "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
         }
       ],
-      "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
+      "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"],
+      "dependencies": [{
+        "name": "SciPy",
+        "version": null,
+        "required": true,
+        "freeNonCommercialLicense": true,
+        "url": "https://www.scipy.org/"
+      }]
     },
     {
       "id": "dopri5",
@@ -367,15 +375,15 @@
       }],
       "modelFormats": [{
         "namespace": "EDAM",
-        "id": "format_2585", "version": null
+        "id": "format_2585", "version": null, "supportedFeatures": []
       }],
       "simulationFormats": [{
         "namespace": "EDAM",
-        "id": "format_3685", "version": null
+        "id": "format_3685", "version": null, "supportedFeatures": []
       }],
       "archiveFormats": [{
         "namespace": "EDAM",
-        "id": "format_3686", "version": null
+        "id": "format_3686", "version": null, "supportedFeatures": []
       }],
       "citations": [{
         "title": "A family of embedded Runge-Kutta formulae",
@@ -491,7 +499,14 @@
                     "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
         }
       ],
-      "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
+      "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"],
+      "dependencies": [{
+        "name": "SciPy",
+        "version": null,
+        "required": true,
+        "freeNonCommercialLicense": true,
+        "url": "https://www.scipy.org/"
+      }]
     },
     {
       "id": "dop835",
@@ -506,15 +521,15 @@
       }],
       "modelFormats": [{
         "namespace": "EDAM",
-        "id": "format_2585", "version": null
+        "id": "format_2585", "version": null, "supportedFeatures": []
       }],
       "simulationFormats": [{
         "namespace": "EDAM",
-        "id": "format_3685", "version": null
+        "id": "format_3685", "version": null, "supportedFeatures": []
       }],
       "archiveFormats": [{
         "namespace": "EDAM",
-        "id": "format_3686", "version": null
+        "id": "format_3686", "version": null, "supportedFeatures": []
       }],
       "citations": [{
         "title": "A family of embedded Runge-Kutta formulae",
@@ -630,7 +645,14 @@
           "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
         }
       ],
-      "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
+      "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"],
+      "dependencies": [{
+        "name": "SciPy",
+        "version": null,
+        "required": true,
+        "freeNonCommercialLicense": true,
+        "url": "https://www.scipy.org/"
+      }]
     },
     {
       "id": "ssa",
@@ -645,15 +667,15 @@
       }],
       "modelFormats": [{
         "namespace": "EDAM",
-        "id": "format_2585", "version": null
+        "id": "format_2585", "version": null, "supportedFeatures": []
       }],
       "simulationFormats": [{
         "namespace": "EDAM",
-        "id": "format_3685", "version": null
+        "id": "format_3685", "version": null, "supportedFeatures": []
       }],
       "archiveFormats": [{
         "namespace": "EDAM",
-        "id": "format_3686", "version": null
+        "id": "format_3686", "version": null, "supportedFeatures": []
       }],
       "citations": [{
         "title": "Exact stochastic simulation of coupled chemical reactions",
@@ -680,7 +702,8 @@
         "recommendedRange": null,
         "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
       }],
-      "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
+      "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"],
+      "dependencies": null
     },
     {
       "id": "ssa",
@@ -695,15 +718,15 @@
       }],
       "modelFormats": [{
         "namespace": "EDAM",
-        "id": "format_2585", "version": null
+        "id": "format_2585", "version": null, "supportedFeatures": []
       }],
       "simulationFormats": [{
         "namespace": "EDAM",
-        "id": "format_3685", "version": null
+        "id": "format_3685", "version": null, "supportedFeatures": []
       }],
       "archiveFormats": [{
         "namespace": "EDAM",
-        "id": "format_3686", "version": null
+        "id": "format_3686", "version": null, "supportedFeatures": []
       }],
       "citations": [{
         "title": "Approximate accelerated stochastic simulation of chemically reacting systems",
@@ -742,7 +765,8 @@
           "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
         }
       ],
-      "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
+      "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"],
+      "dependencies": null
     },
     {
       "id": "slow-scale SSA",
@@ -757,15 +781,15 @@
       }],
       "modelFormats": [{
         "namespace": "EDAM",
-        "id": "format_2585", "version": null
+        "id": "format_2585", "version": null, "supportedFeatures": []
       }],
       "simulationFormats": [{
         "namespace": "EDAM",
-        "id": "format_3685", "version": null
+        "id": "format_3685", "version": null, "supportedFeatures": []
       }],
       "archiveFormats": [{
         "namespace": "EDAM",
-        "id": "format_3686", "version": null
+        "id": "format_3686", "version": null, "supportedFeatures": []
       }],
       "citations": [],
       "parameters": [{
@@ -802,7 +826,8 @@
           "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
         }
       ],
-      "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
+      "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"],
+      "dependencies": null
     },
     {
       "id": "vode",
@@ -817,15 +842,15 @@
       }],
       "modelFormats": [{
         "namespace": "EDAM",
-        "id": "format_2585", "version": null
+        "id": "format_2585", "version": null, "supportedFeatures": []
       }],
       "simulationFormats": [{
         "namespace": "EDAM",
-        "id": "format_3685", "version": null
+        "id": "format_3685", "version": null, "supportedFeatures": []
       }],
       "archiveFormats": [{
         "namespace": "EDAM",
-        "id": "format_3686", "version": null
+        "id": "format_3686", "version": null, "supportedFeatures": []
       }],
       "citations": [{
         "title": "VODE: a variable-coefficient ODE solver",
@@ -963,7 +988,14 @@
           "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
         }
       ],
-      "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
+      "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"],
+      "dependencies": [{
+        "name": "SciPy",
+        "version": null,
+        "required": true,
+        "freeNonCommercialLicense": true,
+        "url": "https://www.scipy.org/"
+      }]
     },
     {
       "id": "zvode",
@@ -978,15 +1010,15 @@
       }],
       "modelFormats": [{
         "namespace": "EDAM",
-        "id": "format_2585", "version": null
+        "id": "format_2585", "version": null, "supportedFeatures": []
       }],
       "simulationFormats": [{
         "namespace": "EDAM",
-        "id": "format_3685", "version": null
+        "id": "format_3685", "version": null, "supportedFeatures": []
       }],
       "archiveFormats": [{
         "namespace": "EDAM",
-        "id": "format_3686", "version": null
+        "id": "format_3686", "version": null, "supportedFeatures": []
       }],
       "citations": [{
         "title": "VODE: a variable-coefficient ODE solver",
@@ -1124,11 +1156,20 @@
           "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
         }
       ],
-      "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
+      "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"],
+      "dependencies": [{
+        "name": "SciPy",
+        "version": null,
+        "required": true,
+        "freeNonCommercialLicense": true,
+        "url": "https://www.scipy.org/"
+      }]
     }
   ],
   "interfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"],
-  "supportedProgrammingLanguages": ["Python"],
+  "supportedOperatingSystemTypes": ["platform-independent"],
+  "supportedProgrammingLanguages": [{"namespace": "Linguist", "id": "Python"}],
+  "funding": [],
   "biosimulators": {
     "specificationVersion": "1.0.0",
     "imageVersion": "1.0.0",

@@ -1,24 +1,27 @@
-""" Methods for executing SED tasks in COMBINE archives and saving their outputs
+""" Methods for using GillesPy2 to execute SED tasks in COMBINE archives and save their outputs
 
-:Author: Bilal Shaikh <bilalshaikh42@gmail.com>
 :Author: Jonathan Karr <karr@mssm.edu>
-:Date: 2020-10-26
+:Author: Bilal Shaikh <bilalshaikh42@gmail.com>
+:Date: 2020-12-09
 :Copyright: 2020, Center for Reproducible Biomedical Modeling
 :License: MIT
 """
 
-from Biosimulations_utils.simulation.data_model import TimecourseSimulation, SimulationResultsFormat
-from Biosimulations_utils.simulator.utils import exec_simulations_in_archive
+from biosimulators_utils.combine.exec import exec_sedml_docs_in_archive
+from biosimulators_utils.report.data_model import ReportFormat, DataGeneratorVariableResults  # noqa: F401
+from biosimulators_utils.sedml.data_model import (Task, ModelLanguage, UniformTimeCourseSimulation,  # noqa: F401
+                                                  DataGeneratorVariable, DataGeneratorVariableSymbol)
 import enum
 import gillespy2
+import math
 import numpy
-import pandas
+import os
+import re
 
 __all__ = [
     'Algorithm', 'AlgorithmParameter', 'VodeMethod', 'HybridTauIntegrationMethod',
     'kisao_algorithm_map',
-    'InputError',
-    'exec_combine_archive', 'exec_simulation',
+    'exec_sedml_docs_in_combine_archive', 'exec_sed_task',
 ]
 
 
@@ -29,6 +32,7 @@ class Algorithm(object):
         name (:obj:`str`): name
         solver (:obj:`type`): solver
         solver_args (:obj:`dict`): solver arguments
+        parameters (:obj:`dict`): dictionary that maps KiSAO ids to :obj:`AlgorithmParameter`s
     """
 
     def __init__(self, name, solver, parameters=None, **solver_args):
@@ -37,7 +41,7 @@ class Algorithm(object):
             name (:obj:`str`): name
             solver (:obj:`type`): solver
             **solver_args (:obj:`dict`): solver arguments
-            parameters (:obj:`dict`): dictionary that maps KiSAO ids to :obj:`AlgorithmParameter`s
+            parameters (:obj:`dict`, optional): dictionary that maps KiSAO ids to :obj:`AlgorithmParameter`s
         """
         self.name = name
         self.solver = solver
@@ -68,12 +72,18 @@ class AlgorithmParameter(object):
         self.data_type = data_type
         self.default = default
 
-    def set_value(self, solver_args, value):
+    def set_value(self, solver_args, str_value):
         """ Apply the value of a parameter to a data structure of solver arguments
 
         Args:
             solver_args (:obj:`dict`): solver arguments
-            value (:obj:`object`): parameter value
+            str_value (:obj:`string`): string representation of parameter value
+
+        Raises:
+            :obj:`ValueError`: if :obj:`str_value` is not a valid string representation
+                of the data type of the parameter
+            :obj:`NotImplementedError`: if :obj:`str_value` is not a valid value of an
+                enumerated parameter
         """
         keys = self.key.split('.')
         for key in keys[0:-1]:
@@ -84,12 +94,37 @@ class AlgorithmParameter(object):
                 solver_args[key] = nested_solver_args
             solver_args = nested_solver_args
 
-        if isinstance(self.data_type, enum.Enum):
+        if self.data_type == bool:
+            if str_value.lower() == 'false' or str_value == '0':
+                value = False
+            elif str_value.lower() == 'true' or str_value == '1':
+                value = True
+            else:
+                raise ValueError("Value '{}' is not a valid Boolean".format(str_value))
+
+        elif self.data_type == int:
             try:
-                value = self.data_type(value).name
+                value = int(str_value)
             except ValueError:
-                raise InputError(expression=value,
-                                 message="{} option '{}' is not supported".format(self.data_type.__name__, value))
+                raise ValueError("Value '{}' is not a valid integer".format(str_value))
+
+        elif self.data_type == float:
+            try:
+                value = float(str_value)
+            except ValueError:
+                raise ValueError("Value '{}' is not a valid float".format(str_value))
+
+        elif issubclass(self.data_type, enum.Enum):
+            try:
+                value = self.data_type(str_value).name
+            except ValueError:
+                raise NotImplementedError(
+                    '{} is not a supported value of {}. The value of {} must be one of the following:\n  - {}'.format(
+                        str_value, self.name, self.name,
+                        '\n  - '.join('{}: {}'.format(value, name) for name, value in self.data_type.__members__.items())))
+
+        else:
+            raise NotImplementedError('Data type {} is not supported'.format(self.data_type.__name__))
 
         solver_args[keys[-1]] = value
 
@@ -122,6 +157,7 @@ kisao_algorithm_map = {
         'KISAO_0000219': AlgorithmParameter("maximum non-stiff order (Adams order)", 'integrator_options.max_order_ns', int, 12),
         'KISAO_0000220': AlgorithmParameter("maximum stiff order (BDF order)", 'integrator_options.max_order_s', int, 5),
     }),
+
     'KISAO_0000087': Algorithm("dopri5", gillespy2.ODESolver, integrator="dopri5", parameters={
         'KISAO_0000211': AlgorithmParameter("absolute tolerance", 'integrator_options.atol', float, 1e-12),
         'KISAO_0000209': AlgorithmParameter("relative tolerance", 'integrator_options.rtol', float, 1e-6),
@@ -135,16 +171,15 @@ kisao_algorithm_map = {
                                             'integrator_options.dfactor', float, 0.2),
         'KISAO_0000541': AlgorithmParameter("Beta parameter for stabilised step size control", 'integrator_options.beta', float, 0.),
     }),
+
     'KISAO_0000436': Algorithm("dop835", gillespy2.ODESolver, integrator="dop835", parameters={
         'KISAO_0000211': AlgorithmParameter("absolute tolerance", 'integrator_options.atol', float, 1e-12),
         'KISAO_0000209': AlgorithmParameter("relative tolerance", 'integrator_options.rtol', float, 1e-6),
         'KISAO_0000415': AlgorithmParameter("maximum number of steps", 'integrator_options.nsteps', int, 500),
-
         'KISAO_0000559': AlgorithmParameter("initial step size", 'integrator_options.first_step', float, 0.0),
         'KISAO_0000467': AlgorithmParameter("maximum step size", 'integrator_options.max_step', float, float("inf")),
         'KISAO_0000538': AlgorithmParameter("safety factor on new step selection", 'integrator_options.safety', float, 0.9),
         'KISAO_0000540': AlgorithmParameter("maximum factor to increase/decrease step size by in one step",
-
                                             'integrator_options.ifactor', float, 6.),
         'KISAO_0000539': AlgorithmParameter("minimum factor to increase/decrease step size by in one step",
                                             'integrator_options.dfactor', float, 0.333),
@@ -152,7 +187,6 @@ kisao_algorithm_map = {
     }),
 
     'KISAO_0000535': Algorithm("vode", gillespy2.ODESolver, integrator="vode", parameters={
-
         'KISAO_0000211': AlgorithmParameter("absolute tolerance", 'integrator_options.atol', float, 1e-12),
         'KISAO_0000209': AlgorithmParameter("relative tolerance", 'integrator_options.rtol', float, 1e-6),
         'KISAO_0000480': AlgorithmParameter("lower half bandwith", 'integrator_options.lband', int, None),
@@ -163,11 +197,10 @@ kisao_algorithm_map = {
         'KISAO_0000467': AlgorithmParameter("maximum step size", 'integrator_options.max_step', float, float("inf")),
         'KISAO_0000484': AlgorithmParameter("order", 'integrator_options.order', int, 12),
         'KISAO_0000475': AlgorithmParameter("integration method", 'integrator_options.method', VodeMethod, VodeMethod.adams),
-
         'KISAO_0000542': AlgorithmParameter("with Jacobian", 'integrator_options.with_jacobian', bool, False),
     }),
+
     'KISAO_0000536': Algorithm("zvode", gillespy2.ODESolver, integrator="zvode", parameters={
-
         'KISAO_0000211': AlgorithmParameter("absolute tolerance", 'integrator_options.atol', float, 1e-12),
         'KISAO_0000209': AlgorithmParameter("relative tolerance", 'integrator_options.rtol', float, 1e-6),
         'KISAO_0000480': AlgorithmParameter("lower half bandwith", 'integrator_options.lband', int, None),
@@ -178,17 +211,18 @@ kisao_algorithm_map = {
         'KISAO_0000467': AlgorithmParameter("maximum step size", 'integrator_options.max_step', float, float("inf")),
         'KISAO_0000484': AlgorithmParameter("order", 'integrator_options.order', int, 12),
         'KISAO_0000475': AlgorithmParameter("integration method", 'integrator_options.method', VodeMethod, VodeMethod.adams),
-
         'KISAO_0000542': AlgorithmParameter("with Jacobian", 'integrator_options.with_jacobian', bool, False),
-
     }),
+
     'KISAO_0000029': Algorithm("SSA", gillespy2.SSACSolver, parameters={
         'KISAO_0000488': AlgorithmParameter("seed", 'seed', int, None),
     }),
+
     'KISAO_0000039': Algorithm("tau-leaping", gillespy2.TauLeapingSolver, parameters={
         'KISAO_0000488': AlgorithmParameter("seed", 'seed', int, None),
         'KISAO_0000228': AlgorithmParameter("epsilon", 'tau_tol', float, 0.03),
     }),
+
     'KISAO_0000028': Algorithm("hybrid tau solver", gillespy2.TauHybridSolver, parameters={
         'KISAO_0000488': AlgorithmParameter("seed", 'seed', int, None),
         'KISAO_0000228': AlgorithmParameter("epsilon", 'tau_tol', float, 0.03),
@@ -198,136 +232,174 @@ kisao_algorithm_map = {
 }
 
 
-class InputError(Exception):
-    """ An error with a COMBINE/OMEX archive that prevents its parsing and/or simulation
-
-    Attributes:
-        expression (:obj:`object`): Python object which triggered the error
-    """
-
-    def __init__(self, message, expression):
-        """
-        Args:
-            message (:obj:`str`): error message
-            expression (:obj:`object`): Python object which triggered the error
-        """
-        super(InputError, self).__init__(message)
-        self.expression = expression
-
-
-def exec_combine_archive(archive_file, out_dir):
-    """ Execute the SED tasks defined in a COMBINE archive and save the outputs
+def exec_sedml_docs_in_combine_archive(archive_filename, out_dir, report_formats=None):
+    """ Execute the SED tasks defined in a COMBINE/OMEX archive and save the outputs
 
     Args:
-        archive_file (:obj:`str`): path to COMBINE archive
-        out_dir (:obj:`str`): directory to store the outputs of the tasks
+        archive_filename (:obj:`str`): path to COMBINE/OMEX archive
+        out_dir (:obj:`str`): path to store the outputs of the archive
+
+            * CSV: directory in which to save outputs to files
+              ``{ out_dir }/{ relative-path-to-SED-ML-file-within-archive }/{ report.id }.csv``
+            * HDF5: directory in which to save a single HDF5 file (``{ out_dir }/reports.h5``),
+              with reports at keys ``{ relative-path-to-SED-ML-file-within-archive }/{ report.id }`` within the HDF5 file
+
+        report_formats (:obj:`list` of :obj:`ReportFormat`, optional): report format (e.g., CSV or HDF5)
     """
-    exec_simulations_in_archive(archive_file, exec_simulation, out_dir, apply_model_changes=True)
+    exec_sedml_docs_in_archive(archive_filename, exec_sed_task, out_dir,
+                               apply_xml_model_changes=True,
+                               report_formats=report_formats)
 
 
-def exec_simulation(model_filename, model_sed_urn, simulation, working_dir, out_filename, out_format):
-    ''' Execute a simulation and save its results
+def exec_sed_task(task, variables):
+    ''' Execute a task and save its results
 
     Args:
-       model_filename (:obj:`str`): path to the model
-       model_sed_urn (:obj:`str`): SED URN for the format of the model (e.g., `urn:sedml:language:sbml`)
-       simulation (:obj:`TimecourseSimulation`): simulation
-       working_dir (:obj:`str`): directory of the SED-ML file
-       out_filename (:obj:`str`): path to save the results of the simulation
-       out_format (:obj:`SimulationResultsFormat`): format to save the results of the simulation (e.g., `HDF5`)
+       task (:obj:`Task`): task
+       variables (:obj:`list` of :obj:`DataGeneratorVariable`): variables that should be recorded
 
     Returns:
-        :obj:`pandas.DataFrame`: predicted species counts/concentrations;
-            rows: species, columns: time points
+        :obj:`DataGeneratorVariableResults`: results of variables
 
     Raises:
-        :obj:`InputError`: if the simulation uses an unsupported format, the model could not be imported,
-            the simulation requires an unsupported algorithm or algorithm parameter, or the simulation
-            start time is not zero
+        :obj:`ValueError`: if the task or an aspect of the task is not valid, or the requested output variables
+            could not be recorded
+        :obj:`NotImplementedError`: if the task is not of a supported type or involves an unsuported feature
     '''
+    # check that task is an instance of Task
+    if not isinstance(task, Task):
+        raise NotImplementedError('Task type {} is not supported'.format(task.__class__.__name__))
+
+    # check that task has model
+    if not task.model:
+        raise ValueError('Task must have a model')
+
     # check that model is encoded in SBML
-    if model_sed_urn != "urn:sedml:language:sbml":
-        format = model_sed_urn.split("language:")
-        raise InputError(
-            expression=format, message="Model language with URN '{}' is not supported".format(model_sed_urn))
+    if not task.model.language or not re.match('^{}($|:)'.format(ModelLanguage.SBML.value), task.model.language):
+        raise NotImplementedError("Model language {} is not supported. Model language must be '{}'.".format(
+            task.model.language, ModelLanguage.SBML.value))
+
+    # check that model parameter changes have already been applied (because handled by :obj:`exec_sedml_docs_in_archive`)
+    if task.model.changes:
+        raise NotImplementedError('Model changes are not supported')
+
+    # check that task has model
+    simulation = task.simulation
+    if not simulation:
+        raise ValueError('Task must have a simulation')
 
     # check that simulation is a time course simulation
-    if not isinstance(simulation, TimecourseSimulation):
-        raise InputError(expression=simulation.__class__, message='{} is not supported'.format(simulation.__class__.__name__))
+    if not isinstance(simulation, UniformTimeCourseSimulation):
+        raise NotImplementedError('Simulation type {} is not supported. Simulation must be an instance of {}.'.format(
+            simulation.__class__.__name__, UniformTimeCourseSimulation.__name__))
 
-    # check that model parameter changes have already been applied (because handled by :obj:`exec_simulations_in_archive`)
-    if simulation.model_parameter_changes:
-        raise InputError(expression=simulation.model_parameter_changes, message='Model parameter changes are not supported')
-
-    # check that the desired output format is supported
-    if out_format != SimulationResultsFormat.HDF5:
-        raise NotImplementedError("Simulation results format '{}' is not supported".format(out_format))
-
-    # Read the model located at `model_filename` in the format
-    # with the SED URN `model_sed_urn`.    
+    # Read the model located at `task.model.source` in the format
+    # with the SED URN `model_language_urn`.
     # Convert SBML into a GillesPy2 model
-    model, errors = gillespy2.import_SBML(model_filename, simulation.model.metadata.name)
+    if not task.model.source or not os.path.isfile(task.model.source):
+        raise FileNotFoundError("Model source '{}' must be a file".format(task.model.source or ''))
+
+    model, errors = gillespy2.import_SBML(task.model.source)
     if model is None or errors:
-        raise InputError(expression=model_filename,
-                         message='Model at {} could not be imported:\n  - {}'.format(
-                             model_filename, '\n  - '.join(message for message, code in errors)))
+        raise ValueError('Model at {} could not be imported:\n  - {}'.format(
+            task.model.source, '\n  - '.join(message for message, code in errors)))
 
     # Load the algorithm specified by `simulation.algorithm`
-    algorithm_id = simulation.algorithm.kisao_term.id
-    algorithm = kisao_algorithm_map.get(algorithm_id, None)
-    if algorithm is None:
-        raise InputError(expression=algorithm_id,
-                         message="Algorithm with KISAO id '{}' is not supported".format(algorithm_id))
+    if not simulation.algorithm:
+        raise ValueError('Simulation must have an algorithm')
 
-    # Apply the algorithm parameter changes specified by `simulation.algorithm_parameter_changes`
+    algorithm_kisao_id = simulation.algorithm.kisao_id
+    algorithm = kisao_algorithm_map.get(algorithm_kisao_id, None)
+    if algorithm is None:
+        raise NotImplementedError("".join([
+            "Algorithm with KiSAO id '{}' is not supported. ".format(algorithm_kisao_id),
+            "Algorithm must have one of the following KiSAO ids:\n  - {}".format('\n  - '.join(
+                '{}: {} ({})'.format(kisao_id, algorithm.name, algorithm.solver.__name__)
+                for kisao_id, algorithm in kisao_algorithm_map.items())),
+        ]))
+
+    solver = algorithm.solver
+    if solver == gillespy2.SSACSolver and (model.get_all_events() or model.get_all_assignment_rules()):
+        solver = gillespy2.NumPySSASolver
+
+    # Apply the algorithm parameter changes specified by `simulation.algorithm.parameter_changes`
     algorithm_params = {}
-    for change in simulation.algorithm_parameter_changes:
-        parameter = algorithm.parameters.get(
-            change.parameter.kisao_term.id, None)
+    for change in simulation.algorithm.changes:
+        parameter = algorithm.parameters.get(change.kisao_id, None)
         if parameter is None:
-            raise InputError(
-                expression=change.parameter.kisao_term.id,
-                message="Algorithm parameter with KiSAO id '{}' is not supported".format(change.parameter.kisao_term.id))
-        parameter.set_value(algorithm_params, change.value)
+            raise NotImplementedError("".join([
+                "Algorithm parameter with KiSAO id '{}' is not supported. ".format(change.kisao_id),
+                "Parameter must have one of the following KiSAO ids:\n  - {}".format('\n  - '.join(
+                    '{}: {}'.format(kisao_id, parameter.name) for kisao_id, parameter in algorithm.parameters.items())),
+            ]))
+        parameter.set_value(algorithm_params, change.new_value)
 
     # Validate that start time is 0 because this is the only option that GillesPy2 supports
-    if simulation.start_time != 0:
-        raise InputError(expression=simulation.start_time,
-                         message='Start time must be 0')
+    if simulation.initial_time != 0:
+        raise NotImplementedError('Initial simulation time {} is not supported. Initial time must be 0.'.format(simulation.initial_time))
+
+    if simulation.output_start_time < simulation.initial_time:
+        raise ValueError('Output start time {} must be at least the initial time {}.'.format(
+            simulation.output_start_time, simulation.initial_time))
+
+    if simulation.output_end_time < simulation.output_start_time:
+        raise ValueError('Output end time {} must be at least the output start time {}.'.format(
+            simulation.output_end_time, simulation.output_start_time))
 
     # set the simulation time span
-    num_time_points = (simulation.end_time - simulation.start_time) / \
-        (simulation.end_time - simulation.output_start_time) * simulation.num_time_points
-    model.timespan(numpy.linspace(simulation.start_time, simulation.end_time, num_time_points + 1))
+    number_of_points = (simulation.output_end_time - simulation.initial_time) / \
+        (simulation.output_end_time - simulation.output_start_time) * simulation.number_of_points
+    if number_of_points != math.floor(number_of_points):
+        raise NotImplementedError('Time course must specify an integer number of time points')
+    number_of_points = int(number_of_points)
+    model.timespan(numpy.linspace(simulation.initial_time, simulation.output_end_time, number_of_points + 1))
 
-    # Simulate the model from `simulation.start_time` to `simulation.end_time` and record `simulation.num_time_points` + 1 time points
-    results_dict = model.run(algorithm.solver, **algorithm.solver_args, **algorithm_params)[0]
+    # Simulate the model from ``simulation.start_time`` to ``simulation.output_end_time``
+    # and record ``simulation.number_of_points`` + 1 time points
+    results_dict = model.run(solver, **algorithm.solver_args, **algorithm_params)[0]
 
-    # transform the results to data frame
-    variables = sorted([var.id for var in simulation.model.variables])
-    variables.insert(0, 'time')
-    unpredicted_variables = set(variables).difference(set(results_dict.keys()))
-    if unpredicted_variables:
-        raise InputError(expression=unpredicted_variables,
-                         message='Simulation did not record the following required outputs:\n  - {}'.format(
-                             '\n  - '.join(sorted(unpredicted_variables))))
+    # transform the results to an instance of :obj:`DataGeneratorVariableResults`
+    variable_results = DataGeneratorVariableResults()
+    unpredicted_symbols = []
+    unpredicted_targets = []
+    for variable in variables:
+        if (variable.symbol and variable.target) or (not variable.symbol and not variable.target):
+            raise ValueError('Variable must define a symbol or target')
 
-    results_matrix = numpy.zeros((simulation.num_time_points + 1, len(variables)))
-    for i_specie, specie in enumerate(variables):
-        results_matrix[:, i_specie] = results_dict[specie][-(simulation.num_time_points + 1):]
+        if variable.symbol:
+            if variable.symbol == DataGeneratorVariableSymbol.time:
+                variable_results[variable.id] = results_dict['time'][-(simulation.number_of_points + 1):]
+            else:
+                unpredicted_symbols.append(variable.symbol)
 
-    results_df = pandas.DataFrame(results_matrix, columns=variables)
+        elif variable.target:
+            match = (
+                re.match(r"^/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species\[@id='(.*?)'\]$", variable.target) or
+                re.match(r'^/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species\[@id="(.*?)"\]$', variable.target)
+            )
+            if match and match.group(1) in results_dict:
+                variable_results[variable.id] = results_dict[match.group(1)][-(simulation.number_of_points + 1):]
+            else:
+                unpredicted_targets.append(variable.target)
 
-    # Save a report of the results of the simulation with `simulation.num_time_points` time points
-    # beginning at `simulation.output_start_time` to `out_filename` in `out_format` format.
-    # This should save all of the variables specified by `simulation.model.variables`.
-    results_df.to_csv(out_filename, index=False)
+    if unpredicted_symbols:
+        raise NotImplementedError("".join([
+            "The following variable symbols are not supported:\n  - {}\n\n".format(
+                '\n  - '.join(sorted(unpredicted_symbols)),
+            ),
+            "Symbols must be one of the following:\n  - {}".format(DataGeneratorVariableSymbol.time),
+        ]))
+
+    if unpredicted_targets:
+        raise ValueError(''.join([
+            'The following variable targets could not be recorded:\n  - {}\n\n'.format(
+                '\n  - '.join(sorted(unpredicted_targets)),
+            ),
+            'Targets must be one of the following:\n  - {}'.format(
+                '\n  - '.join("/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id='{}']".format(id)
+                              for id in sorted(results_dict.keys()) if id != 'time'),
+            )
+        ]))
 
     # return results
-    return results_df
-
-
-if __name__ == "__main__":
-
-    exec_simulation("tests/fixtures/BIOMD0000000028.xml",
-                    "urn:sedml:language:sbml", "simulation", "", "", "")
+    return variable_results

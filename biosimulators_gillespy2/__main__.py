@@ -1,58 +1,22 @@
 """ BioSimulators-compliant command-line interface to the `Gillespy2 <https://github.com/StochSS/GillesPy2>`_ simulation program.
 
+:Author: Jonathan Karr <karr@mssm.edu>
 :Author: Bilal Shaikh <bilalshaikh42@gmail.com>
 :Date: 2020-08-18
 :Copyright: 2020, BioSimulators Team
 :License: MIT
 """
 
-from .core import exec_combine_archive
-import biosimulators_gillespy2
-import cement
+from ._version import __version__
+from .core import exec_sedml_docs_in_combine_archive
+from biosimulators_utils.simulator.cli import build_cli
+import gillespy2
 
-
-class BaseController(cement.Controller):
-    """ Base controller for command line application """
-
-    class Meta:
-        label = 'base'
-        description = ("BioSimulators-compliant command-line interface to the "
-                       "<Gillespy2> simulation program <https://github.com/StochSS/GillesPy2>.")
-        help = "gillespy2"
-        arguments = [
-            (['-i', '--archive'], dict(type=str,
-                                       required=True,
-                                       help='Path to OMEX file which contains one or more SED-ML-encoded simulation experiments')),
-            (['-o', '--out-dir'], dict(type=str,
-                                       default='.',
-                                       help='Directory to save outputs')),
-            (['-v', '--version'], dict(action='version',
-                                       version=biosimulators_gillespy2.__version__)),
-        ]
-
-    @cement.ex(hide=True)
-    def _default(self):
-        args = self.app.pargs
-        try:
-            exec_combine_archive(args.archive, args.out_dir)
-        except Exception as exception:
-            raise SystemExit(str(exception)) from exception
-
-
-class App(cement.App):
-    """ Command line application """
-    class Meta:
-        label = 'gillespy2'
-        base_controller = 'base'
-        handlers = [
-            BaseController,
-        ]
+App = build_cli('gillespy2', __version__,
+                'GillesPy2', gillespy2.__version__, 'https://github.com/StochSS/GillesPy2',
+                exec_sedml_docs_in_combine_archive)
 
 
 def main():
     with App() as app:
         app.run()
-
-
-if __name__ == "__main__":
-    main()

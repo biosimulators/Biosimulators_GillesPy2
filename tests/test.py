@@ -6,21 +6,31 @@
 :License: MIT
 """
 
-from Biosimulations_utils.simulator.testing import SimulatorValidator
+# from biosimulators_utils.simulator.testing import SimulatorValidator
 from biosimulators_gillespy2 import __main__
-import biosimulators_gillespy2
-import capturer
-import docker
+from biosimulators_gillespy2 import core
+from biosimulators_utils.combine import data_model as combine_data_model
+from biosimulators_utils.combine.io import CombineArchiveWriter
+from biosimulators_utils.report import data_model as report_data_model
+from biosimulators_utils.report.io import ReportReader
+from biosimulators_utils.simulator.exec import exec_sedml_docs_in_archive_with_containerized_simulator
+from biosimulators_utils.sedml import data_model as sedml_data_model
+from biosimulators_utils.sedml.io import SedmlSimulationWriter
+from biosimulators_utils.sedml.utils import append_all_nested_children_to_doc
+from biosimulators_utils.utils.core import are_lists_equal
+from unittest import mock
+import datetime
+import dateutil.tz
+import gillespy2
+import numpy.testing
 import os
-import PyPDF2
 import shutil
 import tempfile
 import unittest
 
 
-class CliTestCase(unittest.TestCase):
-    EXAMPLE_ARCHIVE_FILENAME = 'tests/fixtures/BIOMD0000000297.edited.omex'
-    DOCKER_IMAGE = 'ghcr.io/biosimulators/biosimulators_gillespy2/gillespy2'
+class TestCase(unittest.TestCase):
+    DOCKER_IMAGE = 'ghcr.io/biosimulators/biosimulators_gillespy2/gillespy2:latest'
 
     def setUp(self):
         self.dirname = tempfile.mkdtemp()
@@ -28,94 +38,414 @@ class CliTestCase(unittest.TestCase):
     def tearDown(self):
         shutil.rmtree(self.dirname)
 
-    def test_help(self):
-        with self.assertRaises(SystemExit):
-            with __main__.App(argv=['--help']) as app:
-                app.run()
+    def test_algorithm(self):
+        alg = core.Algorithm("LSODA", gillespy2.ODESolver, integrator="lsoda", parameters=None)
+        self.assertEqual(alg.name, "LSODA")
+        self.assertEqual(alg.solver, gillespy2.ODESolver)
+        self.assertEqual(alg.solver_args, {'integrator': 'lsoda'})
+        self.assertEqual(alg.parameters, {})
 
-    def test_version(self):
-        with __main__.App(argv=['-v']) as app:
-            with capturer.CaptureOutput(merged=False, relay=False) as captured:
-                with self.assertRaises(SystemExit):
-                    app.run()
-                self.assertIn(biosimulators_gillespy2.__version__, captured.stdout.get_text())
-                self.assertEqual(captured.stderr.get_text(), '')
+        alg = core.Algorithm("LSODA", gillespy2.ODESolver, integrator="lsoda", parameters={'param_1': 'value'})
+        self.assertEqual(alg.name, "LSODA")
+        self.assertEqual(alg.solver, gillespy2.ODESolver)
+        self.assertEqual(alg.solver_args, {'integrator': 'lsoda'})
+        self.assertEqual(alg.parameters, {'param_1': 'value'})
 
-        with __main__.App(argv=['--version']) as app:
-            with capturer.CaptureOutput(merged=False, relay=False) as captured:
-                with self.assertRaises(SystemExit):
-                    app.run()
-                self.assertIn(biosimulators_gillespy2.__version__, captured.stdout.get_text())
-                self.assertEqual(captured.stderr.get_text(), '')
+    def test_algorithm_parameter(self):
+        param = core.AlgorithmParameter("absolute tolerance", 'integrator_options.atol', float, 1e-12)
+        self.assertEqual(param.name, "absolute tolerance")
+        self.assertEqual(param.key, "integrator_options.atol")
+        self.assertEqual(param.data_type, float)
+        self.assertEqual(param.default, 1e-12)
 
-    def test_sim_short_arg_names(self):
-        with __main__.App(argv=['-i', self.EXAMPLE_ARCHIVE_FILENAME, '-o', self.dirname]) as app:
-            app.run()
-        self.assert_outputs_created(self.dirname)
+    def test_algorithm_parameter_boolean(self):
+        param = core.AlgorithmParameter('name', 'integrator_options', bool, True)
 
-    def test_sim_long_arg_names(self):
-        with __main__.App(argv=['--archive', self.EXAMPLE_ARCHIVE_FILENAME, '--out-dir', self.dirname]) as app:
-            app.run()
-        self.assert_outputs_created(self.dirname)
+        solver_args = {}
+        param.set_value(solver_args, 'false')
+        self.assertEqual(solver_args['integrator_options'], False)
 
-    def test_build_docker_image(self):
-        docker_client = docker.from_env()
-        docker_client.images.build(
-            path='.',
-            dockerfile='Dockerfile',
-            pull=True,
-            rm=True,
+        solver_args = {}
+        param.set_value(solver_args, '1')
+        self.assertEqual(solver_args['integrator_options'], True)
+
+        with self.assertRaises(ValueError):
+            param.set_value(solver_args, 'f')
+
+    def test_algorithm_parameter_integer(self):
+        param = core.AlgorithmParameter('name', 'integrator_options.atol', int, 10)
+        solver_args = {}
+        param.set_value(solver_args, '11')
+        self.assertEqual(solver_args['integrator_options']['atol'], 11)
+
+        with self.assertRaises(ValueError):
+            param.set_value(solver_args, '1.1')
+
+        with self.assertRaises(ValueError):
+            param.set_value(solver_args, '1.')
+
+        with self.assertRaises(ValueError):
+            param.set_value(solver_args, 'a')
+
+    def test_algorithm_parameter_float(self):
+        param = core.AlgorithmParameter("absolute tolerance", 'integrator_options.atol', float, 1e-12)
+        solver_args = {}
+        param.set_value(solver_args, '1e-14')
+        self.assertEqual(solver_args['integrator_options']['atol'], 1e-14)
+
+        with self.assertRaises(ValueError):
+            param.set_value(solver_args, 'a')
+
+    def test_algorithm_parameter_enum(self):
+        param = core.AlgorithmParameter('name', 'integrator_options.atol', core.VodeMethod, core.VodeMethod.bdf.value)
+        solver_args = {}
+        param.set_value(solver_args, core.VodeMethod.bdf.value)
+        self.assertEqual(solver_args['integrator_options']['atol'], core.VodeMethod.bdf.name)
+
+        with self.assertRaises(NotImplementedError):
+            param.set_value(solver_args, '--invalid--')
+
+    def test_algorithm_parameter_invalid_type(self):
+        param = core.AlgorithmParameter('name', 'integrator_options.atol', str, 'default')
+        solver_args = {}
+        with self.assertRaises(NotImplementedError):
+            param.set_value(solver_args, 'value')
+
+    def test_exec_sed_task(self):
+        task = sedml_data_model.Task(
+            model=sedml_data_model.Model(
+                source=os.path.join(os.path.dirname(__file__), 'fixtures', 'BIOMD0000000297.edited', 'ex1', 'BIOMD0000000297.xml'),
+                language=sedml_data_model.ModelLanguage.SBML.value,
+                changes=[],
+            ),
+            simulation=sedml_data_model.UniformTimeCourseSimulation(
+                algorithm=sedml_data_model.Algorithm(
+                    kisao_id='KISAO_0000029',
+                    changes=[
+                        sedml_data_model.AlgorithmParameterChange(
+                            kisao_id='KISAO_0000488',
+                            new_value='10',
+                        ),
+                    ],
+                ),
+                initial_time=0.,
+                output_start_time=10.,
+                output_end_time=20.,
+                number_of_points=20,
+            ),
         )
 
-    def test_sim_with_docker_image(self):
-        docker_client = docker.from_env()
+        variables = [
+            sedml_data_model.DataGeneratorVariable(id='time', symbol=sedml_data_model.DataGeneratorVariableSymbol.time),
+            sedml_data_model.DataGeneratorVariable(id='BE', target="/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id='BE']"),
+            sedml_data_model.DataGeneratorVariable(id='BUD', target='/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id="BUD"]'),
+            sedml_data_model.DataGeneratorVariable(id='Cdc20', target="/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id='Cdc20']"),
+        ]
 
-        # setup input and output directories
-        in_dir = os.path.join(self.dirname, 'in')
+        variable_results = core.exec_sed_task(task, variables)
+
+        self.assertTrue(sorted(variable_results.keys()), sorted([var.id for var in variables]))
+        self.assertEqual(variable_results[variables[0].id].shape, (task.simulation.number_of_points + 1,))
+        numpy.testing.assert_equal(
+            variable_results['time'],
+            numpy.linspace(task.simulation.output_start_time, task.simulation.output_end_time, task.simulation.number_of_points + 1),
+        )
+
+    def test_exec_sed_task_errors(self):
+        task = None
+        variables = []
+        with self.assertRaisesRegex(NotImplementedError, 'is not supported'):
+            core.exec_sed_task(task, variables)
+
+        task = sedml_data_model.Task()
+        with self.assertRaisesRegex(ValueError, 'must have a model'):
+            core.exec_sed_task(task, variables)
+
+        task.model = sedml_data_model.Model()
+        with self.assertRaisesRegex(NotImplementedError, 'is not supported. Model language must be'):
+            core.exec_sed_task(task, variables)
+
+        task.model.language = 'sbml'
+        with self.assertRaisesRegex(NotImplementedError, 'is not supported. Model language must be'):
+            core.exec_sed_task(task, variables)
+
+        task.model.language = sedml_data_model.ModelLanguage.SBML
+        task.model.changes = [sedml_data_model.ModelAttributeChange()]
+        with self.assertRaisesRegex(NotImplementedError, 'changes are not supported'):
+            core.exec_sed_task(task, variables)
+
+        task.model.changes = []
+        with self.assertRaisesRegex(ValueError, 'must have a simulation'):
+            core.exec_sed_task(task, variables)
+
+        task.simulation = mock.Mock()
+        with self.assertRaisesRegex(NotImplementedError, 'is not supported. Simulation must be'):
+            core.exec_sed_task(task, variables)
+
+        task.simulation = sedml_data_model.UniformTimeCourseSimulation(
+            initial_time=10.,
+            output_start_time=-10.,
+            output_end_time=-20.,
+            number_of_points=10,
+        )
+        with self.assertRaisesRegex(FileNotFoundError, 'must be a file'):
+            core.exec_sed_task(task, variables)
+
+        task.model.source = os.path.join(self.dirname, 'invalid-model.xml')
+        with open(task.model.source, 'w') as file:
+            file.write('!')
+        with self.assertRaisesRegex(ValueError, 'could not be imported'):
+            core.exec_sed_task(task, variables)
+
+        task.model.source = os.path.join(os.path.dirname(__file__), 'fixtures', 'BIOMD0000000297.edited', 'ex1', 'BIOMD0000000297.xml')
+        with self.assertRaisesRegex(ValueError, 'must have an algorithm'):
+            core.exec_sed_task(task, variables)
+
+        task.simulation.algorithm = sedml_data_model.Algorithm()
+        with self.assertRaisesRegex(NotImplementedError, 'is not supported. Algorithm must'):
+            core.exec_sed_task(task, variables)
+
+        task.simulation.algorithm.kisao_id = 'KISAO_0000029'
+        task.simulation.algorithm.changes = [
+            sedml_data_model.AlgorithmParameterChange(kisao_id='unsupported'),
+        ]
+        with self.assertRaisesRegex(NotImplementedError, 'is not supported. Parameter must'):
+            core.exec_sed_task(task, variables)
+
+        task.simulation.algorithm.changes[0].kisao_id = 'KISAO_0000488'
+        task.simulation.algorithm.changes[0].new_value = ''
+        with self.assertRaisesRegex(ValueError, 'not a valid integer'):
+            core.exec_sed_task(task, variables)
+
+        task.simulation.algorithm.changes[0].new_value = '10'
+        with self.assertRaisesRegex(NotImplementedError, 'is not supported. Initial time must be 0'):
+            core.exec_sed_task(task, variables)
+
+        task.simulation.initial_time = 0.
+        with self.assertRaisesRegex(ValueError, 'must be at least'):
+            core.exec_sed_task(task, variables)
+
+        task.simulation.output_start_time = 10.
+        with self.assertRaisesRegex(ValueError, 'must be at least'):
+            core.exec_sed_task(task, variables)
+
+        task.simulation.output_end_time = 20.1
+        with self.assertRaisesRegex(NotImplementedError, 'must specify an integer'):
+            core.exec_sed_task(task, variables)
+
+        task.simulation.output_end_time = 20.
+        variables = [
+            sedml_data_model.DataGeneratorVariable()
+        ]
+        with self.assertRaisesRegex(ValueError, 'must define a symbol or target'):
+            core.exec_sed_task(task, variables)
+
+        variables = [
+            sedml_data_model.DataGeneratorVariable(symbol='x', target='y')
+        ]
+        with self.assertRaisesRegex(ValueError, 'must define a symbol or target'):
+            core.exec_sed_task(task, variables)
+
+        variables = [
+            sedml_data_model.DataGeneratorVariable(symbol='unsupported')
+        ]
+        with self.assertRaisesRegex(NotImplementedError, 'Symbols must be'):
+            core.exec_sed_task(task, variables)
+
+        variables = [
+            sedml_data_model.DataGeneratorVariable(symbol=sedml_data_model.DataGeneratorVariableSymbol.time),
+            sedml_data_model.DataGeneratorVariable(target='--undefined--'),
+        ]
+        with self.assertRaisesRegex(ValueError, 'Targets must be'):
+            core.exec_sed_task(task, variables)
+
+        variables = [
+            sedml_data_model.DataGeneratorVariable(id='time', symbol=sedml_data_model.DataGeneratorVariableSymbol.time),
+            sedml_data_model.DataGeneratorVariable(id='BE', target="/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id='BE']"),
+            sedml_data_model.DataGeneratorVariable(id='BUD', target='/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id="BUD"]'),
+            sedml_data_model.DataGeneratorVariable(id='Cdc20', target="/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id='Cdc20']"),
+        ]
+
+        variable_results = core.exec_sed_task(task, variables)
+
+        self.assertTrue(sorted(variable_results.keys()), sorted([var.id for var in variables]))
+        self.assertEqual(variable_results[variables[0].id].shape, (task.simulation.number_of_points + 1,))
+        numpy.testing.assert_equal(
+            variable_results['time'],
+            numpy.linspace(task.simulation.output_start_time, task.simulation.output_end_time, task.simulation.number_of_points + 1),
+        )
+
+    def test_exec_sedml_docs_in_combine_archive(self):
+        doc, archive_filename = self._build_combine_archive()
+
         out_dir = os.path.join(self.dirname, 'out')
-        os.makedirs(in_dir)
-        os.makedirs(out_dir)
+        core.exec_sedml_docs_in_combine_archive(archive_filename, out_dir, report_formats=[report_data_model.ReportFormat.HDF5])
 
-        # copy model and simulation to temporary directory which will be mounted into container
-        shutil.copyfile(self.EXAMPLE_ARCHIVE_FILENAME, os.path.join(in_dir, os.path.basename(self.EXAMPLE_ARCHIVE_FILENAME)))
+        self._assert_combine_archive_outputs(doc, out_dir)
 
-        # run image
-        docker_client.containers.run(
-            image=self.DOCKER_IMAGE,
-            command=['-i', '/root/in/' + os.path.basename(self.EXAMPLE_ARCHIVE_FILENAME), '-o', '/root/out'],
-            volumes={
-                in_dir: {
-                    'bind': '/root/in',
-                    'mode': 'ro',
-                },
-                out_dir: {
-                    'bind': '/root/out',
-                    'mode': 'rw',
-                }
-            },
-            tty=True,
-            remove=True)
+    def _build_combine_archive(self):
+        doc = self._build_sed_doc()
 
-        self.assert_outputs_created(out_dir)
+        archive_dirname = os.path.join(self.dirname, 'archive')
+        os.mkdir(archive_dirname)
+
+        model_filename = os.path.join(archive_dirname, 'model_1.xml')
+        shutil.copyfile(
+            os.path.join(os.path.dirname(__file__), 'fixtures', 'BIOMD0000000297.edited', 'ex1', 'BIOMD0000000297.xml'),
+            model_filename)
+
+        sim_filename = os.path.join(archive_dirname, 'sim_1.sedml')
+        SedmlSimulationWriter().run(doc, sim_filename)
+
+        updated = datetime.datetime(2020, 1, 2, 1, 2, 3, tzinfo=dateutil.tz.tzutc())
+        archive = combine_data_model.CombineArchive(
+            contents=[
+                combine_data_model.CombineArchiveContent(
+                    'model_1.xml', combine_data_model.CombineArchiveContentFormat.SBML.value, updated=updated),
+                combine_data_model.CombineArchiveContent(
+                    'sim_1.sedml', combine_data_model.CombineArchiveContentFormat.SED_ML.value, updated=updated),
+            ],
+            updated=updated,
+        )
+        archive_filename = os.path.join(self.dirname, 'archive.omex')
+        CombineArchiveWriter().run(archive, archive_dirname, archive_filename)
+
+        return (doc, archive_filename)
+
+    def _build_sed_doc(self):
+        doc = sedml_data_model.SedDocument()
+        doc.models.append(sedml_data_model.Model(
+            id='model_1',
+            source=os.path.join(os.path.dirname(__file__), 'fixtures', 'BIOMD0000000297.edited', 'ex1', 'BIOMD0000000297.xml'),
+            language=sedml_data_model.ModelLanguage.SBML.value,
+            changes=[],
+        ))
+        doc.simulations.append(sedml_data_model.UniformTimeCourseSimulation(
+            id='sim_1_time_course',
+            algorithm=sedml_data_model.Algorithm(
+                kisao_id='KISAO_0000029',
+                changes=[
+                    sedml_data_model.AlgorithmParameterChange(
+                        kisao_id='KISAO_0000488',
+                        new_value='10',
+                    ),
+                ],
+            ),
+            initial_time=0.,
+            output_start_time=10.,
+            output_end_time=20.,
+            number_of_points=20,
+        ))
+        doc.tasks.append(sedml_data_model.Task(
+            id='task_1',
+            model=doc.models[0],
+            simulation=doc.simulations[0],
+        ))
+        doc.data_generators.append(sedml_data_model.DataGenerator(
+            id='data_gen_time',
+            variables=[
+                sedml_data_model.DataGeneratorVariable(
+                    id='var_time',
+                    symbol=sedml_data_model.DataGeneratorVariableSymbol.time,
+                    task=doc.tasks[0],
+                    model=doc.models[0],
+                ),
+            ],
+            math='var_time',
+        ))
+        doc.data_generators.append(sedml_data_model.DataGenerator(
+            id='data_gen_BE',
+            variables=[
+                sedml_data_model.DataGeneratorVariable(
+                    id='var_BE',
+                    target="/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id='BE']",
+                    task=doc.tasks[0],
+                    model=doc.models[0],
+                ),
+            ],
+            math='var_BE',
+        ))
+        doc.data_generators.append(sedml_data_model.DataGenerator(
+            id='data_gen_BUD',
+            variables=[
+                sedml_data_model.DataGeneratorVariable(
+                    id='var_BUD',
+                    target='/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id="BUD"]',
+                    task=doc.tasks[0],
+                    model=doc.models[0],
+                ),
+            ],
+            math='var_BUD',
+        ))
+        doc.data_generators.append(sedml_data_model.DataGenerator(
+            id='data_gen_Cdc20',
+            variables=[
+                sedml_data_model.DataGeneratorVariable(
+                    id='var_Cdc20',
+                    target="/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id='Cdc20']",
+                    task=doc.tasks[0],
+                    model=doc.models[0],
+                ),
+            ],
+            math='var_Cdc20',
+        ))
+        doc.outputs.append(sedml_data_model.Report(
+            id='report_1',
+            datasets=[
+                sedml_data_model.Dataset(id='data_set_time', label='Time', data_generator=doc.data_generators[0]),
+                sedml_data_model.Dataset(id='data_set_BE', label='BE', data_generator=doc.data_generators[1]),
+                sedml_data_model.Dataset(id='data_set_BUD', label='BUD', data_generator=doc.data_generators[2]),
+                sedml_data_model.Dataset(id='data_set_Cdc20', label='Cdc20', data_generator=doc.data_generators[3]),
+            ],
+        ))
+
+        append_all_nested_children_to_doc(doc)
+
+        return doc
+
+    def _assert_combine_archive_outputs(self, doc, out_dir):
+        self.assertEqual(os.listdir(out_dir), ['reports.h5'])
+
+        report = ReportReader().run(out_dir, 'sim_1.sedml/report_1', format=report_data_model.ReportFormat.HDF5)
+
+        self.assertEqual(sorted(report.index), sorted([d.id for d in doc.outputs[0].datasets]))
+
+        sim = doc.tasks[0].simulation
+        self.assertEqual(report.shape, (len(doc.outputs[0].datasets), sim.number_of_points + 1))
+        numpy.testing.assert_equal(
+            report.loc['data_set_time', :].to_numpy(),
+            numpy.linspace(sim.output_start_time, sim.output_end_time, sim.number_of_points + 1),
+        )
+
+    def test_exec_sedml_docs_in_combine_archive_with_cli(self):
+        doc, archive_filename = self._build_combine_archive()
+        out_dir = os.path.join(self.dirname, 'out')
+        env = self._get_combine_archive_exec_env()
+
+        with mock.patch.dict(os.environ, env):
+            with __main__.App(argv=['-i', archive_filename, '-o', out_dir]) as app:
+                app.run()
+
+        self._assert_combine_archive_outputs(doc, out_dir)
+
+    def _get_combine_archive_exec_env(self):
+        return {
+            'REPORT_FORMATS': 'HDF5'
+        }
+
+    def test_exec_sedml_docs_in_combine_archive_with_docker_image(self):
+        doc, archive_filename = self._build_combine_archive()
+        out_dir = os.path.join(self.dirname, 'out')
+        docker_image = self.DOCKER_IMAGE
+        env = self._get_combine_archive_exec_env()
+
+        exec_sedml_docs_in_archive_with_containerized_simulator(
+            archive_filename, out_dir, docker_image, environment=env)
+
+        self._assert_combine_archive_outputs(doc, out_dir)
 
     def assert_outputs_created(self, dirname):
         name = "BIOMD0000000297"
         self.assertEqual(set(os.listdir(dirname)), set(['ex1', 'ex2']))
         self.assertEqual(set(os.listdir(os.path.join(dirname, 'ex1'))), set([name]))
         self.assertEqual(set(os.listdir(os.path.join(dirname, 'ex2'))), set([name]))
-        self.assertEqual(set(os.listdir(os.path.join(dirname, 'ex1', name))), set(['plot_1_task1.pdf', 'plot_3_task1.pdf']))
-        self.assertEqual(set(os.listdir(os.path.join(dirname, 'ex2', name))), set(['plot_1_task1.pdf', 'plot_3_task1.pdf']))
-
-        files = [
-            os.path.join(dirname, 'ex1', name, 'plot_1_task1.pdf'),
-            os.path.join(dirname, 'ex1', name, 'plot_3_task1.pdf'),
-            os.path.join(dirname, 'ex2', name, 'plot_1_task1.pdf'),
-            os.path.join(dirname, 'ex2', name, 'plot_3_task1.pdf'),
-        ]
-        for file in files:
-            with open(file, 'rb') as file:
-                PyPDF2.PdfFileReader(file)
-
-    def test_validator(self):
-        validator = SimulatorValidator()
-        validator.run(self.DOCKER_IMAGE)

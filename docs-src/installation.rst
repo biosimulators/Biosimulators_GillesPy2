@@ -1,7 +1,7 @@
 Installation instructions
 =========================
 
-BioSimulators-GillesPy2 is available as command-line program and as a command-line program encapsulated into a Docker image.
+BioSimulators-GillesPy2 is available as a command-line program and as a command-line program encapsulated into a Docker image.
 
 Command-line program
 --------------------

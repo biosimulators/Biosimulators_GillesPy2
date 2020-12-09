@@ -1,9 +1,7 @@
-![Latest version](https://img.shields.io/github/v/tag/biosimulators/Biosimulators_GillesPy2)
+[![Latest release](https://img.shields.io/github/v/tag/biosimulators/Biosimulators_GillesPy2)](https://github.com/biosimulations/Biosimulators_GillesPy2/releases)
 [![PyPI](https://img.shields.io/pypi/v/biosimulators_gillespy2)](https://pypi.org/project/biosimulators_gillespy2/)
-[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/biosimulators/Biosimulators_GillesPy2/workflow-id)](https://github.com/biosimulators/Biosimulators_GillesPy2/actions?query=workflow%3Aworkflow-id)
-[![Documentation](https://img.shields.io/github/license/biosimulators/Biosimulators_GillesPy2?badges-awesome-green.svg)](https://biosimulators.github.io/Biosimulators_GillesPy2/)
-[![Issues](https://img.shields.io/github/issues/biosimulators/Biosimulators_GillesPy2)](https://github.com/biosimulators/Biosimulators_GillesPy2/issues)
-[![License](https://img.shields.io/github/license/biosimulators/Biosimulators_GillesPy2?badges-awesome-green.svg)](https://github.com/biosimulators/Biosimulators_GillesPy2/blob/dev/LICENSE)
+[![CI status](https://img.shields.io/github/workflow/status/biosimulators/Biosimulators_GillesPy2/workflow-id)](https://github.com/biosimulators/Biosimulators_GillesPy2/actions?query=workflow%3Aworkflow-id)
+[![Test coverage](https://codecov.io/gh/biosimulators/Biosimulators_GillesPy2/branch/dev/graph/badge.svg)](https://codecov.io/gh/biosimulators/Biosimulators_GillesPy2)
 
 # BioSimulators-GillesPy2
 BioSimulators-compliant command-line interface and Docker image for the [Gillespy2](https://stochss.github.io/GillesPy2) simulation program.

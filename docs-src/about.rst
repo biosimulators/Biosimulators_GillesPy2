@@ -3,7 +3,7 @@ About BioSimulators-GillesPy2
 
 License
 -------
-This package is released under the `MIT License <https://github.com/biosimulators/BioSimulators_GillesPy2/blob/dev/LICENSE>`_. GillesPy2 is released under the `GPL 3.0 License <https://github.com/StochSS/GillesPy2/blob/main/LICENSE>`_.
+This package is released under the `MIT License <https://github.com/biosimulators/Biosimulators_GillesPy2/blob/dev/LICENSE>`_. GillesPy2 is released under the `GPL 3.0 License <https://github.com/StochSS/GillesPy2/blob/main/LICENSE>`_.
 
 Development team
 ----------------

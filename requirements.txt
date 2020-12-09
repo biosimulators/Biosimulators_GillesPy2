@@ -1,5 +1,3 @@
-Biosimulations_utils
-cement
+biosimulators_utils
 gillespy2
 numpy
-pandas

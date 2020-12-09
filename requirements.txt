@@ -1,3 +1,5 @@
 biosimulators_utils
 gillespy2
+lxml
 numpy
+python_libsbml

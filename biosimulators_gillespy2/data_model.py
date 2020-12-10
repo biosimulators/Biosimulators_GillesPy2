@@ -22,7 +22,7 @@ class Algorithm(object):
         name (:obj:`str`): name
         solver (:obj:`type`): solver
         solver_args (:obj:`dict`): solver arguments
-        parameters (:obj:`dict`): dictionary that maps KiSAO ids to :obj:`AlgorithmParameter`s
+        parameters (:obj:`dict`): dictionary that maps KiSAO ids to :obj:`AlgorithmParameter`\\ s
     """
 
     def __init__(self, name, solver, parameters=None, **solver_args):
@@ -31,7 +31,7 @@ class Algorithm(object):
             name (:obj:`str`): name
             solver (:obj:`type`): solver
             **solver_args (:obj:`dict`): solver arguments
-            parameters (:obj:`dict`, optional): dictionary that maps KiSAO ids to :obj:`AlgorithmParameter`s
+            parameters (:obj:`dict`, optional): dictionary that maps KiSAO ids to :obj:`AlgorithmParameter`\\ s
         """
         self.name = name
         self.solver = solver

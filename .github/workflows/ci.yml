@@ -38,14 +38,10 @@ jobs:
           echo "::set-output name=mainBranchRef::refs/heads/$mainBranch"
           echo "::set-output name=mainBranchHeadRevision::$mainBranchHeadRevision"
 
-          echo $mainBranch
-          echo $mainBranchHeadRevision
-
       - name: Checkout ref
         run: |
           if [[ "${{ github.ref }}" =~ ^refs/heads/ ]]; then
             branch=$(echo "${{ github.ref }}" | cut -d'/' -f 3-)
-            echo $branch
             git checkout ${branch}
           else
             git checkout ${{ github.ref }}

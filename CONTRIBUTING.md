@@ -69,13 +69,18 @@ To release changes, contact the [lead developers](mailto:info@biosimulators.org)
 
 Below are instructions for releasing a new version:
 
-1. Commit the changes to this repository.
-2. Increment the `__version__` variable in `biosimulators_gillespy2/_version.py`.
-3. Commit this change to `biosimulators_gillespy2/_version.py`.
-4. Add a tag for the new version by running `git tag { version }`. `version` should be equal to the value of the
+1. Make the required changes to the repository.
+  * To update the version of the underyling simulator, update its version numbers in the following files:
+    * `requirements.txt`
+    * `Dockerfile`
+    * `biosimulators.json`
+2. Commit the changes to this repository.
+3. Increment the `__version__` variable in `biosimulators_gillespy2/_version.py`.
+4. Commit this change to `biosimulators_gillespy2/_version.py`.
+5. Add a tag for the new version by running `git tag { version }`. `version` should be equal to the value of the
    `__version__` variable in `biosimulators_gillespy2/_version.py`.
-5. Push these commits and the new tag to GitHub by running `git push && git push --tags`.
-6. This push will trigger a GitHub action which will execute the following tasks:
+6. Push these commits and the new tag to GitHub by running `git push && git push --tags`.
+7. This push will trigger a GitHub action which will execute the following tasks:
    * Create a GitHub release for the version.
    * Push the release to PyPI.
    * Compile the documentation and push the compiled documentation to the repository so that the new documentation is viewable at github.io.

@@ -416,6 +416,12 @@ class TestCase(unittest.TestCase):
             numpy.linspace(sim.output_start_time, sim.output_end_time, sim.number_of_points + 1),
         )
 
+    def test_raw_cli(self):
+        with mock.patch('sys.argv', ['', '--help']):
+            with self.assertRaises(SystemExit) as context:
+                __main__.main()
+                self.assertRegex(context.Exception, 'usage: ')
+
     def test_exec_sedml_docs_in_combine_archive_with_cli(self):
         doc, archive_filename = self._build_combine_archive()
         out_dir = os.path.join(self.dirname, 'out')

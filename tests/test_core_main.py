@@ -20,7 +20,6 @@ from biosimulators_utils.utils.core import are_lists_equal
 from unittest import mock
 import datetime
 import dateutil.tz
-import gillespy2
 import numpy.testing
 import os
 import shutil
@@ -36,79 +35,6 @@ class TestCase(unittest.TestCase):
 
     def tearDown(self):
         shutil.rmtree(self.dirname)
-
-    def test_algorithm(self):
-        alg = core.Algorithm("LSODA", gillespy2.ODESolver, integrator="lsoda", parameters=None)
-        self.assertEqual(alg.name, "LSODA")
-        self.assertEqual(alg.solver, gillespy2.ODESolver)
-        self.assertEqual(alg.solver_args, {'integrator': 'lsoda'})
-        self.assertEqual(alg.parameters, {})
-
-        alg = core.Algorithm("LSODA", gillespy2.ODESolver, integrator="lsoda", parameters={'param_1': 'value'})
-        self.assertEqual(alg.name, "LSODA")
-        self.assertEqual(alg.solver, gillespy2.ODESolver)
-        self.assertEqual(alg.solver_args, {'integrator': 'lsoda'})
-        self.assertEqual(alg.parameters, {'param_1': 'value'})
-
-    def test_algorithm_parameter(self):
-        param = core.AlgorithmParameter("absolute tolerance", 'integrator_options.atol', float, 1e-12)
-        self.assertEqual(param.name, "absolute tolerance")
-        self.assertEqual(param.key, "integrator_options.atol")
-        self.assertEqual(param.data_type, float)
-        self.assertEqual(param.default, 1e-12)
-
-    def test_algorithm_parameter_boolean(self):
-        param = core.AlgorithmParameter('name', 'integrator_options', bool, True)
-
-        solver_args = {}
-        param.set_value(solver_args, 'false')
-        self.assertEqual(solver_args['integrator_options'], False)
-
-        solver_args = {}
-        param.set_value(solver_args, '1')
-        self.assertEqual(solver_args['integrator_options'], True)
-
-        with self.assertRaises(ValueError):
-            param.set_value(solver_args, 'f')
-
-    def test_algorithm_parameter_integer(self):
-        param = core.AlgorithmParameter('name', 'integrator_options.atol', int, 10)
-        solver_args = {}
-        param.set_value(solver_args, '11')
-        self.assertEqual(solver_args['integrator_options']['atol'], 11)
-
-        with self.assertRaises(ValueError):
-            param.set_value(solver_args, '1.1')
-
-        with self.assertRaises(ValueError):
-            param.set_value(solver_args, '1.')
-
-        with self.assertRaises(ValueError):
-            param.set_value(solver_args, 'a')
-
-    def test_algorithm_parameter_float(self):
-        param = core.AlgorithmParameter("absolute tolerance", 'integrator_options.atol', float, 1e-12)
-        solver_args = {}
-        param.set_value(solver_args, '1e-14')
-        self.assertEqual(solver_args['integrator_options']['atol'], 1e-14)
-
-        with self.assertRaises(ValueError):
-            param.set_value(solver_args, 'a')
-
-    def test_algorithm_parameter_enum(self):
-        param = core.AlgorithmParameter('name', 'integrator_options.atol', core.VodeMethod, core.VodeMethod.bdf.value)
-        solver_args = {}
-        param.set_value(solver_args, core.VodeMethod.bdf.value)
-        self.assertEqual(solver_args['integrator_options']['atol'], core.VodeMethod.bdf.name)
-
-        with self.assertRaises(NotImplementedError):
-            param.set_value(solver_args, '--invalid--')
-
-    def test_algorithm_parameter_invalid_type(self):
-        param = core.AlgorithmParameter('name', 'integrator_options.atol', str, 'default')
-        solver_args = {}
-        with self.assertRaises(NotImplementedError):
-            param.set_value(solver_args, 'value')
 
     def test_exec_sed_task(self):
         task = sedml_data_model.Task(

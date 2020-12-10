@@ -21,6 +21,7 @@ from biosimulators_utils.utils.core import are_lists_equal
 from unittest import mock
 import datetime
 import dateutil.tz
+import numpy
 import numpy.testing
 import os
 import shutil
@@ -325,3 +326,28 @@ class TestCase(unittest.TestCase):
             archive_filename, out_dir, docker_image, environment=env, pull_docker_image=False)
 
         self._assert_combine_archive_outputs(doc, out_dir)
+
+    def test_more_complex_archive(self):
+        archive_filename = os.path.join(os.path.dirname(__file__), 'fixtures', 'BIOMD0000000297.edited.omex')
+        core.exec_sedml_docs_in_combine_archive(archive_filename, self.dirname, report_formats=[
+            report_data_model.ReportFormat.CSV,
+            report_data_model.ReportFormat.HDF5,
+        ])
+
+        self.assertEqual(set(os.listdir(self.dirname)), set(['reports.zip', 'reports.h5']))
+
+        archive = ArchiveReader().run(os.path.join(self.dirname, 'reports.zip'))
+
+        self.assertEqual(
+            sorted(file.archive_path for file in archive.files),
+            sorted([
+                'ex1/BIOMD0000000297.sedml/two_species.csv',
+                'ex1/BIOMD0000000297.sedml/three_species.csv',
+                'ex2/BIOMD0000000297.sedml/one_species.csv',
+                'ex2/BIOMD0000000297.sedml/four_species.csv',
+            ]),
+        )
+
+        report = ReportReader().run(self.dirname, 'ex1/BIOMD0000000297.sedml/two_species', format=report_data_model.ReportFormat.HDF5)
+        self.assertEqual(sorted(report.index), sorted(['data_set_time', 'data_set_Cln4', 'data_set_Swe13']))
+        numpy.testing.assert_equal(report.loc['data_set_time', :], numpy.linspace(0., 1., 10 + 1))

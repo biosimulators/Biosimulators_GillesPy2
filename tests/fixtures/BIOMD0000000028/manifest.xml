@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<omexManifest xmlns="http://identifiers.org/combine.specifications/omex-manifest">
-  <content location="./ex1/BIOMD0000000028.xml" format="http://identifiers.org/combine.specifications/sbml" master="true"/>
-  <content location="./ex1/BIOMD0000000028.sedml" format="http://identifiers.org/combine.specifications/sed-ml" master="false"/>
-  <content location="./ex2/BIOMD0000000028.xml" format="http://identifiers.org/combine.specifications/sbml" master="false"/>
-  <content location="./ex2/BIOMD0000000028.sedml" format="http://identifiers.org/combine.specifications/sed-ml" master="false"/>
-  <content location="." format="http://identifiers.org/combine.specifications/omex"/>
-</omexManifest>

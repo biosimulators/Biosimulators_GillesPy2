@@ -1,6 +1,6 @@
 [![Latest release](https://img.shields.io/github/v/tag/biosimulators/Biosimulators_GillesPy2)](https://github.com/biosimulations/Biosimulators_GillesPy2/releases)
 [![PyPI](https://img.shields.io/pypi/v/biosimulators_gillespy2)](https://pypi.org/project/biosimulators_gillespy2/)
-[![CI status](https://img.shields.io/github/workflow/status/biosimulators/Biosimulators_GillesPy2/workflow-id)](https://github.com/biosimulators/Biosimulators_GillesPy2/actions?query=workflow%3Aworkflow-id)
+[![CI status](https://github.com/biosimulators/Biosimulators_GillesPy2/workflows/Continuous%20integration/badge.svg)](https://github.com/biosimulators/Biosimulators_GillesPy2/actions?query=workflow%3A%22Continuous+integration%22)
 [![Test coverage](https://codecov.io/gh/biosimulators/Biosimulators_GillesPy2/branch/dev/graph/badge.svg)](https://codecov.io/gh/biosimulators/Biosimulators_GillesPy2)
 
 # BioSimulators-GillesPy2

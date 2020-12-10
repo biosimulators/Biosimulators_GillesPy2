@@ -1,137 +1,236 @@
-name: Test package, build image, and push image to GitHub Container Registry and BioSimulators
+name: Continuous integration
 
 on:
   - push
-  - pull_request
-  - release:
-      types: [published]
 
 jobs:
-  init:
-    name: Checkout repository and get simulator id and version
+  getVersionNumber:
+    name: Get version number
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.get-version-number.outputs.version }}
+    steps:
+      - id: get-version-number
+        name: Get version number
+        env:
+          TAG: ${{ github.ref }}
+        run: |
+          version="${TAG/refs\/tags\//}"
+          echo "::set-output name=version::$version"
+
+  build:
+    name: Lint, test, and compile documentation
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
         with:
-          ref: ${{ github.event.pull_request.head.ref }}
           fetch-depth: 1
-      - name: Get simulator id and version from specifications
-        working-directory: ${GITHUB_WORKSPACE}
-        run: |
-          export IMAGE_ID_VERSION=$(python <<EOF
-          import json
-          import os
-          with open('biosimulators.json', 'r') as file:
-            specs = json.load(file)
-          print((specs['id'] + ':' + specs['version']).lower())
-          EOF
-          )
-          IFS=":" read -a tmp <<< "$IMAGE_ID_VERSION"
-          unset IFS
-          export IMAGE_ID=${tmp[0]}
-          export IMAGE_VERSION=${tmp[1]}
-  build-tag-image:
-    name: Build and tag image
-    needs: checkout
-    runs-on: ubuntu-latest
-    steps:
-      - working-directory: ${GITHUB_WORKSPACE}
-        run: |
-          export tag=ghcr.io/${{ github.repository_owner }}/${{ github.repository }}/${IMAGE_ID_VERSION}
-          export tag=$(echo "$tag" | tr '[:upper:]' '[:lower:]')
-          docker build \
-            -f Dockerfile \
-            . \
-            --tag "$tag"
-  install-package:
-    name: Install package 
-    needs: build-tag-image
-    runs-on: ubuntu-latest
-    steps:
+
       - name: Install Python
         uses: actions/setup-python@v2
         with:
           python-version: '3.7'
+
       - name: Setup pip cache
         uses: actions/cache@v2
         with:
           path: /opt/hostedtoolcache/Python
-          key: ${{ runner.os }}-pip-${{ hashFiles('${GITHUB_WORKSPACE}/requirements.txt') }}-${{ hashFiles('${GITHUB_WORKSPACE}/requirements.optional.txt') }}
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}-${{ hashFiles('requirements.optional.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
-      - name: Install pip, setuptools, and test utilities
+
+      - name: Install pip and setuptools
         run: |
           python -m pip install --upgrade pip
           python -m pip install --upgrade setuptools
-      - name: Install additional dependencies
-        run: |
-          apt-get install -y --no-install-recommends \
-            g++ \
-            libatlas-base-dev \
-            swig
-      - name: Install package
-        working-directory: ${GITHUB_WORKSPACE} 
-        run: |
-          python -m pip install .[all]
-  test:
-    name: Test command-line interface and container
-    needs: install-package
-    runs-on: ubuntu-latest
-    steps:
-      - name: Install requirements
-        run: python -m pip install pytest pytest-cov
-      - name: Test
-        run: python -m pytest tests --cov
 
-  compile-docs:
-    name: Compile documentation and push to repository
-    needs: install-package
-    runs-on: ubuntu-latest
-    steps:
-      - id: check_docs
-        name: Check there are docs
-        uses: andstor/file-existence-action@v1
-        working-directory: ${GITHUB_WORKSPACE}
+      # install package
+      - name: Install the package
+        run: python -m pip install .[all]
+
+      # lint
+      - name: Install flake8
+        run: python -m pip install flake8
+
+      - name: Lint the package
+        run: python -m flake8
+
+      # build Docker image
+      - name: Build Docker image
+        run: |
+          IMAGE_ID=$(jq -r '.id' biosimulators.json)
+          IMAGE_VERSION=$(jq -r '.version' biosimulators.json)
+          OWNER_REPO=$(echo $GITHUB_REPOSITORY | tr '[:upper:]' '[:lower:]')
+
+          docker build \
+            --tag ghcr.io/${ OWNER_REPO }/${ IMAGE_ID }:${ IMAGE_VERSION } \
+            --tag ghcr.io/${ OWNER_REPO }/${ IMAGE_ID }:latest \
+            .
+
+      # test and upload coverage report to Codecov
+      - name: Install pytest
+        run: python -m pip install pytest pytest-cov
+
+      - name: Install the requirements for the tests
+        run: python -m pip install .[tests]
+
+      - name: Run the tests
+        run: python -m pytest tests/ --cov=./biosimulators_utils --cov-report=xml
+
+      - name: Upload the coverage report to Codecov
+        uses: codecov/codecov-action@v1.0.3
         with:
-          files: "docs"
-      - name: Install requirements
-        if: steps.check_docs.outputs.files_exists == 'true'
+          token: ${{ secrets.CODECOV_TOKEN }}
+          flags: unittests
+          file: ./coverage.xml
+
+      # compile documentation
+      - name: Install the requirements for compiling the documentation
         run: python -m pip install -r docs-src/requirements.txt
-      - name: Compile documentation
-        if: steps.check_docs.outputs.files_exists == 'true'
-        working-directory: ${GITHUB_WORKSPACE}
+
+      - name: Compile the documentation
         run: |
           sphinx-apidoc . setup.py --output-dir docs-src/source --force --module-first --no-toc
           sphinx-build docs-src docs
-      - name: Push docs to repository
-        if: steps.check_docs.outputs.files_exists == 'true' && github.ref == 'refs/heads/dev'
-        uses: peter-evans/create-pull-request@v3
-        with:
-          branch: dev-docs
-          base: dev
-          commit-message: "Updated docs"
 
-  push-image:
-    name: Push image to GitHub Container Registry
-    needs: test
-    if: github.event_name == 'release'
+  release:
+    name: Release a new version
+    needs: [getVersionNumber, build]
     runs-on: ubuntu-latest
+    outputs:
+      docsChanged: ${{ steps.commit-docs.outputs.docsChanged }}
     steps:
-      - working-directory: ${GITHUB_WORKSPACE}
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
+          ref: dev
+
+      - name: Install Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.7'
+
+      - name: Setup pip cache
+        uses: actions/cache@v2
+        with:
+          path: /opt/hostedtoolcache/Python
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}-${{ hashFiles('requirements.optional.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Install pip and setuptools
         run: |
-          docker login ghcr.io --username ${{ github.actor }} --password ${{ github.token }}
-          docker push ghcr.io/${{ github.repository_owner }}/${{ github.repository }}/${IMAGE_ID_VERSION}
-  submit-biosimulators:
-    name: Submit image to BioSimulators
-    needs: push-image
-    if: github.event_name == 'release'
-    runs-on: ubuntu-latest
-    steps:
-      - run: |
+          python -m pip install --upgrade pip
+          python -m pip install --upgrade setuptools
+
+      # install package
+      - name: Install the package
+        run: python -m pip install .[all]
+
+      # compile and push documentation
+      - name: Install the requirements for compiling the documentation
+        run: python -m pip install -r docs-src/requirements.txt
+
+      - name: Compile the documentation
+        run: |
+          sphinx-apidoc . setup.py --output-dir docs-src/source --force --module-first --no-toc
+          sphinx-build docs-src docs
+
+      - id: commit-docs
+        name: Commit the compiled documentation
+        run: |
+          git config --local user.email "biosimulators.daemon@gmail.com"
+          git config --local user.name "biosimulatorsdaemon"
+          git stash
+          git pull
+          git stash pop
+          git add docs
+          set +e
+          git commit -m "Updating compiled documentation"
+          if [[ $? = 0 ]]; then
+            docsChanged=1
+          else
+            docsChanged=0
+          fi
+          echo "::set-output name=docsChanged::$docsChanged"
+
+      - name: Push the compiled documentation
+        if: steps.commit-docs.outputs.docsChanged == '1'
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: dev
+
+      # Create GitHub release
+      - name: Create GitHub release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ needs.getVersionNumber.outputs.version }}
+          release_name: Release ${{ needs.getVersionNumber.outputs.version }}
+
+      # Create PyPI release
+      - name: Install pandoc
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y --no-install-recommends wget
+
+          wget https://github.com/jgm/pandoc/releases -O /tmp/pandocVersions.html
+          urlPart=`grep "\.deb" /tmp/pandocVersions.html | head -n 1 | cut -d'/' -f2-7 | cut -d'"' -f1`
+          wget "https://github.com/$urlPart" -O /tmp/pandoc.deb
+          sudo dpkg -i /tmp/pandoc.deb
+          rm /tmp/pandocVersions.html
+          rm /tmp/pandoc.deb
+
+      - name: Convert README to .rst format
+        run: pandoc --from=gfm --output=README.rst --to=rst README.md
+
+      - name: Install twine
+        run: |
+          python -m pip install wheel twine
+
+      - name: Create packages to upload to PyPI
+        run: |
+          python setup.py sdist
+          python setup.py bdist_wheel
+
+      - name: Upload packages to PyPI
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
+        run: |
+          twine upload dist/*
+
+      # build Docker image and push to GitHub Container Registry
+      - name: Build and push Docker image
+        run: |
+          IMAGE_ID=$(jq -r '.id' biosimulators.json)
+          IMAGE_VERSION=$(jq -r '.version' biosimulators.json)
+          OWNER_REPO=$(echo $GITHUB_REPOSITORY | tr '[:upper:]' '[:lower:]')
+
+          docker build \
+            --tag ghcr.io/${ OWNER_REPO }/${ IMAGE_ID }:${ IMAGE_VERSION } \
+            --tag ghcr.io/${ OWNER_REPO }/${ IMAGE_ID }:latest \
+            .
+
+          docker login ghcr.io --username ${{ secrets.GHCR_USERNAME }} --password ${{ secrets.GHCR_TOKEN }}
+          docker push ghcr.io/${ OWNER_REPO }/${ IMAGE_ID }:${ IMAGE_VERSION }
+          docker push ghcr.io/${ OWNER_REPO }/${ IMAGE_ID }:latest
+
+      # Submit to BioSimulators registry
+      - name: Submit to BioSimulators registry
+        run: |
+          IMAGE_ID=$(jq -r '.id' biosimulators.json)
+          IMAGE_VERSION=$(jq -r '.version' biosimulators.json)
+          IMAGE_NAME=$(jq -r '.name' biosimulators.json)
+
           curl \
             -X POST \
             -u ${{ github.actor }}:${{ github.token }} \
             -H "Accept: application/vnd.github.v3+json" \
             https://api.github.com/repos/biosimulators/Biosimulators/issues \
-            -d '{"labels": ["Submit simulator"], "title": "Submit ${IMAGE_ID} ${IMAGE_VERSION}", "body": "---\nname: ${IMAGE_ID}\nversion: ${IMAGE_VERSION}\nspecificationsUrl: https://raw.githubusercontent.com/${{ github.repository_owner }}/${{ github.repository }}/${{ github.ref }}/biosimulators.json\nvalidateImage: true\n\n---"}'
+            -d '{"labels": ["Submit simulator"], "title": "Submit ${IMAGE_NAME} ${IMAGE_VERSION}", "body": "---\nid: ${IMAGE_ID}\nversion: ${IMAGE_VERSION}\nspecificationsUrl: https://raw.githubusercontent.com/${{ github.repository }}/${{ needs.getVersionNumber.outputs.version }}/biosimulators.json\nvalidateImage: true\n\n---"}'

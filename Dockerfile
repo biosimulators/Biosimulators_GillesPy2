@@ -4,7 +4,7 @@ FROM python:3.7.9-slim-buster
 # metadata
 LABEL \
     org.opencontainers.image.title="GillesPy2" \
-    org.opencontainers.image.version="1.5.7" \
+    org.opencontainers.image.version="1.5.6" \
     org.opencontainers.image.description="Python 3 package for stochastic simulation of biochemical systems" \
     org.opencontainers.image.url="https://github.com/StochSS/GillesPy2" \
     org.opencontainers.image.documentation="https://stochss.github.io/GillesPy2/" \
@@ -16,7 +16,7 @@ LABEL \
     base_image="python:3.7.9-slim-buster" \
     version="0.0.1" \
     software="gillespy2" \
-    software.version="1.5.7" \
+    software.version="1.5.6" \
     about.summary="Python 3 package for stochastic simulation of biochemical systems" \
     about.home="https://github.com/StochSS/GillesPy2" \
     about.documentation="https://stochss.github.io/GillesPy2/" \

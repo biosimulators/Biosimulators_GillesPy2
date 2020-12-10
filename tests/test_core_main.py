@@ -77,113 +77,63 @@ class TestCase(unittest.TestCase):
         )
 
     def test_exec_sed_task_errors(self):
-        task = None
-        variables = []
-        with self.assertRaisesRegex(NotImplementedError, 'is not supported'):
-            core.exec_sed_task(task, variables)
-
         task = sedml_data_model.Task()
-        with self.assertRaisesRegex(ValueError, 'must have a model'):
-            core.exec_sed_task(task, variables)
-
         task.model = sedml_data_model.Model()
-        with self.assertRaisesRegex(NotImplementedError, 'is not supported. Model language must be'):
-            core.exec_sed_task(task, variables)
-
-        task.model.language = 'sbml'
-        with self.assertRaisesRegex(NotImplementedError, 'is not supported. Model language must be'):
-            core.exec_sed_task(task, variables)
-
-        task.model.language = sedml_data_model.ModelLanguage.SBML
-        task.model.changes = [sedml_data_model.ModelAttributeChange()]
-        with self.assertRaisesRegex(NotImplementedError, 'changes are not supported'):
-            core.exec_sed_task(task, variables)
-
-        task.model.changes = []
-        with self.assertRaisesRegex(ValueError, 'must have a simulation'):
-            core.exec_sed_task(task, variables)
-
-        task.simulation = mock.Mock()
-        with self.assertRaisesRegex(NotImplementedError, 'is not supported. Simulation must be'):
-            core.exec_sed_task(task, variables)
-
-        task.simulation = sedml_data_model.UniformTimeCourseSimulation(
-            initial_time=10.,
-            output_start_time=-10.,
-            output_end_time=-20.,
-            number_of_points=10,
-        )
-        with self.assertRaisesRegex(FileNotFoundError, 'must be a file'):
-            core.exec_sed_task(task, variables)
-
-        task.model.source = os.path.join(self.dirname, 'invalid-model.xml')
+        task.model.source = os.path.join(self.dirname, 'valid-model.xml')
         with open(task.model.source, 'w') as file:
             file.write('!')
+        task.model.language = sedml_data_model.ModelLanguage.SBML
+        task.model.changes = []
+        task.simulation = sedml_data_model.UniformTimeCourseSimulation(
+            algorithm=sedml_data_model.Algorithm(kisao_id='KISAO_0000001'),
+            initial_time=10.,
+            output_start_time=10.,
+            output_end_time=20.1,
+            number_of_points=10,
+        )
+
+        variables = []
+
         with self.assertRaisesRegex(ValueError, 'could not be imported'):
             core.exec_sed_task(task, variables)
-
         task.model.source = os.path.join(os.path.dirname(__file__), 'fixtures', 'BIOMD0000000297.edited', 'ex1', 'BIOMD0000000297.xml')
-        with self.assertRaisesRegex(ValueError, 'must have an algorithm'):
-            core.exec_sed_task(task, variables)
 
-        task.simulation.algorithm = sedml_data_model.Algorithm()
         with self.assertRaisesRegex(NotImplementedError, 'is not supported. Algorithm must'):
             core.exec_sed_task(task, variables)
-
         task.simulation.algorithm.kisao_id = 'KISAO_0000029'
         task.simulation.algorithm.changes = [
-            sedml_data_model.AlgorithmParameterChange(kisao_id='unsupported'),
+            sedml_data_model.AlgorithmParameterChange(kisao_id='KISAO_0000000'),
         ]
+
         with self.assertRaisesRegex(NotImplementedError, 'is not supported. Parameter must'):
             core.exec_sed_task(task, variables)
-
         task.simulation.algorithm.changes[0].kisao_id = 'KISAO_0000488'
         task.simulation.algorithm.changes[0].new_value = ''
+
         with self.assertRaisesRegex(ValueError, 'not a valid integer'):
             core.exec_sed_task(task, variables)
-
         task.simulation.algorithm.changes[0].new_value = '10'
+
         with self.assertRaisesRegex(NotImplementedError, 'is not supported. Initial time must be 0'):
             core.exec_sed_task(task, variables)
-
         task.simulation.initial_time = 0.
-        with self.assertRaisesRegex(ValueError, 'must be at least'):
-            core.exec_sed_task(task, variables)
 
-        task.simulation.output_start_time = 10.
-        with self.assertRaisesRegex(ValueError, 'must be at least'):
-            core.exec_sed_task(task, variables)
-
-        task.simulation.output_end_time = 20.1
         with self.assertRaisesRegex(NotImplementedError, 'must specify an integer'):
             core.exec_sed_task(task, variables)
-
         task.simulation.output_end_time = 20.
-        variables = [
-            sedml_data_model.DataGeneratorVariable()
-        ]
-        with self.assertRaisesRegex(ValueError, 'must define a symbol or target'):
-            core.exec_sed_task(task, variables)
-
-        variables = [
-            sedml_data_model.DataGeneratorVariable(symbol='x', target='y')
-        ]
-        with self.assertRaisesRegex(ValueError, 'must define a symbol or target'):
-            core.exec_sed_task(task, variables)
-
         variables = [
             sedml_data_model.DataGeneratorVariable(symbol='unsupported')
         ]
+
         with self.assertRaisesRegex(NotImplementedError, 'Symbols must be'):
             core.exec_sed_task(task, variables)
-
         variables = [
             sedml_data_model.DataGeneratorVariable(symbol=sedml_data_model.DataGeneratorVariableSymbol.time),
             sedml_data_model.DataGeneratorVariable(target='--undefined--'),
         ]
+
         with self.assertRaisesRegex(ValueError, 'Targets must be'):
             core.exec_sed_task(task, variables)
-
         variables = [
             sedml_data_model.DataGeneratorVariable(id='time', symbol=sedml_data_model.DataGeneratorVariableSymbol.time),
             sedml_data_model.DataGeneratorVariable(id='BE', target="/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id='BE']"),

@@ -7,15 +7,15 @@
 :License: MIT
 """
 
-from .data_model import Algorithm, AlgorithmParameter, VodeMethod, HybridTauIntegrationMethod, kisao_algorithm_map
+from .data_model import kisao_algorithm_map
 from biosimulators_utils.combine.exec import exec_sedml_docs_in_archive
 from biosimulators_utils.report.data_model import ReportFormat, DataGeneratorVariableResults  # noqa: F401
 from biosimulators_utils.sedml.data_model import (Task, ModelLanguage, UniformTimeCourseSimulation,  # noqa: F401
                                                   DataGeneratorVariable, DataGeneratorVariableSymbol)
+from biosimulators_utils.sedml import validation
 import gillespy2
 import math
 import numpy
-import os
 import re
 
 __all__ = [
@@ -57,48 +57,21 @@ def exec_sed_task(task, variables):
             could not be recorded
         :obj:`NotImplementedError`: if the task is not of a supported type or involves an unsuported feature
     '''
-    # check that task is an instance of Task
-    if not isinstance(task, Task):
-        raise NotImplementedError('Task type {} is not supported'.format(task.__class__.__name__))
+    validation.validate_task(task)
+    validation.validate_model_language(task.model.language, ModelLanguage.SBML)
+    validation.validate_model_change_types(task.model.changes, ())
+    validation.validate_simulation_type(task.simulation, (UniformTimeCourseSimulation, ))
+    validation.validate_uniform_time_course_simulation(task.simulation)
+    validation.validate_data_generator_variables(variables)
 
-    # check that task has model
-    if not task.model:
-        raise ValueError('Task must have a model')
-
-    # check that model is encoded in SBML
-    if not task.model.language or not re.match('^{}($|:)'.format(ModelLanguage.SBML.value), task.model.language):
-        raise NotImplementedError("Model language {} is not supported. Model language must be '{}'.".format(
-            task.model.language, ModelLanguage.SBML.value))
-
-    # check that model parameter changes have already been applied (because handled by :obj:`exec_sedml_docs_in_archive`)
-    if task.model.changes:
-        raise NotImplementedError('Model changes are not supported')
-
-    # check that task has model
-    simulation = task.simulation
-    if not simulation:
-        raise ValueError('Task must have a simulation')
-
-    # check that simulation is a time course simulation
-    if not isinstance(simulation, UniformTimeCourseSimulation):
-        raise NotImplementedError('Simulation type {} is not supported. Simulation must be an instance of {}.'.format(
-            simulation.__class__.__name__, UniformTimeCourseSimulation.__name__))
-
-    # Read the model located at `task.model.source` in the format
-    # with the SED URN `model_language_urn`.
-    # Convert SBML into a GillesPy2 model
-    if not task.model.source or not os.path.isfile(task.model.source):
-        raise FileNotFoundError("Model source '{}' must be a file".format(task.model.source or ''))
-
+    # Read the SBML-encoded model located at `task.model.source`
     model, errors = gillespy2.import_SBML(task.model.source)
     if model is None or errors:
         raise ValueError('Model at {} could not be imported:\n  - {}'.format(
             task.model.source, '\n  - '.join(message for message, code in errors)))
 
     # Load the algorithm specified by `simulation.algorithm`
-    if not simulation.algorithm:
-        raise ValueError('Simulation must have an algorithm')
-
+    simulation = task.simulation
     algorithm_kisao_id = simulation.algorithm.kisao_id
     algorithm = kisao_algorithm_map.get(algorithm_kisao_id, None)
     if algorithm is None:
@@ -129,14 +102,6 @@ def exec_sed_task(task, variables):
     if simulation.initial_time != 0:
         raise NotImplementedError('Initial simulation time {} is not supported. Initial time must be 0.'.format(simulation.initial_time))
 
-    if simulation.output_start_time < simulation.initial_time:
-        raise ValueError('Output start time {} must be at least the initial time {}.'.format(
-            simulation.output_start_time, simulation.initial_time))
-
-    if simulation.output_end_time < simulation.output_start_time:
-        raise ValueError('Output end time {} must be at least the output start time {}.'.format(
-            simulation.output_end_time, simulation.output_start_time))
-
     # set the simulation time span
     number_of_points = (simulation.output_end_time - simulation.initial_time) / \
         (simulation.output_end_time - simulation.output_start_time) * simulation.number_of_points
@@ -154,9 +119,6 @@ def exec_sed_task(task, variables):
     unpredicted_symbols = []
     unpredicted_targets = []
     for variable in variables:
-        if (variable.symbol and variable.target) or (not variable.symbol and not variable.target):
-            raise ValueError('Variable must define a symbol or target')
-
         if variable.symbol:
             if variable.symbol == DataGeneratorVariableSymbol.time:
                 variable_results[variable.id] = results_dict['time'][-(simulation.number_of_points + 1):]

@@ -216,7 +216,7 @@ jobs:
           git config --local user.email "biosimulators.daemon@gmail.com"
           git config --local user.name "biosimulatorsdaemon"
           git stash
-          git checkout ${{ steps.get-main-branch.mainBranch }}
+          git checkout ${{ steps.get-main-branch.outputs.mainBranch }}
           git pull
           git stash pop
           git add docs

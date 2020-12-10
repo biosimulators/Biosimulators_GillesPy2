@@ -25,10 +25,9 @@ jobs:
       docsChanged: ${{ steps.commit-docs.outputs.docsChanged }}
       version: ${{ steps.get-version-number.outputs.version }}
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
+      - name: Clone repository
+        run: |
+          git clone https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} .
 
       - id: get-main-branch
         name: Determine main branch
@@ -38,6 +37,19 @@ jobs:
           echo "::set-output name=mainBranch::$mainBranch"
           echo "::set-output name=mainBranchRef::refs/heads/$mainBranch"
           echo "::set-output name=mainBranchHeadRevision::$mainBranchHeadRevision"
+
+          echo $mainBranch
+          echo $mainBranchHeadRevision
+
+      - name: Checkout ref
+        run: |
+          if [[ "${{ github.ref }}" =~ ^refs/heads/ ]]; then
+            branch=$(echo "${{ github.ref }}" | cut -d'/' -f 3-)
+            echo $branch
+            git checkout ${branch}
+          else
+            git checkout ${{ github.ref }}
+          fi
 
       #############################################
       ## Update the version of the simulator

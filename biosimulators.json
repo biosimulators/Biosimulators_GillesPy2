@@ -1,124 +1,132 @@
 {
   "id": "gillespy2",
   "name": "GillesPy2",
-  "version": "1.5.6",
+  "version": "1.5.7",
   "description": "GillesPy2 is a Python 3 package for stochastic simulation of biochemical systems.",
-  "urls": [{"type": "Home page", "url": "https://github.com/StochSS/GillesPy2"}],
+  "urls": [
+    {
+      "type": "Home page",
+      "url": "https://github.com/StochSS/GillesPy2"
+    }
+  ],
   "image": {
-    "url": "ghcr.io/biosimulators/biosimulators_gillespy2/gillespy2:1.5.6",
+    "url": "ghcr.io/biosimulators/biosimulators_gillespy2/gillespy2:1.5.7",
     "format": {
       "namespace": "EDAM",
-      "id": "format_3973", "version": null, "supportedFeatures": []
+      "id": "format_3973",
+      "version": null,
+      "supportedFeatures": []
     },
     "operatingSystemType": "Linux"
   },
-  "authors": [{
+  "authors": [
+    {
       "firstName": "Brian",
       "middleName": null,
       "lastName": "Drawert",
-            "identifiers": []
+      "identifiers": []
     },
     {
       "firstName": "Kevin",
       "middleName": null,
       "lastName": "Sanft",
-            "identifiers": []
+      "identifiers": []
     },
     {
       "firstName": "Ghilman",
       "middleName": null,
       "lastName": "Brock",
-            "identifiers": []
+      "identifiers": []
     },
     {
       "firstName": "Eliot",
       "middleName": null,
       "lastName": "Dixon",
-            "identifiers": []
+      "identifiers": []
     },
     {
       "firstName": "Dalton",
       "middleName": null,
       "lastName": "Nickerson",
-            "identifiers": []
+      "identifiers": []
     },
     {
       "firstName": "Sean",
       "middleName": null,
       "lastName": "Mathew",
-            "identifiers": []
+      "identifiers": []
     },
     {
       "firstName": "George",
       "middleName": null,
       "lastName": "Hall",
-            "identifiers": []
+      "identifiers": []
     },
     {
       "firstName": "W.",
       "middleName": "R.",
       "lastName": "Jackson",
-            "identifiers": []
+      "identifiers": []
     },
     {
       "firstName": "Samuel",
       "middleName": null,
       "lastName": "Hodges",
-            "identifiers": []
+      "identifiers": []
     },
     {
       "firstName": "Emma",
       "middleName": null,
       "lastName": "Weisegerber",
-            "identifiers": []
+      "identifiers": []
     },
     {
       "firstName": "Adrien",
       "middleName": null,
       "lastName": "Coulier",
-            "identifiers": []
+      "identifiers": []
     },
     {
       "firstName": "Mike",
       "middleName": null,
       "lastName": "Hucka",
-            "identifiers": []
+      "identifiers": []
     },
     {
       "firstName": "Fredrik",
       "middleName": null,
       "lastName": "Wrede",
-            "identifiers": []
+      "identifiers": []
     },
     {
       "firstName": "Prashant",
       "middleName": null,
       "lastName": "Singh",
-            "identifiers": []
+      "identifiers": []
     },
     {
       "firstName": "Bryan",
       "middleName": null,
       "lastName": "Rumsey",
-            "identifiers": []
+      "identifiers": []
     },
     {
       "firstName": "Mason",
       "middleName": null,
       "lastName": "Kidwell",
-            "identifiers": []
+      "identifiers": []
     },
     {
       "firstName": "Jesse",
       "middleName": null,
       "lastName": "Reeve",
-            "identifiers": []
+      "identifiers": []
     },
     {
       "firstName": "Fin",
       "middleName": null,
       "lastName": "Carter",
-            "identifiers": []
+      "identifiers": []
     }
   ],
   "references": {
@@ -139,7 +147,8 @@
         "url": "https://stochss.org/"
       }
     ],
-    "citations": [{
+    "citations": [
+      {
         "title": "StochKit2: software for discrete stochastic simulation of biochemical systems with events",
         "authors": "Kevin R. Sanft, Sheng Wu, Min Roh, Jin Fu, Rone Kwei Lim & Linda R. Petzold",
         "journal": "Bioinformatics",
@@ -147,7 +156,8 @@
         "issue": 17,
         "pages": "2457-2458",
         "year": 2011,
-        "identifiers": [{
+        "identifiers": [
+          {
             "namespace": "doi",
             "id": "10.1093/bioinformatics/btr401",
             "url": "https://doi.org/10.1093/bioinformatics/btr401"
@@ -172,7 +182,8 @@
         "issue": 1,
         "pages": "56-61",
         "year": 2008,
-        "identifiers": [{
+        "identifiers": [
+          {
             "namespace": "doi",
             "id": "10.1021/bp070255h",
             "url": "https://doi.org/10.1021/bp070255h"
@@ -197,52 +208,74 @@
         "issue": 12,
         "pages": "e1005220",
         "year": 2016,
-        "identifiers": [{
-          "namespace": "doi",
-          "id": "10.1371/journal.pcbi.1005220",
-          "url": "https://doi.org/10.1371/journal.pcbi.1005220"
-        }]
+        "identifiers": [
+          {
+            "namespace": "doi",
+            "id": "10.1371/journal.pcbi.1005220",
+            "url": "https://doi.org/10.1371/journal.pcbi.1005220"
+          }
+        ]
       }
     ]
   },
   "license": {
-    "namespace": "SPDX", 
+    "namespace": "SPDX",
     "id": "GPL-3.0-only"
   },
-  "algorithms": [{
+  "algorithms": [
+    {
       "id": "lsoda",
       "name": "Livermore solver systems for ordinary differential equations with automatic method switching",
       "kisaoId": {
         "namespace": "KISAO",
         "id": "KISAO_0000088"
       },
-      "modelingFrameworks": [{
-        "namespace": "SBO",
-        "id": "SBO_0000293"
-      }],
-      "modelFormats": [{
-        "namespace": "EDAM",
-        "id": "format_2585", "version": null, "supportedFeatures": []
-      }],
-      "simulationFormats": [{
-        "namespace": "EDAM",
-        "id": "format_3685", "version": null, "supportedFeatures": []
-      }],
-      "archiveFormats": [{
-        "namespace": "EDAM",
-        "id": "format_3686", "version": null, "supportedFeatures": []
-      }],
-      "citations": [{
-        "title": "LSODA, ordinary differential equation solver for stiff or non-stiff system",
-        "authors": "Alan C. Hindmarsh & Linda R. Petzold",
-        "year": 2005,
-        "identifiers": [{
-          "namespace": "inis",
-          "id": "RN:41086668",
-          "url": "https://inis.iaea.org/search/search.aspx?orig_q=RN:41086668"
-        }]
-      }],
-      "parameters": [{
+      "modelingFrameworks": [
+        {
+          "namespace": "SBO",
+          "id": "SBO_0000293"
+        }
+      ],
+      "modelFormats": [
+        {
+          "namespace": "EDAM",
+          "id": "format_2585",
+          "version": null,
+          "supportedFeatures": []
+        }
+      ],
+      "simulationFormats": [
+        {
+          "namespace": "EDAM",
+          "id": "format_3685",
+          "version": null,
+          "supportedFeatures": []
+        }
+      ],
+      "archiveFormats": [
+        {
+          "namespace": "EDAM",
+          "id": "format_3686",
+          "version": null,
+          "supportedFeatures": []
+        }
+      ],
+      "citations": [
+        {
+          "title": "LSODA, ordinary differential equation solver for stiff or non-stiff system",
+          "authors": "Alan C. Hindmarsh & Linda R. Petzold",
+          "year": 2005,
+          "identifiers": [
+            {
+              "namespace": "inis",
+              "id": "RN:41086668",
+              "url": "https://inis.iaea.org/search/search.aspx?orig_q=RN:41086668"
+            }
+          ]
+        }
+      ],
+      "parameters": [
+        {
           "kisaoId": {
             "namespace": "KISAO",
             "id": "KISAO_0000209"
@@ -251,7 +284,12 @@
           "type": "float",
           "value": "1e-6",
           "recommendedRange": null,
-                    "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
+          "availableSoftwareInterfaceTypes": [
+            "library",
+            "command-line application",
+            "web application",
+            "BioSimulators Docker image"
+          ]
         },
         {
           "kisaoId": {
@@ -262,7 +300,12 @@
           "type": "float",
           "value": "1e-12",
           "recommendedRange": null,
-                    "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
+          "availableSoftwareInterfaceTypes": [
+            "library",
+            "command-line application",
+            "web application",
+            "BioSimulators Docker image"
+          ]
         },
         {
           "kisaoId": {
@@ -273,7 +316,12 @@
           "type": "integer",
           "value": null,
           "recommendedRange": null,
-                    "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
+          "availableSoftwareInterfaceTypes": [
+            "library",
+            "command-line application",
+            "web application",
+            "BioSimulators Docker image"
+          ]
         },
         {
           "kisaoId": {
@@ -284,7 +332,12 @@
           "type": "integer",
           "value": null,
           "recommendedRange": null,
-                    "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
+          "availableSoftwareInterfaceTypes": [
+            "library",
+            "command-line application",
+            "web application",
+            "BioSimulators Docker image"
+          ]
         },
         {
           "kisaoId": {
@@ -295,7 +348,12 @@
           "type": "integer",
           "value": "500",
           "recommendedRange": null,
-                    "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
+          "availableSoftwareInterfaceTypes": [
+            "library",
+            "command-line application",
+            "web application",
+            "BioSimulators Docker image"
+          ]
         },
         {
           "kisaoId": {
@@ -306,7 +364,12 @@
           "type": "float",
           "value": null,
           "recommendedRange": null,
-                    "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
+          "availableSoftwareInterfaceTypes": [
+            "library",
+            "command-line application",
+            "web application",
+            "BioSimulators Docker image"
+          ]
         },
         {
           "kisaoId": {
@@ -317,7 +380,12 @@
           "type": "float",
           "value": null,
           "recommendedRange": null,
-                    "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
+          "availableSoftwareInterfaceTypes": [
+            "library",
+            "command-line application",
+            "web application",
+            "BioSimulators Docker image"
+          ]
         },
         {
           "kisaoId": {
@@ -328,7 +396,12 @@
           "type": "float",
           "value": null,
           "recommendedRange": null,
-                    "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
+          "availableSoftwareInterfaceTypes": [
+            "library",
+            "command-line application",
+            "web application",
+            "BioSimulators Docker image"
+          ]
         },
         {
           "kisaoId": {
@@ -339,7 +412,12 @@
           "type": "integer",
           "value": "12",
           "recommendedRange": null,
-                    "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
+          "availableSoftwareInterfaceTypes": [
+            "library",
+            "command-line application",
+            "web application",
+            "BioSimulators Docker image"
+          ]
         },
         {
           "kisaoId": {
@@ -350,17 +428,29 @@
           "type": "integer",
           "value": "5",
           "recommendedRange": null,
-                    "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
+          "availableSoftwareInterfaceTypes": [
+            "library",
+            "command-line application",
+            "web application",
+            "BioSimulators Docker image"
+          ]
         }
       ],
-      "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"],
-      "dependencies": [{
-        "name": "SciPy",
-        "version": null,
-        "required": true,
-        "freeNonCommercialLicense": true,
-        "url": "https://www.scipy.org/"
-      }]
+      "availableSoftwareInterfaceTypes": [
+        "library",
+        "command-line application",
+        "web application",
+        "BioSimulators Docker image"
+      ],
+      "dependencies": [
+        {
+          "name": "SciPy",
+          "version": null,
+          "required": true,
+          "freeNonCommercialLicense": true,
+          "url": "https://www.scipy.org/"
+        }
+      ]
     },
     {
       "id": "dopri5",
@@ -369,37 +459,56 @@
         "namespace": "KISAO",
         "id": "KISAO_0000087"
       },
-      "modelingFrameworks": [{
-        "namespace": "SBO",
-        "id": "SBO_0000293"
-      }],
-      "modelFormats": [{
-        "namespace": "EDAM",
-        "id": "format_2585", "version": null, "supportedFeatures": []
-      }],
-      "simulationFormats": [{
-        "namespace": "EDAM",
-        "id": "format_3685", "version": null, "supportedFeatures": []
-      }],
-      "archiveFormats": [{
-        "namespace": "EDAM",
-        "id": "format_3686", "version": null, "supportedFeatures": []
-      }],
-      "citations": [{
-        "title": "A family of embedded Runge-Kutta formulae",
-        "authors": "John R. Dormand & Peter J. Prince",
-        "journal": "Journal of Computational and Applied Mathematics",
-        "volume": 6,
-        "issue": 1,
-        "pages": "19-26",
-        "year": 1980,
-        "identifiers": [{
-          "namespace": "doi",
-          "id": "10.1016/0771-050X(80)90013-3",
-          "url": "https://doi.org/10.1016/0771-050X(80)90013-3"
-        }]
-      }],
-      "parameters": [{
+      "modelingFrameworks": [
+        {
+          "namespace": "SBO",
+          "id": "SBO_0000293"
+        }
+      ],
+      "modelFormats": [
+        {
+          "namespace": "EDAM",
+          "id": "format_2585",
+          "version": null,
+          "supportedFeatures": []
+        }
+      ],
+      "simulationFormats": [
+        {
+          "namespace": "EDAM",
+          "id": "format_3685",
+          "version": null,
+          "supportedFeatures": []
+        }
+      ],
+      "archiveFormats": [
+        {
+          "namespace": "EDAM",
+          "id": "format_3686",
+          "version": null,
+          "supportedFeatures": []
+        }
+      ],
+      "citations": [
+        {
+          "title": "A family of embedded Runge-Kutta formulae",
+          "authors": "John R. Dormand & Peter J. Prince",
+          "journal": "Journal of Computational and Applied Mathematics",
+          "volume": 6,
+          "issue": 1,
+          "pages": "19-26",
+          "year": 1980,
+          "identifiers": [
+            {
+              "namespace": "doi",
+              "id": "10.1016/0771-050X(80)90013-3",
+              "url": "https://doi.org/10.1016/0771-050X(80)90013-3"
+            }
+          ]
+        }
+      ],
+      "parameters": [
+        {
           "kisaoId": {
             "namespace": "KISAO",
             "id": "KISAO_0000209"
@@ -408,7 +517,12 @@
           "type": "float",
           "value": "1e-6",
           "recommendedRange": null,
-                    "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
+          "availableSoftwareInterfaceTypes": [
+            "library",
+            "command-line application",
+            "web application",
+            "BioSimulators Docker image"
+          ]
         },
         {
           "kisaoId": {
@@ -419,7 +533,12 @@
           "type": "float",
           "value": "1e-12",
           "recommendedRange": null,
-                    "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
+          "availableSoftwareInterfaceTypes": [
+            "library",
+            "command-line application",
+            "web application",
+            "BioSimulators Docker image"
+          ]
         },
         {
           "kisaoId": {
@@ -430,7 +549,12 @@
           "type": "integer",
           "value": "500",
           "recommendedRange": null,
-                    "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
+          "availableSoftwareInterfaceTypes": [
+            "library",
+            "command-line application",
+            "web application",
+            "BioSimulators Docker image"
+          ]
         },
         {
           "kisaoId": {
@@ -441,7 +565,12 @@
           "type": "float",
           "value": null,
           "recommendedRange": null,
-                    "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
+          "availableSoftwareInterfaceTypes": [
+            "library",
+            "command-line application",
+            "web application",
+            "BioSimulators Docker image"
+          ]
         },
         {
           "kisaoId": {
@@ -452,7 +581,12 @@
           "type": "float",
           "value": null,
           "recommendedRange": null,
-                    "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
+          "availableSoftwareInterfaceTypes": [
+            "library",
+            "command-line application",
+            "web application",
+            "BioSimulators Docker image"
+          ]
         },
         {
           "kisaoId": {
@@ -463,7 +597,12 @@
           "type": "float",
           "value": "0.9",
           "recommendedRange": null,
-                    "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
+          "availableSoftwareInterfaceTypes": [
+            "library",
+            "command-line application",
+            "web application",
+            "BioSimulators Docker image"
+          ]
         },
         {
           "kisaoId": {
@@ -474,7 +613,12 @@
           "type": "float",
           "value": "10.0",
           "recommendedRange": null,
-                    "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
+          "availableSoftwareInterfaceTypes": [
+            "library",
+            "command-line application",
+            "web application",
+            "BioSimulators Docker image"
+          ]
         },
         {
           "kisaoId": {
@@ -485,7 +629,12 @@
           "type": "float",
           "value": "0.2",
           "recommendedRange": null,
-                    "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
+          "availableSoftwareInterfaceTypes": [
+            "library",
+            "command-line application",
+            "web application",
+            "BioSimulators Docker image"
+          ]
         },
         {
           "kisaoId": {
@@ -496,17 +645,29 @@
           "type": "float",
           "value": "0.0",
           "recommendedRange": null,
-                    "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
+          "availableSoftwareInterfaceTypes": [
+            "library",
+            "command-line application",
+            "web application",
+            "BioSimulators Docker image"
+          ]
         }
       ],
-      "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"],
-      "dependencies": [{
-        "name": "SciPy",
-        "version": null,
-        "required": true,
-        "freeNonCommercialLicense": true,
-        "url": "https://www.scipy.org/"
-      }]
+      "availableSoftwareInterfaceTypes": [
+        "library",
+        "command-line application",
+        "web application",
+        "BioSimulators Docker image"
+      ],
+      "dependencies": [
+        {
+          "name": "SciPy",
+          "version": null,
+          "required": true,
+          "freeNonCommercialLicense": true,
+          "url": "https://www.scipy.org/"
+        }
+      ]
     },
     {
       "id": "dop835",
@@ -515,37 +676,56 @@
         "namespace": "KISAO",
         "id": "KISAO_0000436"
       },
-      "modelingFrameworks": [{
-        "namespace": "SBO",
-        "id": "SBO_0000293"
-      }],
-      "modelFormats": [{
-        "namespace": "EDAM",
-        "id": "format_2585", "version": null, "supportedFeatures": []
-      }],
-      "simulationFormats": [{
-        "namespace": "EDAM",
-        "id": "format_3685", "version": null, "supportedFeatures": []
-      }],
-      "archiveFormats": [{
-        "namespace": "EDAM",
-        "id": "format_3686", "version": null, "supportedFeatures": []
-      }],
-      "citations": [{
-        "title": "A family of embedded Runge-Kutta formulae",
-        "authors": "John R. Dormand & Peter J. Prince",
-        "journal": "Journal of Computational and Applied Mathematics",
-        "volume": 6,
-        "issue": 1,
-        "pages": "19-26",
-        "year": 1980,
-        "identifiers": [{
-          "namespace": "doi",
-          "id": "10.1016/0771-050X(80)90013-3",
-          "url": "https://doi.org/10.1016/0771-050X(80)90013-3"
-        }]
-      }],
-      "parameters": [{
+      "modelingFrameworks": [
+        {
+          "namespace": "SBO",
+          "id": "SBO_0000293"
+        }
+      ],
+      "modelFormats": [
+        {
+          "namespace": "EDAM",
+          "id": "format_2585",
+          "version": null,
+          "supportedFeatures": []
+        }
+      ],
+      "simulationFormats": [
+        {
+          "namespace": "EDAM",
+          "id": "format_3685",
+          "version": null,
+          "supportedFeatures": []
+        }
+      ],
+      "archiveFormats": [
+        {
+          "namespace": "EDAM",
+          "id": "format_3686",
+          "version": null,
+          "supportedFeatures": []
+        }
+      ],
+      "citations": [
+        {
+          "title": "A family of embedded Runge-Kutta formulae",
+          "authors": "John R. Dormand & Peter J. Prince",
+          "journal": "Journal of Computational and Applied Mathematics",
+          "volume": 6,
+          "issue": 1,
+          "pages": "19-26",
+          "year": 1980,
+          "identifiers": [
+            {
+              "namespace": "doi",
+              "id": "10.1016/0771-050X(80)90013-3",
+              "url": "https://doi.org/10.1016/0771-050X(80)90013-3"
+            }
+          ]
+        }
+      ],
+      "parameters": [
+        {
           "kisaoId": {
             "namespace": "KISAO",
             "id": "KISAO_0000209"
@@ -554,7 +734,12 @@
           "type": "float",
           "value": "1e-6",
           "recommendedRange": null,
-          "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
+          "availableSoftwareInterfaceTypes": [
+            "library",
+            "command-line application",
+            "web application",
+            "BioSimulators Docker image"
+          ]
         },
         {
           "kisaoId": {
@@ -565,7 +750,12 @@
           "type": "float",
           "value": "1e-12",
           "recommendedRange": null,
-          "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
+          "availableSoftwareInterfaceTypes": [
+            "library",
+            "command-line application",
+            "web application",
+            "BioSimulators Docker image"
+          ]
         },
         {
           "kisaoId": {
@@ -576,7 +766,12 @@
           "type": "integer",
           "value": "500",
           "recommendedRange": null,
-          "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
+          "availableSoftwareInterfaceTypes": [
+            "library",
+            "command-line application",
+            "web application",
+            "BioSimulators Docker image"
+          ]
         },
         {
           "kisaoId": {
@@ -587,7 +782,12 @@
           "type": "float",
           "value": null,
           "recommendedRange": null,
-          "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
+          "availableSoftwareInterfaceTypes": [
+            "library",
+            "command-line application",
+            "web application",
+            "BioSimulators Docker image"
+          ]
         },
         {
           "kisaoId": {
@@ -598,7 +798,12 @@
           "type": "float",
           "value": null,
           "recommendedRange": null,
-          "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
+          "availableSoftwareInterfaceTypes": [
+            "library",
+            "command-line application",
+            "web application",
+            "BioSimulators Docker image"
+          ]
         },
         {
           "kisaoId": {
@@ -609,7 +814,12 @@
           "type": "float",
           "value": "0.9",
           "recommendedRange": null,
-          "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
+          "availableSoftwareInterfaceTypes": [
+            "library",
+            "command-line application",
+            "web application",
+            "BioSimulators Docker image"
+          ]
         },
         {
           "kisaoId": {
@@ -620,7 +830,12 @@
           "type": "float",
           "value": "6.0",
           "recommendedRange": null,
-          "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
+          "availableSoftwareInterfaceTypes": [
+            "library",
+            "command-line application",
+            "web application",
+            "BioSimulators Docker image"
+          ]
         },
         {
           "kisaoId": {
@@ -631,7 +846,12 @@
           "type": "float",
           "value": "0.333",
           "recommendedRange": null,
-          "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
+          "availableSoftwareInterfaceTypes": [
+            "library",
+            "command-line application",
+            "web application",
+            "BioSimulators Docker image"
+          ]
         },
         {
           "kisaoId": {
@@ -642,17 +862,29 @@
           "type": "float",
           "value": "0.0",
           "recommendedRange": null,
-          "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
+          "availableSoftwareInterfaceTypes": [
+            "library",
+            "command-line application",
+            "web application",
+            "BioSimulators Docker image"
+          ]
         }
       ],
-      "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"],
-      "dependencies": [{
-        "name": "SciPy",
-        "version": null,
-        "required": true,
-        "freeNonCommercialLicense": true,
-        "url": "https://www.scipy.org/"
-      }]
+      "availableSoftwareInterfaceTypes": [
+        "library",
+        "command-line application",
+        "web application",
+        "BioSimulators Docker image"
+      ],
+      "dependencies": [
+        {
+          "name": "SciPy",
+          "version": null,
+          "required": true,
+          "freeNonCommercialLicense": true,
+          "url": "https://www.scipy.org/"
+        }
+      ]
     },
     {
       "id": "ssa",
@@ -661,48 +893,78 @@
         "namespace": "KISAO",
         "id": "KISAO_0000029"
       },
-      "modelingFrameworks": [{
-        "namespace": "SBO",
-        "id": "SBO_0000295"
-      }],
-      "modelFormats": [{
-        "namespace": "EDAM",
-        "id": "format_2585", "version": null, "supportedFeatures": []
-      }],
-      "simulationFormats": [{
-        "namespace": "EDAM",
-        "id": "format_3685", "version": null, "supportedFeatures": []
-      }],
-      "archiveFormats": [{
-        "namespace": "EDAM",
-        "id": "format_3686", "version": null, "supportedFeatures": []
-      }],
-      "citations": [{
-        "title": "Exact stochastic simulation of coupled chemical reactions",
-        "authors": "Daniel T. Gillespie",
-        "journal": "Journal of Physical Chemistry",
-        "volume": 81,
-        "issue": 25,
-        "pages": "2340-2361",
-        "year": 1977,
-        "identifiers": [{
-          "namespace": "doi",
-          "id": "10.1021/j100540a008",
-          "url": "https://doi.org/10.1021/j100540a008"
-        }]
-      }],
-      "parameters": [{
-        "kisaoId": {
-          "namespace": "KISAO",
-          "id": "KISAO_0000488"
-        },
-        "name": "seed",
-        "type": "integer",
-        "value": null,
-        "recommendedRange": null,
-        "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
-      }],
-      "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"],
+      "modelingFrameworks": [
+        {
+          "namespace": "SBO",
+          "id": "SBO_0000295"
+        }
+      ],
+      "modelFormats": [
+        {
+          "namespace": "EDAM",
+          "id": "format_2585",
+          "version": null,
+          "supportedFeatures": []
+        }
+      ],
+      "simulationFormats": [
+        {
+          "namespace": "EDAM",
+          "id": "format_3685",
+          "version": null,
+          "supportedFeatures": []
+        }
+      ],
+      "archiveFormats": [
+        {
+          "namespace": "EDAM",
+          "id": "format_3686",
+          "version": null,
+          "supportedFeatures": []
+        }
+      ],
+      "citations": [
+        {
+          "title": "Exact stochastic simulation of coupled chemical reactions",
+          "authors": "Daniel T. Gillespie",
+          "journal": "Journal of Physical Chemistry",
+          "volume": 81,
+          "issue": 25,
+          "pages": "2340-2361",
+          "year": 1977,
+          "identifiers": [
+            {
+              "namespace": "doi",
+              "id": "10.1021/j100540a008",
+              "url": "https://doi.org/10.1021/j100540a008"
+            }
+          ]
+        }
+      ],
+      "parameters": [
+        {
+          "kisaoId": {
+            "namespace": "KISAO",
+            "id": "KISAO_0000488"
+          },
+          "name": "seed",
+          "type": "integer",
+          "value": null,
+          "recommendedRange": null,
+          "availableSoftwareInterfaceTypes": [
+            "library",
+            "command-line application",
+            "web application",
+            "BioSimulators Docker image"
+          ]
+        }
+      ],
+      "availableSoftwareInterfaceTypes": [
+        "library",
+        "command-line application",
+        "web application",
+        "BioSimulators Docker image"
+      ],
       "dependencies": null
     },
     {
@@ -712,37 +974,56 @@
         "namespace": "KISAO",
         "id": "KISAO_0000039"
       },
-      "modelingFrameworks": [{
-        "namespace": "SBO",
-        "id": "SBO_0000295"
-      }],
-      "modelFormats": [{
-        "namespace": "EDAM",
-        "id": "format_2585", "version": null, "supportedFeatures": []
-      }],
-      "simulationFormats": [{
-        "namespace": "EDAM",
-        "id": "format_3685", "version": null, "supportedFeatures": []
-      }],
-      "archiveFormats": [{
-        "namespace": "EDAM",
-        "id": "format_3686", "version": null, "supportedFeatures": []
-      }],
-      "citations": [{
-        "title": "Approximate accelerated stochastic simulation of chemically reacting systems",
-        "authors": "Daniel T. Gillespie",
-        "journal": "Journal of Chemical Physics",
-        "volume": 115,
-        "issue": 4,
-        "pages": "1716–1733",
-        "year": 2001,
-        "identifiers": [{
-          "namespace": "doi",
-          "id": "10.1063/1.1378322",
-          "url": "https://doi.org/10.1063/1.1378322"
-        }]
-      }],
-      "parameters": [{
+      "modelingFrameworks": [
+        {
+          "namespace": "SBO",
+          "id": "SBO_0000295"
+        }
+      ],
+      "modelFormats": [
+        {
+          "namespace": "EDAM",
+          "id": "format_2585",
+          "version": null,
+          "supportedFeatures": []
+        }
+      ],
+      "simulationFormats": [
+        {
+          "namespace": "EDAM",
+          "id": "format_3685",
+          "version": null,
+          "supportedFeatures": []
+        }
+      ],
+      "archiveFormats": [
+        {
+          "namespace": "EDAM",
+          "id": "format_3686",
+          "version": null,
+          "supportedFeatures": []
+        }
+      ],
+      "citations": [
+        {
+          "title": "Approximate accelerated stochastic simulation of chemically reacting systems",
+          "authors": "Daniel T. Gillespie",
+          "journal": "Journal of Chemical Physics",
+          "volume": 115,
+          "issue": 4,
+          "pages": "1716–1733",
+          "year": 2001,
+          "identifiers": [
+            {
+              "namespace": "doi",
+              "id": "10.1063/1.1378322",
+              "url": "https://doi.org/10.1063/1.1378322"
+            }
+          ]
+        }
+      ],
+      "parameters": [
+        {
           "kisaoId": {
             "namespace": "KISAO",
             "id": "KISAO_0000488"
@@ -751,7 +1032,12 @@
           "type": "integer",
           "value": null,
           "recommendedRange": null,
-          "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
+          "availableSoftwareInterfaceTypes": [
+            "library",
+            "command-line application",
+            "web application",
+            "BioSimulators Docker image"
+          ]
         },
         {
           "kisaoId": {
@@ -762,10 +1048,20 @@
           "type": "float",
           "value": "0.03",
           "recommendedRange": null,
-          "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
+          "availableSoftwareInterfaceTypes": [
+            "library",
+            "command-line application",
+            "web application",
+            "BioSimulators Docker image"
+          ]
         }
       ],
-      "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"],
+      "availableSoftwareInterfaceTypes": [
+        "library",
+        "command-line application",
+        "web application",
+        "BioSimulators Docker image"
+      ],
       "dependencies": null
     },
     {
@@ -775,24 +1071,39 @@
         "namespace": "KISAO",
         "id": "KISAO_0000028"
       },
-      "modelingFrameworks": [{
-        "namespace": "SBO",
-        "id": "SBO_0000295"
-      }],
-      "modelFormats": [{
-        "namespace": "EDAM",
-        "id": "format_2585", "version": null, "supportedFeatures": []
-      }],
-      "simulationFormats": [{
-        "namespace": "EDAM",
-        "id": "format_3685", "version": null, "supportedFeatures": []
-      }],
-      "archiveFormats": [{
-        "namespace": "EDAM",
-        "id": "format_3686", "version": null, "supportedFeatures": []
-      }],
+      "modelingFrameworks": [
+        {
+          "namespace": "SBO",
+          "id": "SBO_0000295"
+        }
+      ],
+      "modelFormats": [
+        {
+          "namespace": "EDAM",
+          "id": "format_2585",
+          "version": null,
+          "supportedFeatures": []
+        }
+      ],
+      "simulationFormats": [
+        {
+          "namespace": "EDAM",
+          "id": "format_3685",
+          "version": null,
+          "supportedFeatures": []
+        }
+      ],
+      "archiveFormats": [
+        {
+          "namespace": "EDAM",
+          "id": "format_3686",
+          "version": null,
+          "supportedFeatures": []
+        }
+      ],
       "citations": [],
-      "parameters": [{
+      "parameters": [
+        {
           "kisaoId": {
             "namespace": "KISAO",
             "id": "KISAO_0000488"
@@ -801,7 +1112,12 @@
           "type": "integer",
           "value": null,
           "recommendedRange": null,
-          "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
+          "availableSoftwareInterfaceTypes": [
+            "library",
+            "command-line application",
+            "web application",
+            "BioSimulators Docker image"
+          ]
         },
         {
           "kisaoId": {
@@ -812,7 +1128,12 @@
           "type": "float",
           "value": "0.03",
           "recommendedRange": null,
-          "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
+          "availableSoftwareInterfaceTypes": [
+            "library",
+            "command-line application",
+            "web application",
+            "BioSimulators Docker image"
+          ]
         },
         {
           "kisaoId": {
@@ -822,11 +1143,27 @@
           "name": "integrator",
           "type": "kisaoId",
           "value": "KISAO_0000088",
-          "recommendedRange": ["KISAO_0000088", "KISAO_0000288", "KISAO_0000304", "KISAO_0000032", "KISAO_0000537"],
-          "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
+          "recommendedRange": [
+            "KISAO_0000088",
+            "KISAO_0000288",
+            "KISAO_0000304",
+            "KISAO_0000032",
+            "KISAO_0000537"
+          ],
+          "availableSoftwareInterfaceTypes": [
+            "library",
+            "command-line application",
+            "web application",
+            "BioSimulators Docker image"
+          ]
         }
       ],
-      "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"],
+      "availableSoftwareInterfaceTypes": [
+        "library",
+        "command-line application",
+        "web application",
+        "BioSimulators Docker image"
+      ],
       "dependencies": null
     },
     {
@@ -836,37 +1173,56 @@
         "namespace": "KISAO",
         "id": "KISAO_0000535"
       },
-      "modelingFrameworks": [{
-        "namespace": "SBO",
-        "id": "SBO_0000293"
-      }],
-      "modelFormats": [{
-        "namespace": "EDAM",
-        "id": "format_2585", "version": null, "supportedFeatures": []
-      }],
-      "simulationFormats": [{
-        "namespace": "EDAM",
-        "id": "format_3685", "version": null, "supportedFeatures": []
-      }],
-      "archiveFormats": [{
-        "namespace": "EDAM",
-        "id": "format_3686", "version": null, "supportedFeatures": []
-      }],
-      "citations": [{
-        "title": "VODE: a variable-coefficient ODE solver",
-        "authors": "Peter N. Brown, George D. Byrne & Alan C. Hindmarsh",
-        "journal": "SIAM Journal on Scientific and Statistical Computing",
-        "volume": 10,
-        "issue": 5,
-        "pages": "1038-1051",
-        "year": 1989,
-        "identifiers": [{
-          "namespace": "doi",
-          "id": "10.1137/0910062",
-          "url": "https://doi.org/10.1137/0910062"
-        }]
-      }],
-      "parameters": [{
+      "modelingFrameworks": [
+        {
+          "namespace": "SBO",
+          "id": "SBO_0000293"
+        }
+      ],
+      "modelFormats": [
+        {
+          "namespace": "EDAM",
+          "id": "format_2585",
+          "version": null,
+          "supportedFeatures": []
+        }
+      ],
+      "simulationFormats": [
+        {
+          "namespace": "EDAM",
+          "id": "format_3685",
+          "version": null,
+          "supportedFeatures": []
+        }
+      ],
+      "archiveFormats": [
+        {
+          "namespace": "EDAM",
+          "id": "format_3686",
+          "version": null,
+          "supportedFeatures": []
+        }
+      ],
+      "citations": [
+        {
+          "title": "VODE: a variable-coefficient ODE solver",
+          "authors": "Peter N. Brown, George D. Byrne & Alan C. Hindmarsh",
+          "journal": "SIAM Journal on Scientific and Statistical Computing",
+          "volume": 10,
+          "issue": 5,
+          "pages": "1038-1051",
+          "year": 1989,
+          "identifiers": [
+            {
+              "namespace": "doi",
+              "id": "10.1137/0910062",
+              "url": "https://doi.org/10.1137/0910062"
+            }
+          ]
+        }
+      ],
+      "parameters": [
+        {
           "kisaoId": {
             "namespace": "KISAO",
             "id": "KISAO_0000475"
@@ -874,8 +1230,16 @@
           "name": "method",
           "type": "kisaoId",
           "value": "KISAO_0000289",
-          "recommendedRange": ["KISAO_0000288", "KISAO_0000289"],
-          "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
+          "recommendedRange": [
+            "KISAO_0000288",
+            "KISAO_0000289"
+          ],
+          "availableSoftwareInterfaceTypes": [
+            "library",
+            "command-line application",
+            "web application",
+            "BioSimulators Docker image"
+          ]
         },
         {
           "kisaoId": {
@@ -886,7 +1250,12 @@
           "type": "boolean",
           "value": "false",
           "recommendedRange": null,
-          "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
+          "availableSoftwareInterfaceTypes": [
+            "library",
+            "command-line application",
+            "web application",
+            "BioSimulators Docker image"
+          ]
         },
         {
           "kisaoId": {
@@ -897,7 +1266,12 @@
           "type": "float",
           "value": "1e-12",
           "recommendedRange": null,
-          "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
+          "availableSoftwareInterfaceTypes": [
+            "library",
+            "command-line application",
+            "web application",
+            "BioSimulators Docker image"
+          ]
         },
         {
           "kisaoId": {
@@ -908,7 +1282,12 @@
           "type": "float",
           "value": "1e-6",
           "recommendedRange": null,
-          "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
+          "availableSoftwareInterfaceTypes": [
+            "library",
+            "command-line application",
+            "web application",
+            "BioSimulators Docker image"
+          ]
         },
         {
           "kisaoId": {
@@ -919,7 +1298,12 @@
           "type": "integer",
           "value": null,
           "recommendedRange": null,
-          "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
+          "availableSoftwareInterfaceTypes": [
+            "library",
+            "command-line application",
+            "web application",
+            "BioSimulators Docker image"
+          ]
         },
         {
           "kisaoId": {
@@ -930,7 +1314,12 @@
           "type": "integer",
           "value": null,
           "recommendedRange": null,
-          "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
+          "availableSoftwareInterfaceTypes": [
+            "library",
+            "command-line application",
+            "web application",
+            "BioSimulators Docker image"
+          ]
         },
         {
           "kisaoId": {
@@ -941,7 +1330,12 @@
           "type": "integer",
           "value": "12",
           "recommendedRange": null,
-          "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
+          "availableSoftwareInterfaceTypes": [
+            "library",
+            "command-line application",
+            "web application",
+            "BioSimulators Docker image"
+          ]
         },
         {
           "kisaoId": {
@@ -952,7 +1346,12 @@
           "type": "integer",
           "value": "500",
           "recommendedRange": null,
-          "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
+          "availableSoftwareInterfaceTypes": [
+            "library",
+            "command-line application",
+            "web application",
+            "BioSimulators Docker image"
+          ]
         },
         {
           "kisaoId": {
@@ -963,7 +1362,12 @@
           "type": "float",
           "value": null,
           "recommendedRange": null,
-          "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
+          "availableSoftwareInterfaceTypes": [
+            "library",
+            "command-line application",
+            "web application",
+            "BioSimulators Docker image"
+          ]
         },
         {
           "kisaoId": {
@@ -974,7 +1378,12 @@
           "type": "float",
           "value": null,
           "recommendedRange": null,
-          "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
+          "availableSoftwareInterfaceTypes": [
+            "library",
+            "command-line application",
+            "web application",
+            "BioSimulators Docker image"
+          ]
         },
         {
           "kisaoId": {
@@ -985,17 +1394,29 @@
           "type": "float",
           "value": null,
           "recommendedRange": null,
-          "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
+          "availableSoftwareInterfaceTypes": [
+            "library",
+            "command-line application",
+            "web application",
+            "BioSimulators Docker image"
+          ]
         }
       ],
-      "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"],
-      "dependencies": [{
-        "name": "SciPy",
-        "version": null,
-        "required": true,
-        "freeNonCommercialLicense": true,
-        "url": "https://www.scipy.org/"
-      }]
+      "availableSoftwareInterfaceTypes": [
+        "library",
+        "command-line application",
+        "web application",
+        "BioSimulators Docker image"
+      ],
+      "dependencies": [
+        {
+          "name": "SciPy",
+          "version": null,
+          "required": true,
+          "freeNonCommercialLicense": true,
+          "url": "https://www.scipy.org/"
+        }
+      ]
     },
     {
       "id": "zvode",
@@ -1004,37 +1425,56 @@
         "namespace": "KISAO",
         "id": "KISAO_0000536"
       },
-      "modelingFrameworks": [{
-        "namespace": "SBO",
-        "id": "SBO_0000293"
-      }],
-      "modelFormats": [{
-        "namespace": "EDAM",
-        "id": "format_2585", "version": null, "supportedFeatures": []
-      }],
-      "simulationFormats": [{
-        "namespace": "EDAM",
-        "id": "format_3685", "version": null, "supportedFeatures": []
-      }],
-      "archiveFormats": [{
-        "namespace": "EDAM",
-        "id": "format_3686", "version": null, "supportedFeatures": []
-      }],
-      "citations": [{
-        "title": "VODE: a variable-coefficient ODE solver",
-        "authors": "Peter N. Brown, George D. Byrne & Alan C. Hindmarsh",
-        "journal": "SIAM Journal on Scientific and Statistical Computing",
-        "volume": 10,
-        "issue": 5,
-        "pages": "1038-1051",
-        "year": 1989,
-        "identifiers": [{
-          "namespace": "doi",
-          "id": "10.1137/0910062",
-          "url": "https://doi.org/10.1137/0910062"
-        }]
-      }],
-      "parameters": [{
+      "modelingFrameworks": [
+        {
+          "namespace": "SBO",
+          "id": "SBO_0000293"
+        }
+      ],
+      "modelFormats": [
+        {
+          "namespace": "EDAM",
+          "id": "format_2585",
+          "version": null,
+          "supportedFeatures": []
+        }
+      ],
+      "simulationFormats": [
+        {
+          "namespace": "EDAM",
+          "id": "format_3685",
+          "version": null,
+          "supportedFeatures": []
+        }
+      ],
+      "archiveFormats": [
+        {
+          "namespace": "EDAM",
+          "id": "format_3686",
+          "version": null,
+          "supportedFeatures": []
+        }
+      ],
+      "citations": [
+        {
+          "title": "VODE: a variable-coefficient ODE solver",
+          "authors": "Peter N. Brown, George D. Byrne & Alan C. Hindmarsh",
+          "journal": "SIAM Journal on Scientific and Statistical Computing",
+          "volume": 10,
+          "issue": 5,
+          "pages": "1038-1051",
+          "year": 1989,
+          "identifiers": [
+            {
+              "namespace": "doi",
+              "id": "10.1137/0910062",
+              "url": "https://doi.org/10.1137/0910062"
+            }
+          ]
+        }
+      ],
+      "parameters": [
+        {
           "kisaoId": {
             "namespace": "KISAO",
             "id": "KISAO_0000475"
@@ -1042,8 +1482,16 @@
           "name": "method",
           "type": "kisaoId",
           "value": "KISAO_0000289",
-          "recommendedRange": ["KISAO_0000288", "KISAO_0000289"],
-          "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
+          "recommendedRange": [
+            "KISAO_0000288",
+            "KISAO_0000289"
+          ],
+          "availableSoftwareInterfaceTypes": [
+            "library",
+            "command-line application",
+            "web application",
+            "BioSimulators Docker image"
+          ]
         },
         {
           "kisaoId": {
@@ -1054,7 +1502,12 @@
           "type": "boolean",
           "value": "false",
           "recommendedRange": null,
-          "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
+          "availableSoftwareInterfaceTypes": [
+            "library",
+            "command-line application",
+            "web application",
+            "BioSimulators Docker image"
+          ]
         },
         {
           "kisaoId": {
@@ -1065,7 +1518,12 @@
           "type": "float",
           "value": "1e-12",
           "recommendedRange": null,
-          "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
+          "availableSoftwareInterfaceTypes": [
+            "library",
+            "command-line application",
+            "web application",
+            "BioSimulators Docker image"
+          ]
         },
         {
           "kisaoId": {
@@ -1076,7 +1534,12 @@
           "type": "float",
           "value": "1e-6",
           "recommendedRange": null,
-          "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
+          "availableSoftwareInterfaceTypes": [
+            "library",
+            "command-line application",
+            "web application",
+            "BioSimulators Docker image"
+          ]
         },
         {
           "kisaoId": {
@@ -1087,7 +1550,12 @@
           "type": "integer",
           "value": null,
           "recommendedRange": null,
-          "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
+          "availableSoftwareInterfaceTypes": [
+            "library",
+            "command-line application",
+            "web application",
+            "BioSimulators Docker image"
+          ]
         },
         {
           "kisaoId": {
@@ -1098,7 +1566,12 @@
           "type": "integer",
           "value": null,
           "recommendedRange": null,
-          "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
+          "availableSoftwareInterfaceTypes": [
+            "library",
+            "command-line application",
+            "web application",
+            "BioSimulators Docker image"
+          ]
         },
         {
           "kisaoId": {
@@ -1109,7 +1582,12 @@
           "type": "integer",
           "value": "12",
           "recommendedRange": null,
-          "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
+          "availableSoftwareInterfaceTypes": [
+            "library",
+            "command-line application",
+            "web application",
+            "BioSimulators Docker image"
+          ]
         },
         {
           "kisaoId": {
@@ -1120,7 +1598,12 @@
           "type": "integer",
           "value": "500",
           "recommendedRange": null,
-          "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
+          "availableSoftwareInterfaceTypes": [
+            "library",
+            "command-line application",
+            "web application",
+            "BioSimulators Docker image"
+          ]
         },
         {
           "kisaoId": {
@@ -1131,7 +1614,12 @@
           "type": "float",
           "value": null,
           "recommendedRange": null,
-          "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
+          "availableSoftwareInterfaceTypes": [
+            "library",
+            "command-line application",
+            "web application",
+            "BioSimulators Docker image"
+          ]
         },
         {
           "kisaoId": {
@@ -1142,7 +1630,12 @@
           "type": "float",
           "value": null,
           "recommendedRange": null,
-          "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
+          "availableSoftwareInterfaceTypes": [
+            "library",
+            "command-line application",
+            "web application",
+            "BioSimulators Docker image"
+          ]
         },
         {
           "kisaoId": {
@@ -1153,22 +1646,46 @@
           "type": "float",
           "value": null,
           "recommendedRange": null,
-          "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"]
+          "availableSoftwareInterfaceTypes": [
+            "library",
+            "command-line application",
+            "web application",
+            "BioSimulators Docker image"
+          ]
         }
       ],
-      "availableSoftwareInterfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"],
-      "dependencies": [{
-        "name": "SciPy",
-        "version": null,
-        "required": true,
-        "freeNonCommercialLicense": true,
-        "url": "https://www.scipy.org/"
-      }]
+      "availableSoftwareInterfaceTypes": [
+        "library",
+        "command-line application",
+        "web application",
+        "BioSimulators Docker image"
+      ],
+      "dependencies": [
+        {
+          "name": "SciPy",
+          "version": null,
+          "required": true,
+          "freeNonCommercialLicense": true,
+          "url": "https://www.scipy.org/"
+        }
+      ]
     }
   ],
-  "interfaceTypes": ["library", "command-line application", "web application", "BioSimulators Docker image"],
-  "supportedOperatingSystemTypes": ["platform-independent"],
-  "supportedProgrammingLanguages": [{"namespace": "Linguist", "id": "Python"}],
+  "interfaceTypes": [
+    "library",
+    "command-line application",
+    "web application",
+    "BioSimulators Docker image"
+  ],
+  "supportedOperatingSystemTypes": [
+    "platform-independent"
+  ],
+  "supportedProgrammingLanguages": [
+    {
+      "namespace": "Linguist",
+      "id": "Python"
+    }
+  ],
   "funding": [],
   "biosimulators": {
     "specificationVersion": "1.0.0",

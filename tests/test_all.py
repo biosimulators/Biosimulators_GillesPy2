@@ -6,7 +6,6 @@
 :License: MIT
 """
 
-# from biosimulators_utils.simulator.testing import SimulatorValidator
 from biosimulators_gillespy2 import __main__
 from biosimulators_gillespy2 import core
 from biosimulators_utils.combine import data_model as combine_data_model
@@ -316,7 +315,7 @@ class TestCase(unittest.TestCase):
         doc = sedml_data_model.SedDocument()
         doc.models.append(sedml_data_model.Model(
             id='model_1',
-            source=os.path.join(os.path.dirname(__file__), 'fixtures', 'BIOMD0000000297.edited', 'ex1', 'BIOMD0000000297.xml'),
+            source='model_1.xml',
             language=sedml_data_model.ModelLanguage.SBML.value,
             changes=[],
         ))
@@ -440,7 +439,7 @@ class TestCase(unittest.TestCase):
         env = self._get_combine_archive_exec_env()
 
         exec_sedml_docs_in_archive_with_containerized_simulator(
-            archive_filename, out_dir, docker_image, environment=env)
+            archive_filename, out_dir, docker_image, environment=env, pull_docker_image=False)
 
         self._assert_combine_archive_outputs(doc, out_dir)
 

@@ -8,6 +8,7 @@
 
 from biosimulators_gillespy2 import __main__
 from biosimulators_gillespy2 import core
+from biosimulators_utils.archive.io import ArchiveReader
 from biosimulators_utils.combine import data_model as combine_data_model
 from biosimulators_utils.combine.io import CombineArchiveWriter
 from biosimulators_utils.report import data_model as report_data_model
@@ -266,11 +267,11 @@ class TestCase(unittest.TestCase):
         ))
         doc.outputs.append(sedml_data_model.Report(
             id='report_1',
-            datasets=[
-                sedml_data_model.Dataset(id='data_set_time', label='Time', data_generator=doc.data_generators[0]),
-                sedml_data_model.Dataset(id='data_set_BE', label='BE', data_generator=doc.data_generators[1]),
-                sedml_data_model.Dataset(id='data_set_BUD', label='BUD', data_generator=doc.data_generators[2]),
-                sedml_data_model.Dataset(id='data_set_Cdc20', label='Cdc20', data_generator=doc.data_generators[3]),
+            data_sets=[
+                sedml_data_model.DataSet(id='data_set_time', label='Time', data_generator=doc.data_generators[0]),
+                sedml_data_model.DataSet(id='data_set_BE', label='BE', data_generator=doc.data_generators[1]),
+                sedml_data_model.DataSet(id='data_set_BUD', label='BUD', data_generator=doc.data_generators[2]),
+                sedml_data_model.DataSet(id='data_set_Cdc20', label='Cdc20', data_generator=doc.data_generators[3]),
             ],
         ))
 
@@ -283,10 +284,10 @@ class TestCase(unittest.TestCase):
 
         report = ReportReader().run(out_dir, 'sim_1.sedml/report_1', format=report_data_model.ReportFormat.HDF5)
 
-        self.assertEqual(sorted(report.index), sorted([d.id for d in doc.outputs[0].datasets]))
+        self.assertEqual(sorted(report.index), sorted([d.id for d in doc.outputs[0].data_sets]))
 
         sim = doc.tasks[0].simulation
-        self.assertEqual(report.shape, (len(doc.outputs[0].datasets), sim.number_of_points + 1))
+        self.assertEqual(report.shape, (len(doc.outputs[0].data_sets), sim.number_of_points + 1))
         numpy.testing.assert_equal(
             report.loc['data_set_time', :].to_numpy(),
             numpy.linspace(sim.output_start_time, sim.output_end_time, sim.number_of_points + 1),
@@ -324,9 +325,3 @@ class TestCase(unittest.TestCase):
             archive_filename, out_dir, docker_image, environment=env, pull_docker_image=False)
 
         self._assert_combine_archive_outputs(doc, out_dir)
-
-    def assert_outputs_created(self, dirname):
-        name = "BIOMD0000000297"
-        self.assertEqual(set(os.listdir(dirname)), set(['ex1', 'ex2']))
-        self.assertEqual(set(os.listdir(os.path.join(dirname, 'ex1'))), set([name]))
-        self.assertEqual(set(os.listdir(os.path.join(dirname, 'ex2'))), set([name]))

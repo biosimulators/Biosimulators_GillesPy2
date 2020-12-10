@@ -65,8 +65,8 @@ jobs:
           OWNER_REPO=$(echo $GITHUB_REPOSITORY | tr '[:upper:]' '[:lower:]')
 
           docker build \
-            --tag ghcr.io/${ OWNER_REPO }/${ IMAGE_ID }:${ IMAGE_VERSION } \
-            --tag ghcr.io/${ OWNER_REPO }/${ IMAGE_ID }:latest \
+            --tag ghcr.io/${OWNER_REPO}/${IMAGE_ID}:${IMAGE_VERSION} \
+            --tag ghcr.io/${OWNER_REPO}/${IMAGE_ID}:latest \
             .
 
       # test and upload coverage report to Codecov
@@ -213,13 +213,13 @@ jobs:
           OWNER_REPO=$(echo $GITHUB_REPOSITORY | tr '[:upper:]' '[:lower:]')
 
           docker build \
-            --tag ghcr.io/${ OWNER_REPO }/${ IMAGE_ID }:${ IMAGE_VERSION } \
-            --tag ghcr.io/${ OWNER_REPO }/${ IMAGE_ID }:latest \
+            --tag ghcr.io/${OWNER_REPO}/${IMAGE_ID}:${IMAGE_VERSION} \
+            --tag ghcr.io/${OWNER_REPO}/${IMAGE_ID}:latest \
             .
 
           docker login ghcr.io --username ${{ secrets.GHCR_USERNAME }} --password ${{ secrets.GHCR_TOKEN }}
-          docker push ghcr.io/${ OWNER_REPO }/${ IMAGE_ID }:${ IMAGE_VERSION }
-          docker push ghcr.io/${ OWNER_REPO }/${ IMAGE_ID }:latest
+          docker push ghcr.io/${OWNER_REPO}/${IMAGE_ID}:${IMAGE_VERSION}
+          docker push ghcr.io/${OWNER_REPO}/${IMAGE_ID}:latest
 
       # Submit to BioSimulators registry
       - name: Submit to BioSimulators registry

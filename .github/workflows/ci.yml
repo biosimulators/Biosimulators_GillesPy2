@@ -115,12 +115,6 @@ jobs:
 
           echo "::set-output name=version::$version"
 
-      - id: get-version
-        name: Get version of this package
-        run: |
-          version
-          echo "::set-output name=version::${version}"
-
       - id: get-docker-image-tag
         name: Determine Docker image tag
         run: |

@@ -1,8 +1,10 @@
 # Base OS
 FROM python:3.7.9-slim-buster
 
-# metadata
+ARG VERSION=0.1.2
 ARG SIMULATOR_VERSION="1.5.6"
+
+# metadata
 LABEL \
     org.opencontainers.image.title="GillesPy2" \
     org.opencontainers.image.version="${SIMULATOR_VERSION}" \
@@ -15,7 +17,7 @@ LABEL \
     org.opencontainers.image.licenses="GPL-3.0-only" \
     \
     base_image="python:3.7.9-slim-buster" \
-    version="0.1.2" \
+    version="${VERSION}" \
     software="gillespy2" \
     software.version="${SIMULATOR_VERSION}" \
     about.summary="Python 3 package for stochastic simulation of biochemical systems" \

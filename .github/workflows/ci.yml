@@ -16,6 +16,7 @@ jobs:
       mainBranch: ${{ steps.get-main-branch.outputs.mainBranch }}
       mainBranchRef: ${{ steps.get-main-branch.outputs.mainBranchRef }}
       mainBranchHeadRevision: ${{ steps.get-main-branch.outputs.mainBranchHeadRevision }}
+      version: ${{ steps.get-version-number.outputs.version }}
       simulatorId: ${{ steps.get-docker-image-tag.outputs.simulatorId }}
       simulatorVersion: ${{ steps.get-docker-image-tag.outputs.simulatorVersion }}
       simulatorName: ${{ steps.get-docker-image-tag.outputs.simulatorName }}
@@ -23,7 +24,6 @@ jobs:
       dockerRegistry: ${{ steps.get-docker-image-tag.outputs.dockerRegistry }}
       release: ${{ steps.determine-if-release-needed.outputs.release }}
       docsChanged: ${{ steps.commit-docs.outputs.docsChanged }}
-      version: ${{ steps.get-version-number.outputs.version }}
     steps:
       - name: Clone repository
         run: |
@@ -101,6 +101,26 @@ jobs:
       #############################################
       ## Build Docker image
       #############################################
+      - id: get-version-number
+        name: Get version number
+        env:
+          TAG: ${{ github.ref }}
+        run: |
+          if [[ "${TAG}" =~ ^refs/tags/ ]]; then
+            version="${TAG/refs\/tags\//}"
+          else
+            versionFileDir=$(find -name _version.py | rev | cut -d / -f 2- | rev)
+            version=$(PYTHONPATH=$versionFileDir python -c "import _version; print(_version.__version__)")
+          fi
+
+          echo "::set-output name=version::$version"
+
+      - id: get-version
+        name: Get version of this package
+        run: |
+          version
+          echo "::set-output name=version::${version}"
+
       - id: get-docker-image-tag
         name: Determine Docker image tag
         run: |
@@ -121,7 +141,12 @@ jobs:
 
       - name: Build Docker image
         run: |
+          REVISION=$(git rev-parse HEAD)
           docker build \
+            --label org.opencontainers.image.source=https://github.com/${{ github.repository }} \
+            --label org.opencontainers.image.revision=${REVISION} \
+            --build-arg VERSION=${{ steps.get-version-number.outputs.version }} \
+            --build-arg SIMULATOR_VERSION=${{ steps.get-docker-image-tag.outputs.simulatorVersion }} \
             --tag ${{ steps.get-docker-image-tag.outputs.dockerImageBaseUrl }}:${{ steps.get-docker-image-tag.outputs.simulatorVersion }} \
             --tag ${{ steps.get-docker-image-tag.outputs.dockerImageBaseUrl }}:latest \
             .
@@ -236,15 +261,6 @@ jobs:
           branch: ${{ steps.get-main-branch.outputs.mainBranch }}
 
       # Create GitHub release
-      - id: get-version-number
-        if: startsWith(github.ref, 'refs/tags/') && steps.determine-if-release-needed.outputs.release == '1'
-        name: Get version number
-        env:
-          TAG: ${{ github.ref }}
-        run: |
-          version="${TAG/refs\/tags\//}"
-          echo "::set-output name=version::$version"
-
       - name: Create GitHub release
         if: startsWith(github.ref, 'refs/tags/') && steps.determine-if-release-needed.outputs.release == '1'
         uses: actions/create-release@v1

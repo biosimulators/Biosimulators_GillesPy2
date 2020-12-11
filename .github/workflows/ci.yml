@@ -61,10 +61,7 @@ jobs:
           jq ".image.url = \"${IMAGE_BASE_URL}:${{ github.event.inputs.simulatorVersion }}\"" biosimulators.json | sponge biosimulators.json
 
           sed -i -E \
-            "s/software\.version=([^ \n]+|\".*?\")/software.version=\"${{ github.event.inputs.simulatorVersion }}\"/" \
-            Dockerfile
-          sed -i -E \
-            "s/org\.opencontainers\.image\.version=([^ \n]+|\".*?\")/org\.opencontainers\.image\.version=\"${{ github.event.inputs.simulatorVersion }}\"/" \
+            "s/SIMULATOR_VERSION=([^ \n]+|\".*?\")/SIMULATOR_VERSION=\"${{ github.event.inputs.simulatorVersion }}\"/" \
             Dockerfile
 
       #############################################

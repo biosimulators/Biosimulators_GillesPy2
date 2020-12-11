@@ -2,9 +2,10 @@
 FROM python:3.7.9-slim-buster
 
 # metadata
+ARG SIMULATOR_VERSION="1.5.6"
 LABEL \
     org.opencontainers.image.title="GillesPy2" \
-    org.opencontainers.image.version="1.5.6" \
+    org.opencontainers.image.version="${SIMULATOR_VERSION}" \
     org.opencontainers.image.description="Python 3 package for stochastic simulation of biochemical systems" \
     org.opencontainers.image.url="https://github.com/StochSS/GillesPy2" \
     org.opencontainers.image.documentation="https://stochss.github.io/GillesPy2/" \
@@ -14,9 +15,9 @@ LABEL \
     org.opencontainers.image.licenses="GPL-3.0-only" \
     \
     base_image="python:3.7.9-slim-buster" \
-    version="0.0.1" \
+    version="0.1.2" \
     software="gillespy2" \
-    software.version="1.5.6" \
+    software.version="${SIMULATOR_VERSION}" \
     about.summary="Python 3 package for stochastic simulation of biochemical systems" \
     about.home="https://github.com/StochSS/GillesPy2" \
     about.documentation="https://stochss.github.io/GillesPy2/" \
@@ -28,6 +29,7 @@ LABEL \
 # Copy code for command-line interface into image and install it
 COPY . /root/Biosimulators_gillespy2
 RUN pip install /root/Biosimulators_gillespy2
+RUN pip install "gillespy2==${SIMULATOR_VERSION}"
 
 # Entrypoint
 ENTRYPOINT ["gillespy2"]

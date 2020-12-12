@@ -170,8 +170,6 @@ class TestCase(unittest.TestCase):
 
             self._assert_combine_archive_outputs(doc, out_dir)
 
-            os.remove(archive_filename)
-
     def _build_combine_archive(self, algorithm=None):
         doc = self._build_sed_doc(algorithm=algorithm)
 
@@ -197,7 +195,8 @@ class TestCase(unittest.TestCase):
             ],
             updated=updated,
         )
-        archive_filename = os.path.join(self.dirname, 'archive.omex')
+        archive_filename = os.path.join(self.dirname,
+                                        'archive.omex' if algorithm is None else 'archive-{}.omex'.format(algorithm.kisao_id))
         CombineArchiveWriter().run(archive, archive_dirname, archive_filename)
 
         return (doc, archive_filename)

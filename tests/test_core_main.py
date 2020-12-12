@@ -14,6 +14,7 @@ from biosimulators_utils.combine.io import CombineArchiveWriter
 from biosimulators_utils.report import data_model as report_data_model
 from biosimulators_utils.report.io import ReportReader
 from biosimulators_utils.simulator.exec import exec_sedml_docs_in_archive_with_containerized_simulator
+from biosimulators_utils.simulator.specs import gen_algorithms_from_specs
 from biosimulators_utils.sedml import data_model as sedml_data_model
 from biosimulators_utils.sedml.io import SedmlSimulationWriter
 from biosimulators_utils.sedml.utils import append_all_nested_children_to_doc
@@ -73,7 +74,7 @@ class TestCase(unittest.TestCase):
 
         self.assertTrue(sorted(variable_results.keys()), sorted([var.id for var in variables]))
         self.assertEqual(variable_results[variables[0].id].shape, (task.simulation.number_of_points + 1,))
-        numpy.testing.assert_equal(
+        numpy.testing.assert_almost_equal(
             variable_results['time'],
             numpy.linspace(task.simulation.output_start_time, task.simulation.output_end_time, task.simulation.number_of_points + 1),
         )
@@ -147,7 +148,7 @@ class TestCase(unittest.TestCase):
 
         self.assertTrue(sorted(variable_results.keys()), sorted([var.id for var in variables]))
         self.assertEqual(variable_results[variables[0].id].shape, (task.simulation.number_of_points + 1,))
-        numpy.testing.assert_equal(
+        numpy.testing.assert_almost_equal(
             variable_results['time'],
             numpy.linspace(task.simulation.output_start_time, task.simulation.output_end_time, task.simulation.number_of_points + 1),
         )
@@ -160,11 +161,23 @@ class TestCase(unittest.TestCase):
 
         self._assert_combine_archive_outputs(doc, out_dir)
 
-    def _build_combine_archive(self):
-        doc = self._build_sed_doc()
+    def test_exec_sedml_docs_in_combine_archive_with_all_algorithms(self):
+        for alg in gen_algorithms_from_specs(os.path.join(os.path.dirname(__file__), '..', 'biosimulators.json')).values():
+            doc, archive_filename = self._build_combine_archive(algorithm=alg)
+
+            out_dir = os.path.join(self.dirname, alg.kisao_id)
+            core.exec_sedml_docs_in_combine_archive(archive_filename, out_dir, report_formats=[report_data_model.ReportFormat.h5])
+
+            self._assert_combine_archive_outputs(doc, out_dir)
+
+            os.remove(archive_filename)
+
+    def _build_combine_archive(self, algorithm=None):
+        doc = self._build_sed_doc(algorithm=algorithm)
 
         archive_dirname = os.path.join(self.dirname, 'archive')
-        os.mkdir(archive_dirname)
+        if not os.path.isdir(archive_dirname):
+            os.mkdir(archive_dirname)
 
         model_filename = os.path.join(archive_dirname, 'model_1.xml')
         shutil.copyfile(
@@ -189,7 +202,18 @@ class TestCase(unittest.TestCase):
 
         return (doc, archive_filename)
 
-    def _build_sed_doc(self):
+    def _build_sed_doc(self, algorithm=None):
+        if algorithm is None:
+            algorithm = sedml_data_model.Algorithm(
+                kisao_id='KISAO_0000029',
+                changes=[
+                    sedml_data_model.AlgorithmParameterChange(
+                        kisao_id='KISAO_0000488',
+                        new_value='10',
+                    ),
+                ],
+            )
+
         doc = sedml_data_model.SedDocument()
         doc.models.append(sedml_data_model.Model(
             id='model_1',
@@ -199,18 +223,10 @@ class TestCase(unittest.TestCase):
         ))
         doc.simulations.append(sedml_data_model.UniformTimeCourseSimulation(
             id='sim_1_time_course',
-            algorithm=sedml_data_model.Algorithm(
-                kisao_id='KISAO_0000029',
-                changes=[
-                    sedml_data_model.AlgorithmParameterChange(
-                        kisao_id='KISAO_0000488',
-                        new_value='10',
-                    ),
-                ],
-            ),
+            algorithm=algorithm,
             initial_time=0.,
-            output_start_time=10.,
-            output_end_time=20.,
+            output_start_time=0.1,
+            output_end_time=0.2,
             number_of_points=20,
         ))
         doc.tasks.append(sedml_data_model.Task(
@@ -289,7 +305,7 @@ class TestCase(unittest.TestCase):
 
         sim = doc.tasks[0].simulation
         self.assertEqual(report.shape, (len(doc.outputs[0].data_sets), sim.number_of_points + 1))
-        numpy.testing.assert_equal(
+        numpy.testing.assert_almost_equal(
             report.loc['data_set_time', :].to_numpy(),
             numpy.linspace(sim.output_start_time, sim.output_end_time, sim.number_of_points + 1),
         )
@@ -360,4 +376,4 @@ class TestCase(unittest.TestCase):
 
         report = ReportReader().run(self.dirname, 'ex1/BIOMD0000000297.sedml/two_species', format=report_data_model.ReportFormat.h5)
         self.assertEqual(sorted(report.index), sorted(['data_set_time', 'data_set_Cln4', 'data_set_Swe13']))
-        numpy.testing.assert_equal(report.loc['data_set_time', :], numpy.linspace(0., 1., 10 + 1))
+        numpy.testing.assert_almost_equal(report.loc['data_set_time', :], numpy.linspace(0., 1., 10 + 1))

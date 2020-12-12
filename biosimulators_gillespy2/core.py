@@ -9,6 +9,7 @@
 
 from .data_model import kisao_algorithm_map
 from biosimulators_utils.combine.exec import exec_sedml_docs_in_archive
+from biosimulators_utils.plot.data_model import PlotFormat  # noqa: F401
 from biosimulators_utils.report.data_model import ReportFormat, DataGeneratorVariableResults  # noqa: F401
 from biosimulators_utils.sedml.data_model import (Task, ModelLanguage, UniformTimeCourseSimulation,  # noqa: F401
                                                   DataGeneratorVariable, DataGeneratorVariableSymbol)
@@ -23,7 +24,9 @@ __all__ = [
 ]
 
 
-def exec_sedml_docs_in_combine_archive(archive_filename, out_dir, report_formats=None):
+def exec_sedml_docs_in_combine_archive(archive_filename, out_dir,
+                                       report_formats=None, plot_formats=None,
+                                       bundle_outputs=None, keep_individual_outputs=None):
     """ Execute the SED tasks defined in a COMBINE/OMEX archive and save the outputs
 
     Args:
@@ -35,11 +38,17 @@ def exec_sedml_docs_in_combine_archive(archive_filename, out_dir, report_formats
             * HDF5: directory in which to save a single HDF5 file (``{ out_dir }/reports.h5``),
               with reports at keys ``{ relative-path-to-SED-ML-file-within-archive }/{ report.id }`` within the HDF5 file
 
-        report_formats (:obj:`list` of :obj:`ReportFormat`, optional): report format (e.g., CSV or HDF5)
+        report_formats (:obj:`list` of :obj:`ReportFormat`, optional): report format (e.g., csv or h5)
+        plot_formats (:obj:`list` of :obj:`PlotFormat`, optional): report format (e.g., pdf)
+        bundle_outputs (:obj:`bool`, optional): if :obj:`True`, bundle outputs into archives for reports and plots
+        keep_individual_outputs (:obj:`bool`, optional): if :obj:`True`, keep individual output files
     """
     exec_sedml_docs_in_archive(archive_filename, exec_sed_task, out_dir,
                                apply_xml_model_changes=True,
-                               report_formats=report_formats)
+                               report_formats=report_formats,
+                               plot_formats=plot_formats,
+                               bundle_outputs=bundle_outputs,
+                               keep_individual_outputs=keep_individual_outputs)
 
 
 def exec_sed_task(task, variables):

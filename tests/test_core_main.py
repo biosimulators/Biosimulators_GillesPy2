@@ -156,7 +156,7 @@ class TestCase(unittest.TestCase):
         doc, archive_filename = self._build_combine_archive()
 
         out_dir = os.path.join(self.dirname, 'out')
-        core.exec_sedml_docs_in_combine_archive(archive_filename, out_dir, report_formats=[report_data_model.ReportFormat.HDF5])
+        core.exec_sedml_docs_in_combine_archive(archive_filename, out_dir, report_formats=[report_data_model.ReportFormat.h5])
 
         self._assert_combine_archive_outputs(doc, out_dir)
 
@@ -283,7 +283,7 @@ class TestCase(unittest.TestCase):
     def _assert_combine_archive_outputs(self, doc, out_dir):
         self.assertEqual(os.listdir(out_dir), ['reports.h5'])
 
-        report = ReportReader().run(out_dir, 'sim_1.sedml/report_1', format=report_data_model.ReportFormat.HDF5)
+        report = ReportReader().run(out_dir, 'sim_1.sedml/report_1', format=report_data_model.ReportFormat.h5)
 
         self.assertEqual(sorted(report.index), sorted([d.id for d in doc.outputs[0].data_sets]))
 
@@ -313,7 +313,7 @@ class TestCase(unittest.TestCase):
 
     def _get_combine_archive_exec_env(self):
         return {
-            'REPORT_FORMATS': 'HDF5'
+            'REPORT_FORMATS': 'h5'
         }
 
     def test_exec_sedml_docs_in_combine_archive_with_docker_image(self):
@@ -329,12 +329,22 @@ class TestCase(unittest.TestCase):
 
     def test_more_complex_archive(self):
         archive_filename = os.path.join(os.path.dirname(__file__), 'fixtures', 'BIOMD0000000297.edited.omex')
-        core.exec_sedml_docs_in_combine_archive(archive_filename, self.dirname, report_formats=[
-            report_data_model.ReportFormat.CSV,
-            report_data_model.ReportFormat.HDF5,
-        ])
+        core.exec_sedml_docs_in_combine_archive(archive_filename, self.dirname,
+                                                report_formats=[
+                                                    report_data_model.ReportFormat.csv,
+                                                    report_data_model.ReportFormat.h5,
+                                                ],
+                                                plot_formats=[],
+                                                bundle_outputs=True,
+                                                keep_individual_outputs=True)
 
-        self.assertEqual(set(os.listdir(self.dirname)), set(['reports.zip', 'reports.h5']))
+        self.assertEqual(set(os.listdir(self.dirname)), set(['reports.zip', 'reports.h5', 'ex1', 'ex2']))
+        self.assertEqual(set(os.listdir(os.path.join(self.dirname, 'ex1'))), set(['BIOMD0000000297.sedml']))
+        self.assertEqual(set(os.listdir(os.path.join(self.dirname, 'ex2'))), set(['BIOMD0000000297.sedml']))
+        self.assertEqual(set(os.listdir(os.path.join(self.dirname, 'ex1', 'BIOMD0000000297.sedml'))),
+                         set(['two_species.csv', 'three_species.csv']))
+        self.assertEqual(set(os.listdir(os.path.join(self.dirname, 'ex2', 'BIOMD0000000297.sedml'))),
+                         set(['one_species.csv', 'four_species.csv']))
 
         archive = ArchiveReader().run(os.path.join(self.dirname, 'reports.zip'))
 
@@ -348,6 +358,6 @@ class TestCase(unittest.TestCase):
             ]),
         )
 
-        report = ReportReader().run(self.dirname, 'ex1/BIOMD0000000297.sedml/two_species', format=report_data_model.ReportFormat.HDF5)
+        report = ReportReader().run(self.dirname, 'ex1/BIOMD0000000297.sedml/two_species', format=report_data_model.ReportFormat.h5)
         self.assertEqual(sorted(report.index), sorted(['data_set_time', 'data_set_Cln4', 'data_set_Swe13']))
         numpy.testing.assert_equal(report.loc['data_set_time', :], numpy.linspace(0., 1., 10 + 1))

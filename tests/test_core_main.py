@@ -66,7 +66,7 @@ class TestCase(unittest.TestCase):
         variables = [
             sedml_data_model.DataGeneratorVariable(id='time', symbol=sedml_data_model.DataGeneratorVariableSymbol.time),
             sedml_data_model.DataGeneratorVariable(id='BE', target="/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id='BE']"),
-            sedml_data_model.DataGeneratorVariable(id='BUD', target='/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id="BUD"]'),
+            sedml_data_model.DataGeneratorVariable(id='Cdh1', target='/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id="Cdh1"]'),
             sedml_data_model.DataGeneratorVariable(id='Cdc20', target="/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id='Cdc20']"),
         ]
 
@@ -140,7 +140,7 @@ class TestCase(unittest.TestCase):
         variables = [
             sedml_data_model.DataGeneratorVariable(id='time', symbol=sedml_data_model.DataGeneratorVariableSymbol.time),
             sedml_data_model.DataGeneratorVariable(id='BE', target="/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id='BE']"),
-            sedml_data_model.DataGeneratorVariable(id='BUD', target='/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id="BUD"]'),
+            sedml_data_model.DataGeneratorVariable(id='Cdh1', target='/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id="Cdh1"]'),
             sedml_data_model.DataGeneratorVariable(id='Cdc20', target="/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id='Cdc20']"),
         ]
 
@@ -270,16 +270,16 @@ class TestCase(unittest.TestCase):
             math='var_BE',
         ))
         doc.data_generators.append(sedml_data_model.DataGenerator(
-            id='data_gen_BUD',
+            id='data_gen_Cdh1',
             variables=[
                 sedml_data_model.DataGeneratorVariable(
-                    id='var_BUD',
-                    target='/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id="BUD"]',
+                    id='var_Cdh1',
+                    target='/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id="Cdh1"]',
                     task=doc.tasks[0],
                     model=doc.models[0],
                 ),
             ],
-            math='var_BUD',
+            math='var_Cdh1',
         ))
         doc.data_generators.append(sedml_data_model.DataGenerator(
             id='data_gen_Cdc20',
@@ -298,7 +298,7 @@ class TestCase(unittest.TestCase):
             data_sets=[
                 sedml_data_model.DataSet(id='data_set_time', label='Time', data_generator=doc.data_generators[0]),
                 sedml_data_model.DataSet(id='data_set_BE', label='BE', data_generator=doc.data_generators[1]),
-                sedml_data_model.DataSet(id='data_set_BUD', label='BUD', data_generator=doc.data_generators[2]),
+                sedml_data_model.DataSet(id='data_set_Cdh1', label='Cdh1', data_generator=doc.data_generators[2]),
                 sedml_data_model.DataSet(id='data_set_Cdc20', label='Cdc20', data_generator=doc.data_generators[3]),
             ],
         ))

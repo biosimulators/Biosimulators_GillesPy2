@@ -17,7 +17,6 @@ from biosimulators_utils.sedml import validation
 import gillespy2
 import math
 import numpy
-import re
 
 __all__ = [
     'exec_sedml_docs_in_combine_archive', 'exec_sed_task',

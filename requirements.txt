@@ -1,4 +1,4 @@
-biosimulators_utils >= 0.1.2
+biosimulators_utils >= 0.1.5
 gillespy2
 lxml
 numpy

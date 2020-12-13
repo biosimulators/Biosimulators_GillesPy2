@@ -72,6 +72,7 @@ def exec_sed_task(task, variables):
     validation.validate_simulation_type(task.simulation, (UniformTimeCourseSimulation, ))
     validation.validate_uniform_time_course_simulation(task.simulation)
     validation.validate_data_generator_variables(variables)
+    validation.validate_data_generator_variable_xpaths(variables, task.model.source)
 
     # Read the SBML-encoded model located at `task.model.source`
     model, errors = gillespy2.import_SBML(task.model.source)
@@ -119,29 +120,23 @@ def exec_sed_task(task, variables):
     number_of_points = int(number_of_points)
     model.timespan(numpy.linspace(simulation.initial_time, simulation.output_end_time, number_of_points + 1))
 
-    # Simulate the model from ``simulation.start_time`` to ``simulation.output_end_time``
-    # and record ``simulation.number_of_points`` + 1 time points
-    results_dict = model.run(solver, **algorithm.solver_args, **algorithm_params)[0]
+    # determine allowed variable targets
+    variable_target_to_id_map = {}
+    for id in model.get_all_species().keys():
+        variable_target_to_id_map["/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id='{}']".format(id)] = id
+        variable_target_to_id_map['/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id="{}"]'.format(id)] = id
+        variable_target_to_id_map["/sbml:sbml/sbml:model/sbml:listOfParameters/sbml:parameter[@id='{}']".format(id)] = id
+        variable_target_to_id_map['/sbml:sbml/sbml:model/sbml:listOfParameters/sbml:parameter[@id="{}"]'.format(id)] = id
 
-    # transform the results to an instance of :obj:`DataGeneratorVariableResults`
-    variable_results = DataGeneratorVariableResults()
     unpredicted_symbols = []
     unpredicted_targets = []
     for variable in variables:
         if variable.symbol:
-            if variable.symbol == DataGeneratorVariableSymbol.time:
-                variable_results[variable.id] = results_dict['time'][-(simulation.number_of_points + 1):]
-            else:
+            if variable.symbol != DataGeneratorVariableSymbol.time:
                 unpredicted_symbols.append(variable.symbol)
 
-        elif variable.target:
-            match = (
-                re.match(r"^/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species\[@id='(.*?)'\]$", variable.target) or
-                re.match(r'^/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species\[@id="(.*?)"\]$', variable.target)
-            )
-            if match and match.group(1) in results_dict:
-                variable_results[variable.id] = results_dict[match.group(1)][-(simulation.number_of_points + 1):]
-            else:
+        else:
+            if variable.target not in variable_target_to_id_map:
                 unpredicted_targets.append(variable.target)
 
     if unpredicted_symbols:
@@ -158,10 +153,22 @@ def exec_sed_task(task, variables):
                 '\n  - '.join(sorted(unpredicted_targets)),
             ),
             'Targets must be one of the following:\n  - {}'.format(
-                '\n  - '.join("/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id='{}']".format(id)
-                              for id in sorted(results_dict.keys()) if id != 'time'),
-            )
+                '\n  - '.join(sorted(variable_target_to_id_map.keys())),
+            ),
         ]))
+
+    # Simulate the model from ``simulation.start_time`` to ``simulation.output_end_time``
+    # and record ``simulation.number_of_points`` + 1 time points
+    results_dict = model.run(solver, **algorithm.solver_args, **algorithm_params)[0]
+
+    # transform the results to an instance of :obj:`DataGeneratorVariableResults`
+    variable_results = DataGeneratorVariableResults()
+    for variable in variables:
+        if variable.symbol:
+            variable_results[variable.id] = results_dict['time'][-(simulation.number_of_points + 1):]
+
+        elif variable.target:
+            variable_results[variable.id] = results_dict[variable_target_to_id_map[variable.target]][-(simulation.number_of_points + 1):]
 
     # return results
     return variable_results

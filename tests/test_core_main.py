@@ -37,7 +37,8 @@ class TestCase(unittest.TestCase):
         self.dirname = tempfile.mkdtemp()
 
     def tearDown(self):
-        shutil.rmtree(self.dirname)
+        print(self.dirname)
+        # shutil.rmtree(self.dirname)
 
     def test_exec_sed_task(self):
         task = sedml_data_model.Task(
@@ -84,7 +85,11 @@ class TestCase(unittest.TestCase):
         task.model = sedml_data_model.Model()
         task.model.source = os.path.join(self.dirname, 'valid-model.xml')
         with open(task.model.source, 'w') as file:
-            file.write('!')
+            file.write('<?xml version="1.0" encoding="UTF-8" standalone="no"?>')
+            file.write('<sbml2 xmlns="http://www.sbml.org/sbml/level2/version4" level="2" version="4">')
+            file.write('  <model id="model">')
+            file.write('  </model>')
+            file.write('</sbml2>')
         task.model.language = sedml_data_model.ModelLanguage.SBML
         task.model.changes = []
         task.simulation = sedml_data_model.UniformTimeCourseSimulation(
@@ -132,7 +137,14 @@ class TestCase(unittest.TestCase):
             core.exec_sed_task(task, variables)
         variables = [
             sedml_data_model.DataGeneratorVariable(symbol=sedml_data_model.DataGeneratorVariableSymbol.time),
-            sedml_data_model.DataGeneratorVariable(target='--undefined--'),
+            sedml_data_model.DataGeneratorVariable(target='/invalid:target'),
+        ]
+
+        with self.assertRaisesRegex(ValueError, 'XPaths must reference unique objects.'):
+            core.exec_sed_task(task, variables)
+        variables = [
+            sedml_data_model.DataGeneratorVariable(symbol=sedml_data_model.DataGeneratorVariableSymbol.time),
+            sedml_data_model.DataGeneratorVariable(id='BE', target="/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@name='BE']"),
         ]
 
         with self.assertRaisesRegex(ValueError, 'Targets must be'):

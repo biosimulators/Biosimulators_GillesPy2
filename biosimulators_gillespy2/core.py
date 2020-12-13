@@ -72,7 +72,7 @@ def exec_sed_task(task, variables):
     validation.validate_simulation_type(task.simulation, (UniformTimeCourseSimulation, ))
     validation.validate_uniform_time_course_simulation(task.simulation)
     validation.validate_data_generator_variables(variables)
-    validation.validate_data_generator_variable_xpaths(variables, task.model.source)
+    target_x_paths_ids = validation.validate_data_generator_variable_xpaths(variables, task.model.source, attr='id')
 
     # Read the SBML-encoded model located at `task.model.source`
     model, errors = gillespy2.import_SBML(task.model.source)
@@ -168,7 +168,7 @@ def exec_sed_task(task, variables):
             variable_results[variable.id] = results_dict['time'][-(simulation.number_of_points + 1):]
 
         elif variable.target:
-            variable_results[variable.id] = results_dict[variable_target_to_id_map[variable.target]][-(simulation.number_of_points + 1):]
+            variable_results[variable.id] = results_dict[target_x_paths_ids[variable.target]][-(simulation.number_of_points + 1):]
 
     # return results
     return variable_results

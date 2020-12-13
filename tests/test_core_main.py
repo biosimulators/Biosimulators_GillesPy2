@@ -144,10 +144,10 @@ class TestCase(unittest.TestCase):
             core.exec_sed_task(task, variables)
         variables = [
             sedml_data_model.DataGeneratorVariable(symbol=sedml_data_model.DataGeneratorVariableSymbol.time),
-            sedml_data_model.DataGeneratorVariable(id='BE', target="/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@name='BE']"),
+            sedml_data_model.DataGeneratorVariable(id='BE', target="/sbml:sbml/sbml:model/sbml:listOfReactions/sbml:reaction[@id='R1']"),
         ]
 
-        with self.assertRaisesRegex(ValueError, 'Targets must be'):
+        with self.assertRaisesRegex(ValueError, 'Targets must have'):
             core.exec_sed_task(task, variables)
         variables = [
             sedml_data_model.DataGeneratorVariable(id='time', symbol=sedml_data_model.DataGeneratorVariableSymbol.time),

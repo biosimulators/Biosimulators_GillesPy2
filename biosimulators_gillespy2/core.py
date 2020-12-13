@@ -120,13 +120,7 @@ def exec_sed_task(task, variables):
     model.timespan(numpy.linspace(simulation.initial_time, simulation.output_end_time, number_of_points + 1))
 
     # determine allowed variable targets
-    variable_target_to_id_map = {}
-    for id in model.get_all_species().keys():
-        variable_target_to_id_map["/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id='{}']".format(id)] = id
-        variable_target_to_id_map['/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id="{}"]'.format(id)] = id
-        variable_target_to_id_map["/sbml:sbml/sbml:model/sbml:listOfParameters/sbml:parameter[@id='{}']".format(id)] = id
-        variable_target_to_id_map['/sbml:sbml/sbml:model/sbml:listOfParameters/sbml:parameter[@id="{}"]'.format(id)] = id
-
+    predicted_ids = list(model.get_all_species().keys())
     unpredicted_symbols = []
     unpredicted_targets = []
     for variable in variables:
@@ -135,7 +129,7 @@ def exec_sed_task(task, variables):
                 unpredicted_symbols.append(variable.symbol)
 
         else:
-            if variable.target not in variable_target_to_id_map:
+            if target_x_paths_ids[variable.target] not in predicted_ids:
                 unpredicted_targets.append(variable.target)
 
     if unpredicted_symbols:
@@ -151,8 +145,8 @@ def exec_sed_task(task, variables):
             'The following variable targets could not be recorded:\n  - {}\n\n'.format(
                 '\n  - '.join(sorted(unpredicted_targets)),
             ),
-            'Targets must be one of the following:\n  - {}'.format(
-                '\n  - '.join(sorted(variable_target_to_id_map.keys())),
+            'Targets must have one of the following ids:\n  - {}'.format(
+                '\n  - '.join(sorted(predicted_ids)),
             ),
         ]))
 

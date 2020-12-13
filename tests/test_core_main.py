@@ -157,7 +157,13 @@ class TestCase(unittest.TestCase):
         doc, archive_filename = self._build_combine_archive()
 
         out_dir = os.path.join(self.dirname, 'out')
-        core.exec_sedml_docs_in_combine_archive(archive_filename, out_dir, report_formats=[report_data_model.ReportFormat.h5])
+        core.exec_sedml_docs_in_combine_archive(archive_filename, out_dir,
+                                                report_formats=[
+                                                    report_data_model.ReportFormat.h5,
+                                                    report_data_model.ReportFormat.csv,
+                                                ],
+                                                bundle_outputs=True,
+                                                keep_individual_outputs=True)
 
         self._assert_combine_archive_outputs(doc, out_dir)
 
@@ -166,7 +172,13 @@ class TestCase(unittest.TestCase):
             doc, archive_filename = self._build_combine_archive(algorithm=alg)
 
             out_dir = os.path.join(self.dirname, alg.kisao_id)
-            core.exec_sedml_docs_in_combine_archive(archive_filename, out_dir, report_formats=[report_data_model.ReportFormat.h5])
+            core.exec_sedml_docs_in_combine_archive(archive_filename, out_dir,
+                                                    report_formats=[
+                                                        report_data_model.ReportFormat.h5,
+                                                        report_data_model.ReportFormat.csv,
+                                                    ],
+                                                    bundle_outputs=True,
+                                                    keep_individual_outputs=True)
 
             self._assert_combine_archive_outputs(doc, out_dir)
 
@@ -296,8 +308,9 @@ class TestCase(unittest.TestCase):
         return doc
 
     def _assert_combine_archive_outputs(self, doc, out_dir):
-        self.assertEqual(os.listdir(out_dir), ['reports.h5'])
+        self.assertEqual(set(os.listdir(out_dir)), set(['reports.h5', 'reports.zip', 'sim_1.sedml']))
 
+        # check HDF report
         report = ReportReader().run(out_dir, 'sim_1.sedml/report_1', format=report_data_model.ReportFormat.h5)
 
         self.assertEqual(sorted(report.index), sorted([d.id for d in doc.outputs[0].data_sets]))
@@ -308,6 +321,22 @@ class TestCase(unittest.TestCase):
             report.loc['data_set_time', :].to_numpy(),
             numpy.linspace(sim.output_start_time, sim.output_end_time, sim.number_of_points + 1),
         )
+
+        self.assertFalse(numpy.any(numpy.isnan(report)))
+
+        # check CSV report
+        report = ReportReader().run(out_dir, 'sim_1.sedml/report_1', format=report_data_model.ReportFormat.csv)
+
+        self.assertEqual(sorted(report.index), sorted([d.id for d in doc.outputs[0].data_sets]))
+
+        sim = doc.tasks[0].simulation
+        self.assertEqual(report.shape, (len(doc.outputs[0].data_sets), sim.number_of_points + 1))
+        numpy.testing.assert_almost_equal(
+            report.loc['data_set_time', :].to_numpy(),
+            numpy.linspace(sim.output_start_time, sim.output_end_time, sim.number_of_points + 1),
+        )
+
+        self.assertFalse(numpy.any(numpy.isnan(report)))
 
     def test_raw_cli(self):
         with mock.patch('sys.argv', ['', '--help']):
@@ -328,7 +357,7 @@ class TestCase(unittest.TestCase):
 
     def _get_combine_archive_exec_env(self):
         return {
-            'REPORT_FORMATS': 'h5'
+            'REPORT_FORMATS': 'h5,csv'
         }
 
     def test_exec_sedml_docs_in_combine_archive_with_docker_image(self):

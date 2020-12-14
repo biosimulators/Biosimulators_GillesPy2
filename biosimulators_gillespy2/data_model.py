@@ -84,7 +84,10 @@ class AlgorithmParameter(object):
                 solver_args[key] = nested_solver_args
             solver_args = nested_solver_args
 
-        if self.data_type == bool:
+        if not str_value:
+            value = None
+
+        elif self.data_type == bool:
             if str_value.lower() == 'false' or str_value == '0':
                 value = False
             elif str_value.lower() == 'true' or str_value == '1':

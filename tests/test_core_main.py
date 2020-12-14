@@ -8,6 +8,7 @@
 
 from biosimulators_gillespy2 import __main__
 from biosimulators_gillespy2 import core
+from biosimulators_gillespy2.data_model import kisao_algorithm_map
 from biosimulators_utils.archive.io import ArchiveReader
 from biosimulators_utils.combine import data_model as combine_data_model
 from biosimulators_utils.combine.io import CombineArchiveWriter
@@ -20,6 +21,7 @@ from biosimulators_utils.sedml.io import SedmlSimulationWriter
 from biosimulators_utils.sedml.utils import append_all_nested_children_to_doc
 from biosimulators_utils.utils.core import are_lists_equal
 from unittest import mock
+import enum
 import datetime
 import dateutil.tz
 import numpy
@@ -116,7 +118,7 @@ class TestCase(unittest.TestCase):
         with self.assertRaisesRegex(NotImplementedError, 'is not supported. Parameter must'):
             core.exec_sed_task(task, variables)
         task.simulation.algorithm.changes[0].kisao_id = 'KISAO_0000488'
-        task.simulation.algorithm.changes[0].new_value = ''
+        task.simulation.algorithm.changes[0].new_value = 'abc'
 
         with self.assertRaisesRegex(ValueError, 'not a valid integer'):
             core.exec_sed_task(task, variables)
@@ -181,6 +183,41 @@ class TestCase(unittest.TestCase):
 
     def test_exec_sedml_docs_in_combine_archive_with_all_algorithms(self):
         for alg in gen_algorithms_from_specs(os.path.join(os.path.dirname(__file__), '..', 'biosimulators.json')).values():
+            alg_props = kisao_algorithm_map[alg.kisao_id]
+            alg.changes = []
+            for param_kisao_id, param_props in alg_props.parameters.items():
+                new_value = param_props.default
+                if isinstance(new_value, enum.Enum):
+                    new_value = new_value.value
+                if new_value is None:
+                    new_value = ''
+                else:
+                    new_value = str(new_value)
+                alg.changes.append(sedml_data_model.AlgorithmParameterChange(
+                    kisao_id=param_kisao_id,
+                    new_value=new_value,
+                ))
+            doc, archive_filename = self._build_combine_archive(algorithm=alg)
+
+            variables = []
+            for data_gen in doc.data_generators:
+                for var in data_gen.variables:
+                    variables.append(var)
+            doc.tasks[0].model.source = os.path.join(os.path.dirname(__file__), 'fixtures', 'BIOMD0000000297.edited', 'ex1', 'BIOMD0000000297.xml')
+            results = core.exec_sed_task(doc.tasks[0], variables)
+            self.assertEqual(set(results.keys()), set(var.id for var in variables))
+
+            alg.changes = []
+            for param_kisao_id, param_props in alg_props.parameters.items():
+                new_value = param_props.default
+                if isinstance(new_value, enum.Enum):
+                    new_value = new_value.value
+                if new_value is not None:
+                    new_value = str(new_value)
+                    alg.changes.append(sedml_data_model.AlgorithmParameterChange(
+                        kisao_id=param_kisao_id,
+                        new_value=new_value,
+                ))
             doc, archive_filename = self._build_combine_archive(algorithm=alg)
 
             out_dir = os.path.join(self.dirname, alg.kisao_id)

@@ -2,7 +2,7 @@
 
 :Author: Jonathan Karr <karr@mssm.edu>
 :Author: Bilal Shaikh <bilalshaikh42@gmail.com>
-:Date: 2020-08-18
+:Date: 2020-12-13
 :Copyright: 2020, BioSimulators Team
 :License: MIT
 """

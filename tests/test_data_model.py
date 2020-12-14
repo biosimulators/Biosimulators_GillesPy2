@@ -7,7 +7,10 @@
 """
 
 from biosimulators_gillespy2 import data_model
+import enum
 import gillespy2
+import json
+import os
 import unittest
 
 
@@ -84,3 +87,30 @@ class DataModelTestCase(unittest.TestCase):
         solver_args = {}
         with self.assertRaises(NotImplementedError):
             param.set_value(solver_args, 'value')
+
+    def test_data_model_matches_specifications(self):
+        with open(os.path.join(os.path.dirname(__file__), '..', 'biosimulators.json'), 'r') as file:
+            specs = json.load(file)
+
+        self.assertEqual(
+            set(data_model.kisao_algorithm_map.keys()),
+            set(alg_specs['kisaoId']['id'] for alg_specs in specs['algorithms']))
+
+        for alg_specs in specs['algorithms']:
+            alg_props = data_model.kisao_algorithm_map[alg_specs['kisaoId']['id']]
+
+            self.assertEqual(set(alg_props.parameters.keys()), set(param_specs['kisaoId']['id'] for param_specs in alg_specs['parameters']))
+
+            for param_specs in alg_specs['parameters']:
+                param_props = alg_props.parameters[param_specs['kisaoId']['id']]
+
+                param_props_specs_match = (
+                    (param_props.data_type is bool and param_specs['type'] == 'boolean')
+                    or (param_props.data_type is int and param_specs['type'] == 'integer')
+                    or (param_props.data_type is float and param_specs['type'] == 'float')
+                    or (
+                        issubclass(param_props.data_type, enum.Enum) and param_specs['type'] == 'kisaoId'
+                        and set(param_props.data_type.__members__.values()) == set(param_specs['recommendedRange'])
+                    )
+                )
+                self.assertTrue(param_props_specs_match)

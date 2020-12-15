@@ -179,7 +179,6 @@ jobs:
           mkdir -p docs-src/_static
           sphinx-build docs-src docs
 
-
       #############################################
       ## Commit and push new version of simulator
       #############################################
@@ -189,6 +188,7 @@ jobs:
         run: |
           git config --local user.email "biosimulators.daemon@gmail.com"
           git config --local user.name "biosimulatorsdaemon"
+          git config pull.rebase false
           git stash -- biosimulators.json Dockerfile
           git clean -f -d
           git checkout .
@@ -235,12 +235,13 @@ jobs:
         run: |
           git config --local user.email "biosimulators.daemon@gmail.com"
           git config --local user.name "biosimulatorsdaemon"
+          git config pull.rebase false
           git stash
           git checkout ${{ steps.get-main-branch.outputs.mainBranch }}
           git pull
+          set +e
           git stash pop
           git add docs
-          set +e
           git commit -m "Updating compiled documentation"
           git checkout .
           git clean -f -d
@@ -308,7 +309,7 @@ jobs:
             --password ${{ secrets.DOCKER_REGISTRY_TOKEN }}
           docker push ${{ steps.get-docker-image-tag.outputs.dockerImageBaseUrl }}:${{ steps.get-docker-image-tag.outputs.simulatorVersion }}
 
-          if [ "${{ github.event.inputs.simulatorVersionLatest }}" == "true" ]; then
+          if [[ "${{ github.ref }}" =~ ^refs/tags/ ]] || [ "${{ github.event.inputs.simulatorVersionLatest }}" == "true" ]; then
             docker push ${{ steps.get-docker-image-tag.outputs.dockerImageBaseUrl }}:latest
           fi
 

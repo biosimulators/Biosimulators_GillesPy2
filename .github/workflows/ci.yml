@@ -304,7 +304,10 @@ jobs:
             --username ${{ secrets.DOCKER_REGISTRY_USERNAME }} \
             --password ${{ secrets.DOCKER_REGISTRY_TOKEN }}
           docker push ${{ steps.get-docker-image-tag.outputs.dockerImageBaseUrl }}:${{ steps.get-docker-image-tag.outputs.simulatorVersion }}
-          docker push ${{ steps.get-docker-image-tag.outputs.dockerImageBaseUrl }}:latest
+
+          if [[ "${{ github.ref }}" =~ ^refs/tags/ ]]; then
+            docker push ${{ steps.get-docker-image-tag.outputs.dockerImageBaseUrl }}:latest
+          fi
 
       # Submit to BioSimulators registry
       - name: Submit to BioSimulators registry

@@ -28,6 +28,13 @@ LABEL \
     about.tags="systems biology,biochemical networks,dynamical modeling,stochastic simulation,SBML,SED-ML,COMBINE,OMEX,BioSimulators" \
     maintainer="BioSimulators Team <info@biosimulators.org>"
 
+# Install requirements
+RUN apt-get update -y \
+    && apt-get install -y --no-install-recommends \
+        build-essential \
+    && apt-get autoremove -y \
+    && rm -rf /var/lib/apt/lists/*
+
 # Copy code for command-line interface into image and install it
 COPY . /root/Biosimulators_gillespy2
 RUN pip install /root/Biosimulators_gillespy2

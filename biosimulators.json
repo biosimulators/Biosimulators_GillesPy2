@@ -248,7 +248,7 @@
         {
           "namespace": "EDAM",
           "id": "format_3685",
-          "version": null,
+          "version": "L1V3",
           "supportedFeatures": []
         }
       ],
@@ -477,7 +477,7 @@
         {
           "namespace": "EDAM",
           "id": "format_3685",
-          "version": null,
+          "version": "L1V3",
           "supportedFeatures": []
         }
       ],
@@ -694,7 +694,7 @@
         {
           "namespace": "EDAM",
           "id": "format_3685",
-          "version": null,
+          "version": "L1V3",
           "supportedFeatures": []
         }
       ],
@@ -911,7 +911,7 @@
         {
           "namespace": "EDAM",
           "id": "format_3685",
-          "version": null,
+          "version": "L1V3",
           "supportedFeatures": []
         }
       ],
@@ -992,7 +992,7 @@
         {
           "namespace": "EDAM",
           "id": "format_3685",
-          "version": null,
+          "version": "L1V3",
           "supportedFeatures": []
         }
       ],
@@ -1089,7 +1089,7 @@
         {
           "namespace": "EDAM",
           "id": "format_3685",
-          "version": null,
+          "version": "L1V3",
           "supportedFeatures": []
         }
       ],
@@ -1191,7 +1191,7 @@
         {
           "namespace": "EDAM",
           "id": "format_3685",
-          "version": null,
+          "version": "L1V3",
           "supportedFeatures": []
         }
       ],
@@ -1443,7 +1443,7 @@
         {
           "namespace": "EDAM",
           "id": "format_3685",
-          "version": null,
+          "version": "L1V3",
           "supportedFeatures": []
         }
       ],

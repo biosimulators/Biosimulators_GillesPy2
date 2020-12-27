@@ -24,7 +24,7 @@ A simple web application and web service for using GillesPy2 to execute COMBINE/
 
 ### Install Python package
 ```
-pip install git+https://github.com/biosimulators/Biosimulators_GillesPy2
+pip install biosimulators-gillespy2
 ```
 
 ### Install Docker image

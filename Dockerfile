@@ -36,9 +36,11 @@ RUN apt-get update -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy code for command-line interface into image and install it
-COPY . /root/Biosimulators_gillespy2
-RUN pip install /root/Biosimulators_gillespy2
+COPY . /root/Biosimulators_GillesPy2
+RUN pip install /root/Biosimulators_GillesPy2 \
+    && rm -rf /root/Biosimulators_GillesPy2
 RUN pip install "gillespy2==${SIMULATOR_VERSION}"
+ENV MPLBACKEND=PDF
 
 # Entrypoint
 ENTRYPOINT ["gillespy2"]

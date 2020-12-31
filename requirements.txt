@@ -1,4 +1,4 @@
-biosimulators_utils >= 0.1.22
+biosimulators_utils >= 0.1.26
 gillespy2
 lxml # optional dependency of python_libsbml
 numpy

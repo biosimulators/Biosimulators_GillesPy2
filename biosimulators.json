@@ -436,6 +436,16 @@
           ]
         }
       ],
+      "dependentDimensions": [{
+        "namespace": "SIO",
+        "id": "SIO_000418"
+      }],
+      "dependentVariableTargetPatterns": [
+        {
+          "variables": "species concentrations",
+          "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species"
+        }
+      ],
       "availableSoftwareInterfaceTypes": [
         "library",
         "command-line application",
@@ -651,6 +661,16 @@
             "web application",
             "BioSimulators Docker image"
           ]
+        }
+      ],
+      "dependentDimensions": [{
+        "namespace": "SIO",
+        "id": "SIO_000418"
+      }],
+      "dependentVariableTargetPatterns": [
+        {
+          "variables": "species concentrations",
+          "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species"
         }
       ],
       "availableSoftwareInterfaceTypes": [
@@ -870,6 +890,16 @@
           ]
         }
       ],
+      "dependentDimensions": [{
+        "namespace": "SIO",
+        "id": "SIO_000418"
+      }],
+      "dependentVariableTargetPatterns": [
+        {
+          "variables": "species concentrations",
+          "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species"
+        }
+      ],
       "availableSoftwareInterfaceTypes": [
         "library",
         "command-line application",
@@ -957,6 +987,16 @@
             "web application",
             "BioSimulators Docker image"
           ]
+        }
+      ],
+      "dependentDimensions": [{
+        "namespace": "SIO",
+        "id": "SIO_000418"
+      }],
+      "dependentVariableTargetPatterns": [
+        {
+          "variables": "species counts",
+          "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species"
         }
       ],
       "availableSoftwareInterfaceTypes": [
@@ -1054,6 +1094,16 @@
             "web application",
             "BioSimulators Docker image"
           ]
+        }
+      ],
+      "dependentDimensions": [{
+        "namespace": "SIO",
+        "id": "SIO_000418"
+      }],
+      "dependentVariableTargetPatterns": [
+        {
+          "variables": "species counts",
+          "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species"
         }
       ],
       "availableSoftwareInterfaceTypes": [
@@ -1156,6 +1206,16 @@
             "web application",
             "BioSimulators Docker image"
           ]
+        }
+      ],
+      "dependentDimensions": [{
+        "namespace": "SIO",
+        "id": "SIO_000418"
+      }],
+      "dependentVariableTargetPatterns": [
+        {
+          "variables": "species counts",
+          "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species"
         }
       ],
       "availableSoftwareInterfaceTypes": [
@@ -1400,6 +1460,16 @@
             "web application",
             "BioSimulators Docker image"
           ]
+        }
+      ],
+      "dependentDimensions": [{
+        "namespace": "SIO",
+        "id": "SIO_000418"
+      }],
+      "dependentVariableTargetPatterns": [
+        {
+          "variables": "species concentrations",
+          "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species"
         }
       ],
       "availableSoftwareInterfaceTypes": [
@@ -1654,6 +1724,16 @@
           ]
         }
       ],
+      "dependentDimensions": [{
+        "namespace": "SIO",
+        "id": "SIO_000418"
+      }],
+      "dependentVariableTargetPatterns": [
+        {
+          "variables": "species concentrations",
+          "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species"
+        }
+      ],
       "availableSoftwareInterfaceTypes": [
         "library",
         "command-line application",
@@ -1690,6 +1770,7 @@
   "biosimulators": {
     "specificationVersion": "1.0.0",
     "imageVersion": "1.0.0",
-    "validated": false
+    "validated": false,
+    "validationTests": null
   }
 }

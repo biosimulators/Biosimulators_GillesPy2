@@ -121,16 +121,16 @@ def exec_sed_task(task, variables):
 
     # determine allowed variable targets
     predicted_ids = list(model.get_all_species().keys())
-    unpredicted_symbols = []
-    unpredicted_targets = []
+    unpredicted_symbols = set()
+    unpredicted_targets = set()
     for variable in variables:
         if variable.symbol:
             if variable.symbol != DataGeneratorVariableSymbol.time:
-                unpredicted_symbols.append(variable.symbol)
+                unpredicted_symbols.add(variable.symbol)
 
         else:
             if target_x_paths_ids[variable.target] not in predicted_ids:
-                unpredicted_targets.append(variable.target)
+                unpredicted_targets.add(variable.target)
 
     if unpredicted_symbols:
         raise NotImplementedError("".join([

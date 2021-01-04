@@ -39,8 +39,7 @@ class TestCase(unittest.TestCase):
         self.dirname = tempfile.mkdtemp()
 
     def tearDown(self):
-        print(self.dirname)
-        # shutil.rmtree(self.dirname)
+        shutil.rmtree(self.dirname)
 
     def test_exec_sed_task(self):
         task = sedml_data_model.Task(

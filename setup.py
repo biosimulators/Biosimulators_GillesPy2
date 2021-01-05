@@ -30,7 +30,7 @@ setuptools.setup(
     long_description=md.long_description,
     url="https://github.com/biosimulators/Biosimulators_GillesPy2",
     download_url="https://github.com/biosimulators/Biosimulators_GillesPy2",
-    author='Biosimulators Team',
+    author='BioSimulators Team',
     author_email="info@biosimulators.org",
     license="MIT",
     keywords='',

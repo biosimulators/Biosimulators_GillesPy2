@@ -11,12 +11,14 @@ from .data_model import kisao_algorithm_map
 from biosimulators_utils.combine.exec import exec_sedml_docs_in_archive
 from biosimulators_utils.plot.data_model import PlotFormat  # noqa: F401
 from biosimulators_utils.report.data_model import ReportFormat, DataGeneratorVariableResults  # noqa: F401
+from biosimulators_utils.sedml import validation
 from biosimulators_utils.sedml.data_model import (Task, ModelLanguage, UniformTimeCourseSimulation,  # noqa: F401
                                                   DataGeneratorVariable, DataGeneratorVariableSymbol)
-from biosimulators_utils.sedml import validation
+from biosimulators_utils.sedml.exec import exec_sed_doc
 import gillespy2
 import math
 import numpy
+import functools
 
 __all__ = [
     'exec_sedml_docs_in_combine_archive', 'exec_sed_task',
@@ -42,7 +44,8 @@ def exec_sedml_docs_in_combine_archive(archive_filename, out_dir,
         bundle_outputs (:obj:`bool`, optional): if :obj:`True`, bundle outputs into archives for reports and plots
         keep_individual_outputs (:obj:`bool`, optional): if :obj:`True`, keep individual output files
     """
-    exec_sedml_docs_in_archive(archive_filename, exec_sed_task, out_dir,
+    sed_doc_executer = functools.partial(exec_sed_doc, exec_sed_task)
+    exec_sedml_docs_in_archive(sed_doc_executer, archive_filename, out_dir,
                                apply_xml_model_changes=True,
                                report_formats=report_formats,
                                plot_formats=plot_formats,

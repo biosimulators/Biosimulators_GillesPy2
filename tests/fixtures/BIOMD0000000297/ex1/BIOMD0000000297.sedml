@@ -36,7 +36,7 @@
       <math xmlns="http://www.w3.org/1998/Math/MathML">
         <ci> p1_Cln_task1 </ci>
       </math>
-    </dataGenerator>   
+    </dataGenerator>
     <dataGenerator id="PSwe1M_1_task1" name="[PSwe1M]">
       <listOfVariables>
         <variable id="p3_PSwe1M_task1" name="PSwe1M" target="/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id=&apos;PSwe1M&apos;]" taskReference="task1"/>
@@ -60,7 +60,7 @@
       <math xmlns="http://www.w3.org/1998/Math/MathML">
         <ci> p3_Swe1_task1 </ci>
       </math>
-    </dataGenerator>    
+    </dataGenerator>
   </listOfDataGenerators>
   <listOfOutputs>
     <plot2D id="plot_1_task1" name="f3a">

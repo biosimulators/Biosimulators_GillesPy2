@@ -40,7 +40,8 @@ COPY . /root/Biosimulators_GillesPy2
 RUN pip install /root/Biosimulators_GillesPy2 \
     && rm -rf /root/Biosimulators_GillesPy2
 RUN pip install "gillespy2==${SIMULATOR_VERSION}"
-ENV MPLBACKEND=PDF
+ENV VERBOSE=0 \
+    MPLBACKEND=PDF
 
 # Entrypoint
 ENTRYPOINT ["gillespy2"]

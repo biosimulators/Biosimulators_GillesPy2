@@ -12,6 +12,7 @@ from biosimulators_gillespy2.data_model import kisao_algorithm_map
 from biosimulators_utils.archive.io import ArchiveReader
 from biosimulators_utils.combine import data_model as combine_data_model
 from biosimulators_utils.combine.io import CombineArchiveWriter
+from biosimulators_utils.log.data_model import TaskLog
 from biosimulators_utils.report import data_model as report_data_model
 from biosimulators_utils.report.io import ReportReader
 from biosimulators_utils.simulator.exec import exec_sedml_docs_in_archive_with_containerized_simulator
@@ -72,7 +73,7 @@ class TestCase(unittest.TestCase):
             sedml_data_model.DataGeneratorVariable(id='Cdc20', target="/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id='Cdc20']"),
         ]
 
-        variable_results = core.exec_sed_task(task, variables)
+        variable_results, _ = core.exec_sed_task(task, variables, TaskLog())
 
         self.assertTrue(sorted(variable_results.keys()), sorted([var.id for var in variables]))
         self.assertEqual(variable_results[variables[0].id].shape, (task.simulation.number_of_points + 1,))
@@ -104,52 +105,52 @@ class TestCase(unittest.TestCase):
         variables = []
 
         with self.assertRaisesRegex(ValueError, 'could not be imported'):
-            core.exec_sed_task(task, variables)
+            core.exec_sed_task(task, variables, TaskLog())
         task.model.source = os.path.join(os.path.dirname(__file__), 'fixtures', 'BIOMD0000000297.edited', 'ex1', 'BIOMD0000000297.xml')
 
         with self.assertRaisesRegex(NotImplementedError, 'is not supported. Algorithm must'):
-            core.exec_sed_task(task, variables)
+            core.exec_sed_task(task, variables, TaskLog())
         task.simulation.algorithm.kisao_id = 'KISAO_0000029'
         task.simulation.algorithm.changes = [
             sedml_data_model.AlgorithmParameterChange(kisao_id='KISAO_0000000'),
         ]
 
         with self.assertRaisesRegex(NotImplementedError, 'is not supported. Parameter must'):
-            core.exec_sed_task(task, variables)
+            core.exec_sed_task(task, variables, TaskLog())
         task.simulation.algorithm.changes[0].kisao_id = 'KISAO_0000488'
         task.simulation.algorithm.changes[0].new_value = 'abc'
 
         with self.assertRaisesRegex(ValueError, 'not a valid integer'):
-            core.exec_sed_task(task, variables)
+            core.exec_sed_task(task, variables, TaskLog())
         task.simulation.algorithm.changes[0].new_value = '10'
 
         with self.assertRaisesRegex(NotImplementedError, 'is not supported. Initial time must be 0'):
-            core.exec_sed_task(task, variables)
+            core.exec_sed_task(task, variables, TaskLog())
         task.simulation.initial_time = 0.
 
         with self.assertRaisesRegex(NotImplementedError, 'must specify an integer'):
-            core.exec_sed_task(task, variables)
+            core.exec_sed_task(task, variables, TaskLog())
         task.simulation.output_end_time = 20.
         variables = [
             sedml_data_model.DataGeneratorVariable(symbol='unsupported')
         ]
 
         with self.assertRaisesRegex(NotImplementedError, 'Symbols must be'):
-            core.exec_sed_task(task, variables)
+            core.exec_sed_task(task, variables, TaskLog())
         variables = [
             sedml_data_model.DataGeneratorVariable(symbol=sedml_data_model.DataGeneratorVariableSymbol.time),
             sedml_data_model.DataGeneratorVariable(target='/invalid:target'),
         ]
 
         with self.assertRaisesRegex(ValueError, 'XPaths must reference unique objects.'):
-            core.exec_sed_task(task, variables)
+            core.exec_sed_task(task, variables, TaskLog())
         variables = [
             sedml_data_model.DataGeneratorVariable(symbol=sedml_data_model.DataGeneratorVariableSymbol.time),
             sedml_data_model.DataGeneratorVariable(id='BE', target="/sbml:sbml/sbml:model/sbml:listOfReactions/sbml:reaction[@id='R1']"),
         ]
 
         with self.assertRaisesRegex(ValueError, 'Targets must have'):
-            core.exec_sed_task(task, variables)
+            core.exec_sed_task(task, variables, TaskLog())
         variables = [
             sedml_data_model.DataGeneratorVariable(id='time', symbol=sedml_data_model.DataGeneratorVariableSymbol.time),
             sedml_data_model.DataGeneratorVariable(id='BE', target="/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id='BE']"),
@@ -157,7 +158,7 @@ class TestCase(unittest.TestCase):
             sedml_data_model.DataGeneratorVariable(id='Cdc20', target="/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id='Cdc20']"),
         ]
 
-        variable_results = core.exec_sed_task(task, variables)
+        variable_results, _ = core.exec_sed_task(task, variables, TaskLog())
 
         self.assertTrue(sorted(variable_results.keys()), sorted([var.id for var in variables]))
         self.assertEqual(variable_results[variables[0].id].shape, (task.simulation.number_of_points + 1,))
@@ -202,8 +203,9 @@ class TestCase(unittest.TestCase):
             for data_gen in doc.data_generators:
                 for var in data_gen.variables:
                     variables.append(var)
-            doc.tasks[0].model.source = os.path.join(os.path.dirname(__file__), 'fixtures', 'BIOMD0000000297.edited', 'ex1', 'BIOMD0000000297.xml')
-            results = core.exec_sed_task(doc.tasks[0], variables)
+            doc.tasks[0].model.source = os.path.join(os.path.dirname(__file__), 
+                'fixtures', 'BIOMD0000000297.edited', 'ex1', 'BIOMD0000000297.xml')
+            results, _ = core.exec_sed_task(doc.tasks[0], variables, TaskLog())
             self.assertEqual(set(results.keys()), set(var.id for var in variables))
 
             alg.changes = []

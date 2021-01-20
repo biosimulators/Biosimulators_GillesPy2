@@ -67,10 +67,10 @@ class TestCase(unittest.TestCase):
         )
 
         variables = [
-            sedml_data_model.DataGeneratorVariable(id='time', symbol=sedml_data_model.DataGeneratorVariableSymbol.time),
-            sedml_data_model.DataGeneratorVariable(id='BE', target="/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id='BE']"),
-            sedml_data_model.DataGeneratorVariable(id='Cdh1', target='/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id="Cdh1"]'),
-            sedml_data_model.DataGeneratorVariable(id='Cdc20', target="/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id='Cdc20']"),
+            sedml_data_model.Variable(id='time', symbol=sedml_data_model.Symbol.time, task=task),
+            sedml_data_model.Variable(id='BE', target="/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id='BE']", task=task),
+            sedml_data_model.Variable(id='Cdh1', target='/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id="Cdh1"]', task=task),
+            sedml_data_model.Variable(id='Cdc20', target="/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id='Cdc20']", task=task),
         ]
 
         variable_results, _ = core.exec_sed_task(task, variables, TaskLog())
@@ -132,30 +132,30 @@ class TestCase(unittest.TestCase):
             core.exec_sed_task(task, variables, TaskLog())
         task.simulation.output_end_time = 20.
         variables = [
-            sedml_data_model.DataGeneratorVariable(symbol='unsupported')
+            sedml_data_model.Variable(symbol='unsupported', task=task)
         ]
 
         with self.assertRaisesRegex(NotImplementedError, 'Symbols must be'):
             core.exec_sed_task(task, variables, TaskLog())
         variables = [
-            sedml_data_model.DataGeneratorVariable(symbol=sedml_data_model.DataGeneratorVariableSymbol.time),
-            sedml_data_model.DataGeneratorVariable(target='/invalid:target'),
+            sedml_data_model.Variable(symbol=sedml_data_model.Symbol.time, task=task),
+            sedml_data_model.Variable(target='/invalid:target', task=task),
         ]
 
         with self.assertRaisesRegex(ValueError, 'XPaths must reference unique objects.'):
             core.exec_sed_task(task, variables, TaskLog())
         variables = [
-            sedml_data_model.DataGeneratorVariable(symbol=sedml_data_model.DataGeneratorVariableSymbol.time),
-            sedml_data_model.DataGeneratorVariable(id='BE', target="/sbml:sbml/sbml:model/sbml:listOfReactions/sbml:reaction[@id='R1']"),
+            sedml_data_model.Variable(symbol=sedml_data_model.Symbol.time, task=task),
+            sedml_data_model.Variable(id='BE', target="/sbml:sbml/sbml:model/sbml:listOfReactions/sbml:reaction[@id='R1']", task=task),
         ]
 
         with self.assertRaisesRegex(ValueError, 'Targets must have'):
             core.exec_sed_task(task, variables, TaskLog())
         variables = [
-            sedml_data_model.DataGeneratorVariable(id='time', symbol=sedml_data_model.DataGeneratorVariableSymbol.time),
-            sedml_data_model.DataGeneratorVariable(id='BE', target="/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id='BE']"),
-            sedml_data_model.DataGeneratorVariable(id='Cdh1', target='/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id="Cdh1"]'),
-            sedml_data_model.DataGeneratorVariable(id='Cdc20', target="/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id='Cdc20']"),
+            sedml_data_model.Variable(id='time', symbol=sedml_data_model.Symbol.time, task=task),
+            sedml_data_model.Variable(id='BE', target="/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id='BE']", task=task),
+            sedml_data_model.Variable(id='Cdh1', target='/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id="Cdh1"]', task=task),
+            sedml_data_model.Variable(id='Cdc20', target="/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id='Cdc20']", task=task),
         ]
 
         variable_results, _ = core.exec_sed_task(task, variables, TaskLog())
@@ -298,11 +298,10 @@ class TestCase(unittest.TestCase):
         doc.data_generators.append(sedml_data_model.DataGenerator(
             id='data_gen_time',
             variables=[
-                sedml_data_model.DataGeneratorVariable(
+                sedml_data_model.Variable(
                     id='var_time',
-                    symbol=sedml_data_model.DataGeneratorVariableSymbol.time,
+                    symbol=sedml_data_model.Symbol.time,
                     task=doc.tasks[0],
-                    model=doc.models[0],
                 ),
             ],
             math='var_time',
@@ -310,11 +309,10 @@ class TestCase(unittest.TestCase):
         doc.data_generators.append(sedml_data_model.DataGenerator(
             id='data_gen_BE',
             variables=[
-                sedml_data_model.DataGeneratorVariable(
+                sedml_data_model.Variable(
                     id='var_BE',
                     target="/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id='BE']",
                     task=doc.tasks[0],
-                    model=doc.models[0],
                 ),
             ],
             math='var_BE',
@@ -322,11 +320,10 @@ class TestCase(unittest.TestCase):
         doc.data_generators.append(sedml_data_model.DataGenerator(
             id='data_gen_Cdh1',
             variables=[
-                sedml_data_model.DataGeneratorVariable(
+                sedml_data_model.Variable(
                     id='var_Cdh1',
                     target='/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id="Cdh1"]',
                     task=doc.tasks[0],
-                    model=doc.models[0],
                 ),
             ],
             math='var_Cdh1',
@@ -334,11 +331,10 @@ class TestCase(unittest.TestCase):
         doc.data_generators.append(sedml_data_model.DataGenerator(
             id='data_gen_Cdc20',
             variables=[
-                sedml_data_model.DataGeneratorVariable(
+                sedml_data_model.Variable(
                     id='var_Cdc20',
                     target="/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id='Cdc20']",
                     task=doc.tasks[0],
-                    model=doc.models[0],
                 ),
             ],
             math='var_Cdc20',

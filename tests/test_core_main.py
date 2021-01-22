@@ -40,7 +40,8 @@ class TestCase(unittest.TestCase):
         self.dirname = tempfile.mkdtemp()
 
     def tearDown(self):
-        shutil.rmtree(self.dirname)
+        print(self.dirname)
+        # shutil.rmtree(self.dirname)
 
     def test_exec_sed_task(self):
         task = sedml_data_model.Task(
@@ -203,8 +204,8 @@ class TestCase(unittest.TestCase):
             for data_gen in doc.data_generators:
                 for var in data_gen.variables:
                     variables.append(var)
-            doc.tasks[0].model.source = os.path.join(os.path.dirname(__file__), 
-                'fixtures', 'BIOMD0000000297.edited', 'ex1', 'BIOMD0000000297.xml')
+            doc.tasks[0].model.source = os.path.join(os.path.dirname(__file__),
+                                                     'fixtures', 'BIOMD0000000297.edited', 'ex1', 'BIOMD0000000297.xml')
             results, _ = core.exec_sed_task(doc.tasks[0], variables, TaskLog())
             self.assertEqual(set(results.keys()), set(var.id for var in variables))
 
@@ -218,7 +219,7 @@ class TestCase(unittest.TestCase):
                     alg.changes.append(sedml_data_model.AlgorithmParameterChange(
                         kisao_id=param_kisao_id,
                         new_value=new_value,
-                ))
+                    ))
             doc, archive_filename = self._build_combine_archive(algorithm=alg)
 
             out_dir = os.path.join(self.dirname, alg.kisao_id)
@@ -454,12 +455,12 @@ class TestCase(unittest.TestCase):
 
         report = sedml_data_model.Report(
             data_sets=[
-                sedml_data_model.DataSet(id='time', label='time'),
-                sedml_data_model.DataSet(id='Cln4', label='Cln4'),
-                sedml_data_model.DataSet(id='Swe13', label='Swe13'),
+                sedml_data_model.DataSet(id='data_set_time', label='time'),
+                sedml_data_model.DataSet(id='data_set_Cln4', label='Cln4'),
+                sedml_data_model.DataSet(id='data_set_Swe13', label='Swe13'),
             ]
         )
 
         report_results = ReportReader().run(report, self.dirname, 'ex1/BIOMD0000000297.sedml/two_species', format=report_data_model.ReportFormat.h5)
-        self.assertEqual(sorted(report_results.keys()), sorted(['time', 'Cln4', 'Swe13']))
-        numpy.testing.assert_almost_equal(report_results['time'], numpy.linspace(0., 1., 10 + 1))
+        self.assertEqual(sorted(report_results.keys()), sorted(['data_set_time', 'data_set_Cln4', 'data_set_Swe13']))
+        numpy.testing.assert_almost_equal(report_results['data_set_time'], numpy.linspace(0., 1., 10 + 1))

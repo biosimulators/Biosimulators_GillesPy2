@@ -35,13 +35,15 @@ import unittest
 
 class TestCase(unittest.TestCase):
     DOCKER_IMAGE = 'ghcr.io/biosimulators/biosimulators_gillespy2/gillespy2:latest'
+    NAMESPACES = {
+        'sbml': 'http://www.sbml.org/sbml/level2/version4',
+    }
 
     def setUp(self):
         self.dirname = tempfile.mkdtemp()
 
     def tearDown(self):
-        print(self.dirname)
-        # shutil.rmtree(self.dirname)
+        shutil.rmtree(self.dirname)
 
     def test_exec_sed_task(self):
         task = sedml_data_model.Task(
@@ -68,10 +70,29 @@ class TestCase(unittest.TestCase):
         )
 
         variables = [
-            sedml_data_model.Variable(id='time', symbol=sedml_data_model.Symbol.time, task=task),
-            sedml_data_model.Variable(id='BE', target="/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id='BE']", task=task),
-            sedml_data_model.Variable(id='Cdh1', target='/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id="Cdh1"]', task=task),
-            sedml_data_model.Variable(id='Cdc20', target="/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id='Cdc20']", task=task),
+            sedml_data_model.Variable(
+                id='time',
+                symbol=sedml_data_model.Symbol.time,
+                task=task,
+            ),
+            sedml_data_model.Variable(
+                id='BE',
+                target="/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id='BE']",
+                target_namespaces=self.NAMESPACES,
+                task=task,
+            ),
+            sedml_data_model.Variable(
+                id='Cdh1',
+                target='/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id="Cdh1"]',
+                target_namespaces=self.NAMESPACES,
+                task=task,
+            ),
+            sedml_data_model.Variable(
+                id='Cdc20',
+                target="/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id='Cdc20']",
+                target_namespaces=self.NAMESPACES,
+                task=task,
+            ),
         ]
 
         variable_results, _ = core.exec_sed_task(task, variables, TaskLog())
@@ -82,6 +103,8 @@ class TestCase(unittest.TestCase):
             variable_results['time'],
             numpy.linspace(task.simulation.output_start_time, task.simulation.output_end_time, task.simulation.number_of_points + 1),
         )
+        for variable in variables:
+            self.assertFalse(numpy.any(numpy.isnan(variable_results[variable.id])))
 
     def test_exec_sed_task_errors(self):
         task = sedml_data_model.Task()
@@ -147,16 +170,40 @@ class TestCase(unittest.TestCase):
             core.exec_sed_task(task, variables, TaskLog())
         variables = [
             sedml_data_model.Variable(symbol=sedml_data_model.Symbol.time, task=task),
-            sedml_data_model.Variable(id='BE', target="/sbml:sbml/sbml:model/sbml:listOfReactions/sbml:reaction[@id='R1']", task=task),
+            sedml_data_model.Variable(
+                id='BE',
+                target="/sbml:sbml/sbml:model/sbml:listOfReactions/sbml:reaction[@id='R1']",
+                target_namespaces=self.NAMESPACES,
+                task=task
+            ),
         ]
 
         with self.assertRaisesRegex(ValueError, 'Targets must have'):
             core.exec_sed_task(task, variables, TaskLog())
         variables = [
-            sedml_data_model.Variable(id='time', symbol=sedml_data_model.Symbol.time, task=task),
-            sedml_data_model.Variable(id='BE', target="/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id='BE']", task=task),
-            sedml_data_model.Variable(id='Cdh1', target='/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id="Cdh1"]', task=task),
-            sedml_data_model.Variable(id='Cdc20', target="/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id='Cdc20']", task=task),
+            sedml_data_model.Variable(
+                id='time',
+                symbol=sedml_data_model.Symbol.time,
+                task=task
+            ),
+            sedml_data_model.Variable(
+                id='BE',
+                target="/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id='BE']",
+                target_namespaces=self.NAMESPACES,
+                task=task,
+            ),
+            sedml_data_model.Variable(
+                id='Cdh1',
+                target='/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id="Cdh1"]',
+                target_namespaces=self.NAMESPACES,
+                task=task,
+            ),
+            sedml_data_model.Variable(
+                id='Cdc20',
+                target="/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id='Cdc20']",
+                target_namespaces=self.NAMESPACES,
+                task=task,
+            ),
         ]
 
         variable_results, _ = core.exec_sed_task(task, variables, TaskLog())
@@ -313,6 +360,7 @@ class TestCase(unittest.TestCase):
                 sedml_data_model.Variable(
                     id='var_BE',
                     target="/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id='BE']",
+                    target_namespaces=self.NAMESPACES,
                     task=doc.tasks[0],
                 ),
             ],
@@ -324,6 +372,7 @@ class TestCase(unittest.TestCase):
                 sedml_data_model.Variable(
                     id='var_Cdh1',
                     target='/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id="Cdh1"]',
+                    target_namespaces=self.NAMESPACES,
                     task=doc.tasks[0],
                 ),
             ],
@@ -335,6 +384,7 @@ class TestCase(unittest.TestCase):
                 sedml_data_model.Variable(
                     id='var_Cdc20',
                     target="/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id='Cdc20']",
+                    target_namespaces=self.NAMESPACES,
                     task=doc.tasks[0],
                 ),
             ],
@@ -461,6 +511,8 @@ class TestCase(unittest.TestCase):
             ]
         )
 
-        report_results = ReportReader().run(report, self.dirname, 'ex1/BIOMD0000000297.sedml/two_species', format=report_data_model.ReportFormat.h5)
+        report_results = ReportReader().run(report, self.dirname,
+                                            'ex1/BIOMD0000000297.sedml/two_species',
+                                            format=report_data_model.ReportFormat.h5)
         self.assertEqual(sorted(report_results.keys()), sorted(['data_set_time', 'data_set_Cln4', 'data_set_Swe13']))
         numpy.testing.assert_almost_equal(report_results['data_set_time'], numpy.linspace(0., 1., 10 + 1))

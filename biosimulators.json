@@ -1119,7 +1119,7 @@
       "name": "slow-scale stochastic simulation algorithm",
       "kisaoId": {
         "namespace": "KISAO",
-        "id": "KISAO_0000028"
+        "id": "KISAO_0000575"
       },
       "modelingFrameworks": [
         {

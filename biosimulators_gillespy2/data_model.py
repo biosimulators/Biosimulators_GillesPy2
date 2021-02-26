@@ -216,7 +216,7 @@ kisao_algorithm_map = {
         'KISAO_0000228': AlgorithmParameter("epsilon", 'tau_tol', float, 0.03),
     }),
 
-    'KISAO_0000028': Algorithm("hybrid tau solver", gillespy2.TauHybridSolver, parameters={
+    'KISAO_0000575': Algorithm("hybrid tau solver", gillespy2.TauHybridSolver, parameters={
         'KISAO_0000488': AlgorithmParameter("seed", 'seed', int, None),
         'KISAO_0000228': AlgorithmParameter("epsilon", 'tau_tol', float, 0.03),
         'KISAO_0000475': AlgorithmParameter("integration method", 'integrator',

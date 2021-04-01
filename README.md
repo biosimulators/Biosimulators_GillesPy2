@@ -12,14 +12,6 @@ A list of the algorithms and algorithm parameters supported by GillesPy2 is avai
 
 A simple web application and web service for using GillesPy2 to execute COMBINE/OMEX archives is also available at [runBioSimulations](https://run.biosimulations.org).
 
-## Contents
-* [Installation](#installation)
-* [Usage](#usage)
-* [Documentation](#documentation)
-* [License](#license)
-* [Development team](#development-team)
-* [Questions and comments](#questions-and-comments)
-
 ## Installation
 
 ### Install Python package

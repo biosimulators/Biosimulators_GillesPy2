@@ -108,7 +108,7 @@ class TestCase(unittest.TestCase):
 
     def test_exec_sed_task_errors(self):
         task = sedml_data_model.Task()
-        task.model = sedml_data_model.Model()
+        task.model = sedml_data_model.Model(id='model')
         task.model.source = os.path.join(self.dirname, 'valid-model.xml')
         with open(task.model.source, 'w') as file:
             file.write('<?xml version="1.0" encoding="UTF-8" standalone="no"?>')
@@ -119,6 +119,7 @@ class TestCase(unittest.TestCase):
         task.model.language = sedml_data_model.ModelLanguage.SBML
         task.model.changes = []
         task.simulation = sedml_data_model.UniformTimeCourseSimulation(
+            id='simulation',
             algorithm=sedml_data_model.Algorithm(kisao_id='KISAO_0000001'),
             initial_time=10.,
             output_start_time=10.,
@@ -156,20 +157,20 @@ class TestCase(unittest.TestCase):
             core.exec_sed_task(task, variables, TaskLog())
         task.simulation.output_end_time = 20.
         variables = [
-            sedml_data_model.Variable(symbol='unsupported', task=task)
+            sedml_data_model.Variable(id='var_1', symbol='unsupported', task=task)
         ]
 
         with self.assertRaisesRegex(NotImplementedError, 'Symbols must be'):
             core.exec_sed_task(task, variables, TaskLog())
         variables = [
-            sedml_data_model.Variable(symbol=sedml_data_model.Symbol.time, task=task),
-            sedml_data_model.Variable(target='/invalid:target', task=task),
+            sedml_data_model.Variable(id='var_1', symbol=sedml_data_model.Symbol.time, task=task),
+            sedml_data_model.Variable(id='var_2', target='/invalid:target', target_namespaces={'invalid': 'invalid'}, task=task),
         ]
 
         with self.assertRaisesRegex(ValueError, 'XPaths must reference unique objects.'):
             core.exec_sed_task(task, variables, TaskLog())
         variables = [
-            sedml_data_model.Variable(symbol=sedml_data_model.Symbol.time, task=task),
+            sedml_data_model.Variable(id='var_1', symbol=sedml_data_model.Symbol.time, task=task),
             sedml_data_model.Variable(
                 id='BE',
                 target="/sbml:sbml/sbml:model/sbml:listOfReactions/sbml:reaction[@id='R1']",

@@ -506,7 +506,7 @@ class TestCase(unittest.TestCase):
 
         report = sedml_data_model.Report(
             data_sets=[
-                sedml_data_model.DataSet(id='data_set_time', label='time'),
+                sedml_data_model.DataSet(id='data_set_time_two_species', label='time'),
                 sedml_data_model.DataSet(id='data_set_Cln4', label='Cln4'),
                 sedml_data_model.DataSet(id='data_set_Swe13', label='Swe13'),
             ]
@@ -515,5 +515,5 @@ class TestCase(unittest.TestCase):
         report_results = ReportReader().run(report, self.dirname,
                                             'ex1/BIOMD0000000297.sedml/two_species',
                                             format=report_data_model.ReportFormat.h5)
-        self.assertEqual(sorted(report_results.keys()), sorted(['data_set_time', 'data_set_Cln4', 'data_set_Swe13']))
-        numpy.testing.assert_almost_equal(report_results['data_set_time'], numpy.linspace(0., 1., 10 + 1))
+        self.assertEqual(sorted(report_results.keys()), sorted(['data_set_time_two_species', 'data_set_Cln4', 'data_set_Swe13']))
+        numpy.testing.assert_almost_equal(report_results['data_set_time_two_species'], numpy.linspace(0., 1., 10 + 1))

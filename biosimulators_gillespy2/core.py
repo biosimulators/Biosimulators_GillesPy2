@@ -7,7 +7,7 @@
 :License: MIT
 """
 
-from .data_model import kisao_algorithm_map
+from .data_model import KISAO_ALGORITHM_MAP
 from biosimulators_utils.combine.exec import exec_sedml_docs_in_archive
 from biosimulators_utils.log.data_model import CombineArchiveLog, TaskLog  # noqa: F401
 from biosimulators_utils.plot.data_model import PlotFormat  # noqa: F401
@@ -16,7 +16,9 @@ from biosimulators_utils.sedml import validation
 from biosimulators_utils.sedml.data_model import (Task, ModelLanguage, UniformTimeCourseSimulation,  # noqa: F401
                                                   Variable, Symbol)
 from biosimulators_utils.sedml.exec import exec_sed_doc
+from biosimulators_utils.simulator.utils import get_algorithm_substitution_policy
 from biosimulators_utils.utils.core import raise_errors_warnings
+from kisao.utils import get_preferred_substitute_algorithm_by_ids
 import gillespy2
 import math
 import numpy
@@ -92,7 +94,7 @@ def exec_sed_task(task, variables, log=None):
                           error_summary='Changes for model `{}` are invalid.'.format(model.id))
     raise_errors_warnings(validation.validate_simulation_type(task.simulation, (UniformTimeCourseSimulation, )),
                           error_summary='{} `{}` is not supported.'.format(sim.__class__.__name__, sim.id))
-    raise_errors_warnings(validation.validate_simulation(task.simulation),
+    raise_errors_warnings(*validation.validate_simulation(task.simulation),
                           error_summary='Simulation `{}` is invalid.'.format(sim.id))
     raise_errors_warnings(*validation.validate_data_generator_variables(variables),
                           error_summary='Data generator variables for task `{}` are invalid.'.format(task.id))
@@ -107,14 +109,10 @@ def exec_sed_task(task, variables, log=None):
     # Load the algorithm specified by `simulation.algorithm`
     simulation = task.simulation
     algorithm_kisao_id = simulation.algorithm.kisao_id
-    algorithm = kisao_algorithm_map.get(algorithm_kisao_id, None)
-    if algorithm is None:
-        raise NotImplementedError("".join([
-            "Algorithm with KiSAO id '{}' is not supported. ".format(algorithm_kisao_id),
-            "Algorithm must have one of the following KiSAO ids:\n  - {}".format('\n  - '.join(
-                '{}: {} ({})'.format(kisao_id, algorithm.name, algorithm.solver.__name__)
-                for kisao_id, algorithm in kisao_algorithm_map.items())),
-        ]))
+    exec_kisao_id = get_preferred_substitute_algorithm_by_ids(
+        algorithm_kisao_id, KISAO_ALGORITHM_MAP.keys(),
+        substitution_policy=get_algorithm_substitution_policy())
+    algorithm = KISAO_ALGORITHM_MAP[exec_kisao_id]
 
     solver = algorithm.solver
     if solver == gillespy2.SSACSolver and (model.get_all_events() or model.get_all_assignment_rules()):
@@ -122,15 +120,16 @@ def exec_sed_task(task, variables, log=None):
 
     # Apply the algorithm parameter changes specified by `simulation.algorithm.parameter_changes`
     algorithm_params = {}
-    for change in simulation.algorithm.changes:
-        parameter = algorithm.parameters.get(change.kisao_id, None)
-        if parameter is None:
-            raise NotImplementedError("".join([
-                "Algorithm parameter with KiSAO id '{}' is not supported. ".format(change.kisao_id),
-                "Parameter must have one of the following KiSAO ids:\n  - {}".format('\n  - '.join(
-                    '{}: {}'.format(kisao_id, parameter.name) for kisao_id, parameter in algorithm.parameters.items())),
-            ]))
-        parameter.set_value(algorithm_params, change.new_value)
+    if exec_kisao_id == algorithm_kisao_id:
+        for change in simulation.algorithm.changes:
+            parameter = algorithm.parameters.get(change.kisao_id, None)
+            if parameter is None:
+                raise NotImplementedError("".join([
+                    "Algorithm parameter with KiSAO id '{}' is not supported. ".format(change.kisao_id),
+                    "Parameter must have one of the following KiSAO ids:\n  - {}".format('\n  - '.join(
+                        '{}: {}'.format(kisao_id, parameter.name) for kisao_id, parameter in algorithm.parameters.items())),
+                ]))
+            parameter.set_value(algorithm_params, change.new_value)
 
     # Validate that start time is 0 because this is the only option that GillesPy2 supports
     if simulation.initial_time != 0:
@@ -189,7 +188,7 @@ def exec_sed_task(task, variables, log=None):
             variable_results[variable.id] = results_dict[target_x_paths_ids[variable.target]][-(simulation.number_of_points + 1):]
 
     # log action
-    log.algorithm = algorithm_kisao_id
+    log.algorithm = exec_kisao_id
     log.simulator_details = {
         'method': solver.__module__ + '.' + solver.__name__,
         'arguments': dict(**algorithm.solver_args, **algorithm_params),

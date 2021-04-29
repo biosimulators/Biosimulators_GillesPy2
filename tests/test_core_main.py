@@ -8,7 +8,7 @@
 
 from biosimulators_gillespy2 import __main__
 from biosimulators_gillespy2 import core
-from biosimulators_gillespy2.data_model import kisao_algorithm_map
+from biosimulators_gillespy2.data_model import KISAO_ALGORITHM_MAP
 from biosimulators_utils.archive.io import ArchiveReader
 from biosimulators_utils.combine import data_model as combine_data_model
 from biosimulators_utils.combine.io import CombineArchiveWriter
@@ -21,6 +21,7 @@ from biosimulators_utils.sedml import data_model as sedml_data_model
 from biosimulators_utils.sedml.io import SedmlSimulationWriter
 from biosimulators_utils.sedml.utils import append_all_nested_children_to_doc
 from biosimulators_utils.utils.core import are_lists_equal
+from kisao.exceptions import AlgorithmCannotBeSubstitutedException
 from unittest import mock
 import enum
 import datetime
@@ -120,7 +121,7 @@ class TestCase(unittest.TestCase):
         task.model.changes = []
         task.simulation = sedml_data_model.UniformTimeCourseSimulation(
             id='simulation',
-            algorithm=sedml_data_model.Algorithm(kisao_id='KISAO_0000001'),
+            algorithm=sedml_data_model.Algorithm(kisao_id='KISAO_0000448'),
             initial_time=10.,
             output_start_time=10.,
             output_end_time=20.1,
@@ -133,7 +134,7 @@ class TestCase(unittest.TestCase):
             core.exec_sed_task(task, variables, TaskLog())
         task.model.source = os.path.join(os.path.dirname(__file__), 'fixtures', 'BIOMD0000000297.edited', 'ex1', 'BIOMD0000000297.xml')
 
-        with self.assertRaisesRegex(NotImplementedError, 'is not supported. Algorithm must'):
+        with self.assertRaisesRegex(AlgorithmCannotBeSubstitutedException, 'No algorithm can be substituted'):
             core.exec_sed_task(task, variables, TaskLog())
         task.simulation.algorithm.kisao_id = 'KISAO_0000029'
         task.simulation.algorithm.changes = [
@@ -232,7 +233,7 @@ class TestCase(unittest.TestCase):
 
     def test_exec_sedml_docs_in_combine_archive_with_all_algorithms(self):
         for alg in gen_algorithms_from_specs(os.path.join(os.path.dirname(__file__), '..', 'biosimulators.json')).values():
-            alg_props = kisao_algorithm_map[alg.kisao_id]
+            alg_props = KISAO_ALGORITHM_MAP[alg.kisao_id]
             alg.changes = []
             for param_kisao_id, param_props in alg_props.parameters.items():
                 new_value = param_props.default

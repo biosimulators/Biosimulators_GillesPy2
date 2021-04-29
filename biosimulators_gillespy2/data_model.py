@@ -6,12 +6,13 @@
 :License: MIT
 """
 
+import collections
 import enum
 import gillespy2
 
 __all__ = [
     'Algorithm', 'AlgorithmParameter', 'VodeMethod', 'HybridTauIntegrationMethod',
-    'kisao_algorithm_map',
+    'KISAO_ALGORITHM_MAP',
 ]
 
 
@@ -137,8 +138,8 @@ class HybridTauIntegrationMethod(str, enum.Enum):
     RK45 = 'KISAO_0000032'
 
 
-kisao_algorithm_map = {
-    'KISAO_0000088': Algorithm("LSODA", gillespy2.ODESolver, integrator="lsoda", parameters={
+KISAO_ALGORITHM_MAP = collections.OrderedDict([
+    ('KISAO_0000088', Algorithm("LSODA", gillespy2.ODESolver, integrator="lsoda", parameters={
         'KISAO_0000211': AlgorithmParameter("absolute tolerance", 'integrator_options.atol', float, 1e-12),
         'KISAO_0000209': AlgorithmParameter("relative tolerance", 'integrator_options.rtol', float, 1e-6),
         'KISAO_0000480': AlgorithmParameter("lower half bandwith", 'integrator_options.lband', int, None),
@@ -149,9 +150,37 @@ kisao_algorithm_map = {
         'KISAO_0000467': AlgorithmParameter("maximum step size", 'integrator_options.max_step', float, float("inf")),
         'KISAO_0000219': AlgorithmParameter("maximum non-stiff order (Adams order)", 'integrator_options.max_order_ns', int, 12),
         'KISAO_0000220': AlgorithmParameter("maximum stiff order (BDF order)", 'integrator_options.max_order_s', int, 5),
-    }),
+    })),
 
-    'KISAO_0000087': Algorithm("dopri5", gillespy2.ODESolver, integrator="dopri5", parameters={
+    ('KISAO_0000535', Algorithm("vode", gillespy2.ODESolver, integrator="vode", parameters={
+        'KISAO_0000211': AlgorithmParameter("absolute tolerance", 'integrator_options.atol', float, 1e-12),
+        'KISAO_0000209': AlgorithmParameter("relative tolerance", 'integrator_options.rtol', float, 1e-6),
+        'KISAO_0000480': AlgorithmParameter("lower half bandwith", 'integrator_options.lband', int, None),
+        'KISAO_0000479': AlgorithmParameter("upper half bandwith", 'integrator_options.uband', int, None),
+        'KISAO_0000415': AlgorithmParameter("maximum number of steps", 'integrator_options.nsteps', int, 500),
+        'KISAO_0000559': AlgorithmParameter("initial step size", 'integrator_options.first_step', float, 0.0),
+        'KISAO_0000485': AlgorithmParameter("minimum step size", 'integrator_options.min_step', float, 0.0),
+        'KISAO_0000467': AlgorithmParameter("maximum step size", 'integrator_options.max_step', float, float("inf")),
+        'KISAO_0000484': AlgorithmParameter("order", 'integrator_options.order', int, 12),
+        'KISAO_0000475': AlgorithmParameter("integration method", 'integrator_options.method', VodeMethod, VodeMethod.adams),
+        'KISAO_0000542': AlgorithmParameter("with Jacobian", 'integrator_options.with_jacobian', bool, False),
+    })),
+
+    ('KISAO_0000536', Algorithm("zvode", gillespy2.ODESolver, integrator="zvode", parameters={
+        'KISAO_0000211': AlgorithmParameter("absolute tolerance", 'integrator_options.atol', float, 1e-12),
+        'KISAO_0000209': AlgorithmParameter("relative tolerance", 'integrator_options.rtol', float, 1e-6),
+        'KISAO_0000480': AlgorithmParameter("lower half bandwith", 'integrator_options.lband', int, None),
+        'KISAO_0000479': AlgorithmParameter("upper half bandwith", 'integrator_options.uband', int, None),
+        'KISAO_0000415': AlgorithmParameter("maximum number of steps", 'integrator_options.nsteps', int, 500),
+        'KISAO_0000559': AlgorithmParameter("initial step size", 'integrator_options.first_step', float, 0.0),
+        'KISAO_0000485': AlgorithmParameter("minimum step size", 'integrator_options.min_step', float, 0.0),
+        'KISAO_0000467': AlgorithmParameter("maximum step size", 'integrator_options.max_step', float, float("inf")),
+        'KISAO_0000484': AlgorithmParameter("order", 'integrator_options.order', int, 12),
+        'KISAO_0000475': AlgorithmParameter("integration method", 'integrator_options.method', VodeMethod, VodeMethod.adams),
+        'KISAO_0000542': AlgorithmParameter("with Jacobian", 'integrator_options.with_jacobian', bool, False),
+    })),
+
+    ('KISAO_0000087', Algorithm("dopri5", gillespy2.ODESolver, integrator="dopri5", parameters={
         'KISAO_0000211': AlgorithmParameter("absolute tolerance", 'integrator_options.atol', float, 1e-12),
         'KISAO_0000209': AlgorithmParameter("relative tolerance", 'integrator_options.rtol', float, 1e-6),
         'KISAO_0000415': AlgorithmParameter("maximum number of steps", 'integrator_options.nsteps', int, 500),
@@ -163,9 +192,9 @@ kisao_algorithm_map = {
         'KISAO_0000539': AlgorithmParameter("minimum factor to increase/decrease step size by in one step",
                                             'integrator_options.dfactor', float, 0.2),
         'KISAO_0000541': AlgorithmParameter("Beta parameter for stabilised step size control", 'integrator_options.beta', float, 0.),
-    }),
+    })),
 
-    'KISAO_0000436': Algorithm("dop835", gillespy2.ODESolver, integrator="dop835", parameters={
+    ('KISAO_0000436', Algorithm("dop835", gillespy2.ODESolver, integrator="dop835", parameters={
         'KISAO_0000211': AlgorithmParameter("absolute tolerance", 'integrator_options.atol', float, 1e-12),
         'KISAO_0000209': AlgorithmParameter("relative tolerance", 'integrator_options.rtol', float, 1e-6),
         'KISAO_0000415': AlgorithmParameter("maximum number of steps", 'integrator_options.nsteps', int, 500),
@@ -177,49 +206,21 @@ kisao_algorithm_map = {
         'KISAO_0000539': AlgorithmParameter("minimum factor to increase/decrease step size by in one step",
                                             'integrator_options.dfactor', float, 0.333),
         'KISAO_0000541': AlgorithmParameter("Beta parameter for stabilised step size control", 'integrator_options.beta', float, 0.),
-    }),
+    })),
 
-    'KISAO_0000535': Algorithm("vode", gillespy2.ODESolver, integrator="vode", parameters={
-        'KISAO_0000211': AlgorithmParameter("absolute tolerance", 'integrator_options.atol', float, 1e-12),
-        'KISAO_0000209': AlgorithmParameter("relative tolerance", 'integrator_options.rtol', float, 1e-6),
-        'KISAO_0000480': AlgorithmParameter("lower half bandwith", 'integrator_options.lband', int, None),
-        'KISAO_0000479': AlgorithmParameter("upper half bandwith", 'integrator_options.uband', int, None),
-        'KISAO_0000415': AlgorithmParameter("maximum number of steps", 'integrator_options.nsteps', int, 500),
-        'KISAO_0000559': AlgorithmParameter("initial step size", 'integrator_options.first_step', float, 0.0),
-        'KISAO_0000485': AlgorithmParameter("minimum step size", 'integrator_options.min_step', float, 0.0),
-        'KISAO_0000467': AlgorithmParameter("maximum step size", 'integrator_options.max_step', float, float("inf")),
-        'KISAO_0000484': AlgorithmParameter("order", 'integrator_options.order', int, 12),
-        'KISAO_0000475': AlgorithmParameter("integration method", 'integrator_options.method', VodeMethod, VodeMethod.adams),
-        'KISAO_0000542': AlgorithmParameter("with Jacobian", 'integrator_options.with_jacobian', bool, False),
-    }),
-
-    'KISAO_0000536': Algorithm("zvode", gillespy2.ODESolver, integrator="zvode", parameters={
-        'KISAO_0000211': AlgorithmParameter("absolute tolerance", 'integrator_options.atol', float, 1e-12),
-        'KISAO_0000209': AlgorithmParameter("relative tolerance", 'integrator_options.rtol', float, 1e-6),
-        'KISAO_0000480': AlgorithmParameter("lower half bandwith", 'integrator_options.lband', int, None),
-        'KISAO_0000479': AlgorithmParameter("upper half bandwith", 'integrator_options.uband', int, None),
-        'KISAO_0000415': AlgorithmParameter("maximum number of steps", 'integrator_options.nsteps', int, 500),
-        'KISAO_0000559': AlgorithmParameter("initial step size", 'integrator_options.first_step', float, 0.0),
-        'KISAO_0000485': AlgorithmParameter("minimum step size", 'integrator_options.min_step', float, 0.0),
-        'KISAO_0000467': AlgorithmParameter("maximum step size", 'integrator_options.max_step', float, float("inf")),
-        'KISAO_0000484': AlgorithmParameter("order", 'integrator_options.order', int, 12),
-        'KISAO_0000475': AlgorithmParameter("integration method", 'integrator_options.method', VodeMethod, VodeMethod.adams),
-        'KISAO_0000542': AlgorithmParameter("with Jacobian", 'integrator_options.with_jacobian', bool, False),
-    }),
-
-    'KISAO_0000029': Algorithm("SSA", gillespy2.SSACSolver, parameters={
+    ('KISAO_0000029', Algorithm("SSA", gillespy2.SSACSolver, parameters={
         'KISAO_0000488': AlgorithmParameter("seed", 'seed', int, None),
-    }),
+    })),
 
-    'KISAO_0000039': Algorithm("tau-leaping", gillespy2.TauLeapingSolver, parameters={
+    ('KISAO_0000039', Algorithm("tau-leaping", gillespy2.TauLeapingSolver, parameters={
         'KISAO_0000488': AlgorithmParameter("seed", 'seed', int, None),
         'KISAO_0000228': AlgorithmParameter("epsilon", 'tau_tol', float, 0.03),
-    }),
+    })),
 
-    'KISAO_0000575': Algorithm("hybrid tau solver", gillespy2.TauHybridSolver, parameters={
+    ('KISAO_0000575', Algorithm("hybrid tau solver", gillespy2.TauHybridSolver, parameters={
         'KISAO_0000488': AlgorithmParameter("seed", 'seed', int, None),
         'KISAO_0000228': AlgorithmParameter("epsilon", 'tau_tol', float, 0.03),
         'KISAO_0000475': AlgorithmParameter("integration method", 'integrator',
                                             HybridTauIntegrationMethod, HybridTauIntegrationMethod.LSODA),
-    }),
-}
+    })),
+])

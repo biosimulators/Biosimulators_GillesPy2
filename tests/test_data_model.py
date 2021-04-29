@@ -93,11 +93,11 @@ class DataModelTestCase(unittest.TestCase):
             specs = json.load(file)
 
         self.assertEqual(
-            set(data_model.kisao_algorithm_map.keys()),
+            set(data_model.KISAO_ALGORITHM_MAP.keys()),
             set(alg_specs['kisaoId']['id'] for alg_specs in specs['algorithms']))
 
         for alg_specs in specs['algorithms']:
-            alg_props = data_model.kisao_algorithm_map[alg_specs['kisaoId']['id']]
+            alg_props = data_model.KISAO_ALGORITHM_MAP[alg_specs['kisaoId']['id']]
 
             self.assertEqual(set(alg_props.parameters.keys()), set(param_specs['kisaoId']['id'] for param_specs in alg_specs['parameters']))
 

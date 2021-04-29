@@ -1,5 +1,5 @@
 # Base OS
-FROM python:3.7.9-slim-buster
+FROM python:3.9-slim-buster
 
 ARG VERSION=0.1.25
 ARG SIMULATOR_VERSION="1.5.7"
@@ -16,7 +16,7 @@ LABEL \
     org.opencontainers.image.vendor="BioSimulators Team" \
     org.opencontainers.image.licenses="GPL-3.0-only" \
     \
-    base_image="python:3.7.9-slim-buster" \
+    base_image="python:3.9-slim-buster" \
     version="${VERSION}" \
     software="gillespy2" \
     software.version="${SIMULATOR_VERSION}" \

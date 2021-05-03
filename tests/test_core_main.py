@@ -21,6 +21,7 @@ from biosimulators_utils.sedml import data_model as sedml_data_model
 from biosimulators_utils.sedml.io import SedmlSimulationWriter
 from biosimulators_utils.sedml.utils import append_all_nested_children_to_doc
 from biosimulators_utils.utils.core import are_lists_equal
+from biosimulators_utils.warnings import BioSimulatorsWarning
 from kisao.exceptions import AlgorithmCannotBeSubstitutedException
 from unittest import mock
 import enum
@@ -108,114 +109,159 @@ class TestCase(unittest.TestCase):
             self.assertFalse(numpy.any(numpy.isnan(variable_results[variable.id])))
 
     def test_exec_sed_task_errors(self):
-        task = sedml_data_model.Task()
-        task.model = sedml_data_model.Model(id='model')
-        task.model.source = os.path.join(self.dirname, 'valid-model.xml')
-        with open(task.model.source, 'w') as file:
-            file.write('<?xml version="1.0" encoding="UTF-8" standalone="no"?>')
-            file.write('<sbml2 xmlns="http://www.sbml.org/sbml/level2/version4" level="2" version="4">')
-            file.write('  <model id="model">')
-            file.write('  </model>')
-            file.write('</sbml2>')
-        task.model.language = sedml_data_model.ModelLanguage.SBML
-        task.model.changes = []
-        task.simulation = sedml_data_model.UniformTimeCourseSimulation(
-            id='simulation',
-            algorithm=sedml_data_model.Algorithm(kisao_id='KISAO_0000448'),
-            initial_time=10.,
-            output_start_time=10.,
-            output_end_time=20.1,
-            number_of_points=10,
+        with mock.patch.dict('os.environ', {'ALGORITHM_SUBSTITUTION_POLICY': 'SAME_METHOD'}):
+            task = sedml_data_model.Task()
+            task.model = sedml_data_model.Model(id='model')
+            task.model.source = os.path.join(self.dirname, 'valid-model.xml')
+            with open(task.model.source, 'w') as file:
+                file.write('<?xml version="1.0" encoding="UTF-8" standalone="no"?>')
+                file.write('<sbml2 xmlns="http://www.sbml.org/sbml/level2/version4" level="2" version="4">')
+                file.write('  <model id="model">')
+                file.write('  </model>')
+                file.write('</sbml2>')
+            task.model.language = sedml_data_model.ModelLanguage.SBML
+            task.model.changes = []
+            task.simulation = sedml_data_model.UniformTimeCourseSimulation(
+                id='simulation',
+                algorithm=sedml_data_model.Algorithm(kisao_id='KISAO_0000448'),
+                initial_time=10.,
+                output_start_time=10.,
+                output_end_time=20.1,
+                number_of_points=10,
+            )
+
+            variables = []
+
+            with self.assertRaisesRegex(ValueError, 'could not be imported'):
+                core.exec_sed_task(task, variables, TaskLog())
+            task.model.source = os.path.join(os.path.dirname(__file__), 'fixtures', 'BIOMD0000000297.edited', 'ex1', 'BIOMD0000000297.xml')
+
+            with self.assertRaisesRegex(AlgorithmCannotBeSubstitutedException, 'No algorithm can be substituted'):
+                core.exec_sed_task(task, variables, TaskLog())
+            task.simulation.algorithm.kisao_id = 'KISAO_0000029'
+            task.simulation.algorithm.changes = [
+                sedml_data_model.AlgorithmParameterChange(kisao_id='KISAO_0000000'),
+            ]
+
+            with self.assertRaisesRegex(NotImplementedError, 'is not supported. Parameter must'):
+                core.exec_sed_task(task, variables, TaskLog())
+            task.simulation.algorithm.changes[0].kisao_id = 'KISAO_0000488'
+            task.simulation.algorithm.changes[0].new_value = 'abc'
+
+            with self.assertRaisesRegex(ValueError, 'not a valid integer'):
+                core.exec_sed_task(task, variables, TaskLog())
+            task.simulation.algorithm.changes[0].new_value = '10'
+
+            with self.assertRaisesRegex(NotImplementedError, 'is not supported. Initial time must be 0'):
+                core.exec_sed_task(task, variables, TaskLog())
+            task.simulation.initial_time = 0.
+
+            with self.assertRaisesRegex(NotImplementedError, 'must specify an integer'):
+                core.exec_sed_task(task, variables, TaskLog())
+            task.simulation.output_end_time = 20.
+            variables = [
+                sedml_data_model.Variable(id='var_1', symbol='unsupported', task=task)
+            ]
+
+            with self.assertRaisesRegex(NotImplementedError, 'Symbols must be'):
+                core.exec_sed_task(task, variables, TaskLog())
+            variables = [
+                sedml_data_model.Variable(id='var_1', symbol=sedml_data_model.Symbol.time, task=task),
+                sedml_data_model.Variable(id='var_2', target='/invalid:target', target_namespaces={'invalid': 'invalid'}, task=task),
+            ]
+
+            with self.assertRaisesRegex(ValueError, 'XPaths must reference unique objects.'):
+                core.exec_sed_task(task, variables, TaskLog())
+            variables = [
+                sedml_data_model.Variable(id='var_1', symbol=sedml_data_model.Symbol.time, task=task),
+                sedml_data_model.Variable(
+                    id='BE',
+                    target="/sbml:sbml/sbml:model/sbml:listOfReactions/sbml:reaction[@id='R1']",
+                    target_namespaces=self.NAMESPACES,
+                    task=task
+                ),
+            ]
+
+            with self.assertRaisesRegex(ValueError, 'Targets must have'):
+                core.exec_sed_task(task, variables, TaskLog())
+            variables = [
+                sedml_data_model.Variable(
+                    id='time',
+                    symbol=sedml_data_model.Symbol.time,
+                    task=task
+                ),
+                sedml_data_model.Variable(
+                    id='BE',
+                    target="/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id='BE']",
+                    target_namespaces=self.NAMESPACES,
+                    task=task,
+                ),
+                sedml_data_model.Variable(
+                    id='Cdh1',
+                    target='/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id="Cdh1"]',
+                    target_namespaces=self.NAMESPACES,
+                    task=task,
+                ),
+                sedml_data_model.Variable(
+                    id='Cdc20',
+                    target="/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id='Cdc20']",
+                    target_namespaces=self.NAMESPACES,
+                    task=task,
+                ),
+            ]
+
+            variable_results, _ = core.exec_sed_task(task, variables, TaskLog())
+
+            self.assertTrue(sorted(variable_results.keys()), sorted([var.id for var in variables]))
+            self.assertEqual(variable_results[variables[0].id].shape, (task.simulation.number_of_points + 1,))
+            numpy.testing.assert_almost_equal(
+                variable_results['time'],
+                numpy.linspace(task.simulation.output_start_time, task.simulation.output_end_time, task.simulation.number_of_points + 1),
+            )
+
+        # algorithm substitution
+        task = sedml_data_model.Task(
+            model=sedml_data_model.Model(
+                source=os.path.join(os.path.dirname(__file__), 'fixtures', 'BIOMD0000000297.edited', 'ex1', 'BIOMD0000000297.xml'),
+                language=sedml_data_model.ModelLanguage.SBML.value,
+                changes=[],
+            ),
+            simulation=sedml_data_model.UniformTimeCourseSimulation(
+                algorithm=sedml_data_model.Algorithm(
+                    kisao_id='KISAO_0000029',
+                    changes=[
+                        sedml_data_model.AlgorithmParameterChange(
+                            kisao_id='KISAO_0000488',
+                            new_value='10',
+                        ),
+                    ],
+                ),
+                initial_time=0.,
+                output_start_time=10.,
+                output_end_time=20.,
+                number_of_points=20,
+            ),
         )
 
         variables = []
 
-        with self.assertRaisesRegex(ValueError, 'could not be imported'):
-            core.exec_sed_task(task, variables, TaskLog())
-        task.model.source = os.path.join(os.path.dirname(__file__), 'fixtures', 'BIOMD0000000297.edited', 'ex1', 'BIOMD0000000297.xml')
+        task.simulation.algorithm.changes[0].new_value = 'not a number'
+        with mock.patch.dict('os.environ', {'ALGORITHM_SUBSTITUTION_POLICY': 'SAME_METHOD'}):
+            with self.assertRaisesRegex(ValueError, 'is not a valid'):
+                core.exec_sed_task(task, variables, TaskLog())
 
-        with self.assertRaisesRegex(AlgorithmCannotBeSubstitutedException, 'No algorithm can be substituted'):
-            core.exec_sed_task(task, variables, TaskLog())
-        task.simulation.algorithm.kisao_id = 'KISAO_0000029'
-        task.simulation.algorithm.changes = [
-            sedml_data_model.AlgorithmParameterChange(kisao_id='KISAO_0000000'),
-        ]
+        with mock.patch.dict('os.environ', {'ALGORITHM_SUBSTITUTION_POLICY': 'SIMILAR_VARIABLES'}):
+            with self.assertWarnsRegex(BioSimulatorsWarning, 'Unsuported value'):
+                core.exec_sed_task(task, variables, TaskLog())
 
-        with self.assertRaisesRegex(NotImplementedError, 'is not supported. Parameter must'):
-            core.exec_sed_task(task, variables, TaskLog())
-        task.simulation.algorithm.changes[0].kisao_id = 'KISAO_0000488'
-        task.simulation.algorithm.changes[0].new_value = 'abc'
+        task.simulation.algorithm.changes[0].kisao_id = 'KISAO_9999999'
+        with mock.patch.dict('os.environ', {'ALGORITHM_SUBSTITUTION_POLICY': 'SAME_METHOD'}):
+            with self.assertRaisesRegex(NotImplementedError, 'is not supported'):
+                core.exec_sed_task(task, variables, TaskLog())
 
-        with self.assertRaisesRegex(ValueError, 'not a valid integer'):
-            core.exec_sed_task(task, variables, TaskLog())
-        task.simulation.algorithm.changes[0].new_value = '10'
-
-        with self.assertRaisesRegex(NotImplementedError, 'is not supported. Initial time must be 0'):
-            core.exec_sed_task(task, variables, TaskLog())
-        task.simulation.initial_time = 0.
-
-        with self.assertRaisesRegex(NotImplementedError, 'must specify an integer'):
-            core.exec_sed_task(task, variables, TaskLog())
-        task.simulation.output_end_time = 20.
-        variables = [
-            sedml_data_model.Variable(id='var_1', symbol='unsupported', task=task)
-        ]
-
-        with self.assertRaisesRegex(NotImplementedError, 'Symbols must be'):
-            core.exec_sed_task(task, variables, TaskLog())
-        variables = [
-            sedml_data_model.Variable(id='var_1', symbol=sedml_data_model.Symbol.time, task=task),
-            sedml_data_model.Variable(id='var_2', target='/invalid:target', target_namespaces={'invalid': 'invalid'}, task=task),
-        ]
-
-        with self.assertRaisesRegex(ValueError, 'XPaths must reference unique objects.'):
-            core.exec_sed_task(task, variables, TaskLog())
-        variables = [
-            sedml_data_model.Variable(id='var_1', symbol=sedml_data_model.Symbol.time, task=task),
-            sedml_data_model.Variable(
-                id='BE',
-                target="/sbml:sbml/sbml:model/sbml:listOfReactions/sbml:reaction[@id='R1']",
-                target_namespaces=self.NAMESPACES,
-                task=task
-            ),
-        ]
-
-        with self.assertRaisesRegex(ValueError, 'Targets must have'):
-            core.exec_sed_task(task, variables, TaskLog())
-        variables = [
-            sedml_data_model.Variable(
-                id='time',
-                symbol=sedml_data_model.Symbol.time,
-                task=task
-            ),
-            sedml_data_model.Variable(
-                id='BE',
-                target="/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id='BE']",
-                target_namespaces=self.NAMESPACES,
-                task=task,
-            ),
-            sedml_data_model.Variable(
-                id='Cdh1',
-                target='/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id="Cdh1"]',
-                target_namespaces=self.NAMESPACES,
-                task=task,
-            ),
-            sedml_data_model.Variable(
-                id='Cdc20',
-                target="/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id='Cdc20']",
-                target_namespaces=self.NAMESPACES,
-                task=task,
-            ),
-        ]
-
-        variable_results, _ = core.exec_sed_task(task, variables, TaskLog())
-
-        self.assertTrue(sorted(variable_results.keys()), sorted([var.id for var in variables]))
-        self.assertEqual(variable_results[variables[0].id].shape, (task.simulation.number_of_points + 1,))
-        numpy.testing.assert_almost_equal(
-            variable_results['time'],
-            numpy.linspace(task.simulation.output_start_time, task.simulation.output_end_time, task.simulation.number_of_points + 1),
-        )
+        with mock.patch.dict('os.environ', {'ALGORITHM_SUBSTITUTION_POLICY': 'SIMILAR_VARIABLES'}):
+            with self.assertWarnsRegex(BioSimulatorsWarning, 'was ignored because it is not supported'):
+                core.exec_sed_task(task, variables, TaskLog())
 
     def test_exec_sedml_docs_in_combine_archive(self):
         doc, archive_filename = self._build_combine_archive()

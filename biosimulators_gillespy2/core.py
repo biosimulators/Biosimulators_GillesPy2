@@ -18,6 +18,8 @@ from biosimulators_utils.sedml.data_model import (Task, ModelLanguage, UniformTi
 from biosimulators_utils.sedml.exec import exec_sed_doc
 from biosimulators_utils.simulator.utils import get_algorithm_substitution_policy
 from biosimulators_utils.utils.core import raise_errors_warnings
+from biosimulators_utils.warnings import warn, BioSimulatorsWarning
+from kisao.data_model import AlgorithmSubstitutionPolicy, ALGORITHM_SUBSTITUTION_POLICY_LEVELS
 from kisao.utils import get_preferred_substitute_algorithm_by_ids
 import gillespy2
 import math
@@ -109,9 +111,10 @@ def exec_sed_task(task, variables, log=None):
     # Load the algorithm specified by `simulation.algorithm`
     simulation = task.simulation
     algorithm_kisao_id = simulation.algorithm.kisao_id
+    algorithm_substitution_policy = get_algorithm_substitution_policy()
     exec_kisao_id = get_preferred_substitute_algorithm_by_ids(
         algorithm_kisao_id, KISAO_ALGORITHM_MAP.keys(),
-        substitution_policy=get_algorithm_substitution_policy())
+        substitution_policy=algorithm_substitution_policy)
     algorithm = KISAO_ALGORITHM_MAP[exec_kisao_id]
 
     solver = algorithm.solver
@@ -123,13 +126,37 @@ def exec_sed_task(task, variables, log=None):
     if exec_kisao_id == algorithm_kisao_id:
         for change in simulation.algorithm.changes:
             parameter = algorithm.parameters.get(change.kisao_id, None)
-            if parameter is None:
-                raise NotImplementedError("".join([
-                    "Algorithm parameter with KiSAO id '{}' is not supported. ".format(change.kisao_id),
-                    "Parameter must have one of the following KiSAO ids:\n  - {}".format('\n  - '.join(
-                        '{}: {}'.format(kisao_id, parameter.name) for kisao_id, parameter in algorithm.parameters.items())),
-                ]))
-            parameter.set_value(algorithm_params, change.new_value)
+            if parameter:
+                try:
+                    parameter.set_value(algorithm_params, change.new_value)
+                except (NotImplementedError, ValueError) as exception:
+                    if (
+                        ALGORITHM_SUBSTITUTION_POLICY_LEVELS[algorithm_substitution_policy]
+                        <= ALGORITHM_SUBSTITUTION_POLICY_LEVELS[AlgorithmSubstitutionPolicy.SAME_METHOD]
+                    ):
+                        raise
+                    else:
+                        warn('Unsuported value `{}` for algorithm parameter `{}` was ignored:\n  {}'.format(
+                            change.new_value, change.kisao_id, str(exception).replace('\n', '\n  ')),
+                            BioSimulatorsWarning)
+            else:
+                if (
+                    ALGORITHM_SUBSTITUTION_POLICY_LEVELS[algorithm_substitution_policy]
+                    <= ALGORITHM_SUBSTITUTION_POLICY_LEVELS[AlgorithmSubstitutionPolicy.SAME_METHOD]
+                ):
+                    msg = "".join([
+                        "Algorithm parameter with KiSAO id '{}' is not supported. ".format(change.kisao_id),
+                        "Parameter must have one of the following KiSAO ids:\n  - {}".format('\n  - '.join(
+                            '{}: {}'.format(kisao_id, parameter.name) for kisao_id, parameter in algorithm.parameters.items())),
+                    ])
+                    raise NotImplementedError(msg)
+                else:
+                    msg = "".join([
+                        "Algorithm parameter with KiSAO id '{}' was ignored because it is not supported. ".format(change.kisao_id),
+                        "Parameter must have one of the following KiSAO ids:\n  - {}".format('\n  - '.join(
+                            '{}: {}'.format(kisao_id, parameter.name) for kisao_id, parameter in algorithm.parameters.items())),
+                    ])
+                    warn(msg, BioSimulatorsWarning)
 
     # Validate that start time is 0 because this is the only option that GillesPy2 supports
     if simulation.initial_time != 0:

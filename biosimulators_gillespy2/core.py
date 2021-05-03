@@ -132,7 +132,7 @@ def exec_sed_task(task, variables, log=None):
                 except (NotImplementedError, ValueError) as exception:
                     if (
                         ALGORITHM_SUBSTITUTION_POLICY_LEVELS[algorithm_substitution_policy]
-                        <= ALGORITHM_SUBSTITUTION_POLICY_LEVELS[AlgorithmSubstitutionPolicy.SAME_METHOD]
+                        <= ALGORITHM_SUBSTITUTION_POLICY_LEVELS[AlgorithmSubstitutionPolicy.NONE]
                     ):
                         raise
                     else:
@@ -142,7 +142,7 @@ def exec_sed_task(task, variables, log=None):
             else:
                 if (
                     ALGORITHM_SUBSTITUTION_POLICY_LEVELS[algorithm_substitution_policy]
-                    <= ALGORITHM_SUBSTITUTION_POLICY_LEVELS[AlgorithmSubstitutionPolicy.SAME_METHOD]
+                    <= ALGORITHM_SUBSTITUTION_POLICY_LEVELS[AlgorithmSubstitutionPolicy.NONE]
                 ):
                     msg = "".join([
                         "Algorithm parameter with KiSAO id '{}' is not supported. ".format(change.kisao_id),

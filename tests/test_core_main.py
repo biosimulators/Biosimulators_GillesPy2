@@ -109,7 +109,7 @@ class TestCase(unittest.TestCase):
             self.assertFalse(numpy.any(numpy.isnan(variable_results[variable.id])))
 
     def test_exec_sed_task_errors(self):
-        with mock.patch.dict('os.environ', {'ALGORITHM_SUBSTITUTION_POLICY': 'SAME_METHOD'}):
+        with mock.patch.dict('os.environ', {'ALGORITHM_SUBSTITUTION_POLICY': 'NONE'}):
             task = sedml_data_model.Task()
             task.model = sedml_data_model.Model(id='model')
             task.model.source = os.path.join(self.dirname, 'valid-model.xml')
@@ -246,7 +246,7 @@ class TestCase(unittest.TestCase):
         variables = []
 
         task.simulation.algorithm.changes[0].new_value = 'not a number'
-        with mock.patch.dict('os.environ', {'ALGORITHM_SUBSTITUTION_POLICY': 'SAME_METHOD'}):
+        with mock.patch.dict('os.environ', {'ALGORITHM_SUBSTITUTION_POLICY': 'NONE'}):
             with self.assertRaisesRegex(ValueError, 'is not a valid'):
                 core.exec_sed_task(task, variables, TaskLog())
 
@@ -255,7 +255,7 @@ class TestCase(unittest.TestCase):
                 core.exec_sed_task(task, variables, TaskLog())
 
         task.simulation.algorithm.changes[0].kisao_id = 'KISAO_9999999'
-        with mock.patch.dict('os.environ', {'ALGORITHM_SUBSTITUTION_POLICY': 'SAME_METHOD'}):
+        with mock.patch.dict('os.environ', {'ALGORITHM_SUBSTITUTION_POLICY': 'NONE'}):
             with self.assertRaisesRegex(NotImplementedError, 'is not supported'):
                 core.exec_sed_task(task, variables, TaskLog())
 

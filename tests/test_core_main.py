@@ -140,7 +140,7 @@ class TestCase(unittest.TestCase):
                 core.exec_sed_task(task, variables, TaskLog())
             task.simulation.algorithm.kisao_id = 'KISAO_0000029'
             task.simulation.algorithm.changes = [
-                sedml_data_model.AlgorithmParameterChange(kisao_id='KISAO_0000000'),
+                sedml_data_model.AlgorithmParameterChange(kisao_id='KISAO_0000531'),
             ]
 
             with self.assertRaisesRegex(NotImplementedError, 'is not supported. Parameter must'):
@@ -254,7 +254,7 @@ class TestCase(unittest.TestCase):
             with self.assertWarnsRegex(BioSimulatorsWarning, 'Unsuported value'):
                 core.exec_sed_task(task, variables, TaskLog())
 
-        task.simulation.algorithm.changes[0].kisao_id = 'KISAO_9999999'
+        task.simulation.algorithm.changes[0].kisao_id = 'KISAO_0000531'
         with mock.patch.dict('os.environ', {'ALGORITHM_SUBSTITUTION_POLICY': 'NONE'}):
             with self.assertRaisesRegex(NotImplementedError, 'is not supported'):
                 core.exec_sed_task(task, variables, TaskLog())

@@ -1,4 +1,4 @@
-""" BioSimulators-compliant command-line interface to the `Gillespy2 <https://github.com/StochSS/GillesPy2>`_ simulation program.
+""" BioSimulators-compliant command-line interface to the `GillesPy2 <https://github.com/StochSS/GillesPy2>`_ simulation program.
 
 :Author: Jonathan Karr <karr@mssm.edu>
 :Author: Bilal Shaikh <bilalshaikh42@gmail.com>

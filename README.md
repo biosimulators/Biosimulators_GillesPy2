@@ -4,7 +4,7 @@
 [![Test coverage](https://codecov.io/gh/biosimulators/Biosimulators_GillesPy2/branch/dev/graph/badge.svg)](https://codecov.io/gh/biosimulators/Biosimulators_GillesPy2)
 
 # BioSimulators-GillesPy2
-BioSimulators-compliant command-line interface and Docker image for the [Gillespy2](https://stochss.github.io/GillesPy2) simulation program.
+BioSimulators-compliant command-line interface and Docker image for the [GillesPy2](https://stochss.github.io/GillesPy2) simulation program.
 
 This command-line interface and Docker image enable users to use GillesPy2 to execute [COMBINE/OMEX archives](https://combinearchive.org/) that describe one or more simulation experiments (in [SED-ML format](https://sed-ml.org)) of one or more models (in [SBML format](http://sbml.org])).
 
@@ -30,7 +30,7 @@ docker pull ghcr.io/biosimulators/gillespy2
 ```
 usage: gillespy2 [-h] [-d] [-q] -i ARCHIVE [-o OUT_DIR] [-v]
 
-BioSimulators-compliant command-line interface to the Gillespy2 <https://stochss.github.io/GillesPy2> simulation program.
+BioSimulators-compliant command-line interface to the GillesPy2 <https://stochss.github.io/GillesPy2> simulation program.
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -70,4 +70,4 @@ This package is released under the [MIT](LICENSE).
 This package was developed by the [Karr Lab](https://www.karrlab.org) at the Icahn School of Medicine at Mount Sinai and the [Center for Reproducible Biomedical Modeling](https://reproduciblebiomodels.org/).
 
 ## Questions and comments
-Please contact [Bilal Shaikh](mailto:BilalShaikh42@gmail.com) or the [BioSimulators Team](mailto:info@biosimulators.org) with any questions or comments.
+Please contact the [BioSimulators Team](mailto:info@biosimulators.org) with any questions or comments.

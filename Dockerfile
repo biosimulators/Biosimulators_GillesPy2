@@ -2,7 +2,7 @@
 FROM python:3.9-slim-buster
 
 ARG VERSION=0.1.26
-ARG SIMULATOR_VERSION="1.5.7"
+ARG SIMULATOR_VERSION="1.5.11"
 
 # metadata
 LABEL \

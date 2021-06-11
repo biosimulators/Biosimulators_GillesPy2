@@ -436,10 +436,12 @@
           ]
         }
       ],
-      "dependentDimensions": [{
-        "namespace": "SIO",
-        "id": "SIO_000418"
-      }],
+      "dependentDimensions": [
+        {
+          "namespace": "SIO",
+          "id": "SIO_000418"
+        }
+      ],
       "dependentVariableTargetPatterns": [
         {
           "variables": "species concentrations",
@@ -663,10 +665,12 @@
           ]
         }
       ],
-      "dependentDimensions": [{
-        "namespace": "SIO",
-        "id": "SIO_000418"
-      }],
+      "dependentDimensions": [
+        {
+          "namespace": "SIO",
+          "id": "SIO_000418"
+        }
+      ],
       "dependentVariableTargetPatterns": [
         {
           "variables": "species concentrations",
@@ -890,10 +894,12 @@
           ]
         }
       ],
-      "dependentDimensions": [{
-        "namespace": "SIO",
-        "id": "SIO_000418"
-      }],
+      "dependentDimensions": [
+        {
+          "namespace": "SIO",
+          "id": "SIO_000418"
+        }
+      ],
       "dependentVariableTargetPatterns": [
         {
           "variables": "species concentrations",
@@ -989,10 +995,12 @@
           ]
         }
       ],
-      "dependentDimensions": [{
-        "namespace": "SIO",
-        "id": "SIO_000418"
-      }],
+      "dependentDimensions": [
+        {
+          "namespace": "SIO",
+          "id": "SIO_000418"
+        }
+      ],
       "dependentVariableTargetPatterns": [
         {
           "variables": "species counts",
@@ -1096,10 +1104,12 @@
           ]
         }
       ],
-      "dependentDimensions": [{
-        "namespace": "SIO",
-        "id": "SIO_000418"
-      }],
+      "dependentDimensions": [
+        {
+          "namespace": "SIO",
+          "id": "SIO_000418"
+        }
+      ],
       "dependentVariableTargetPatterns": [
         {
           "variables": "species counts",
@@ -1208,10 +1218,12 @@
           ]
         }
       ],
-      "dependentDimensions": [{
-        "namespace": "SIO",
-        "id": "SIO_000418"
-      }],
+      "dependentDimensions": [
+        {
+          "namespace": "SIO",
+          "id": "SIO_000418"
+        }
+      ],
       "dependentVariableTargetPatterns": [
         {
           "variables": "species counts",
@@ -1462,10 +1474,12 @@
           ]
         }
       ],
-      "dependentDimensions": [{
-        "namespace": "SIO",
-        "id": "SIO_000418"
-      }],
+      "dependentDimensions": [
+        {
+          "namespace": "SIO",
+          "id": "SIO_000418"
+        }
+      ],
       "dependentVariableTargetPatterns": [
         {
           "variables": "species concentrations",
@@ -1724,10 +1738,12 @@
           ]
         }
       ],
-      "dependentDimensions": [{
-        "namespace": "SIO",
-        "id": "SIO_000418"
-      }],
+      "dependentDimensions": [
+        {
+          "namespace": "SIO",
+          "id": "SIO_000418"
+        }
+      ],
       "dependentVariableTargetPatterns": [
         {
           "variables": "species concentrations",

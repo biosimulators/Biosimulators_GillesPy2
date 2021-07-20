@@ -1,7 +1,7 @@
 {
   "id": "gillespy2",
   "name": "GillesPy2",
-  "version": "1.5.11",
+  "version": "1.6.2",
   "description": "GillesPy2 is a Python 3 package for stochastic simulation of biochemical systems.",
   "urls": [
     {
@@ -10,7 +10,7 @@
     }
   ],
   "image": {
-    "url": "ghcr.io/biosimulators/biosimulators_gillespy2/gillespy2:1.5.11",
+    "url": "ghcr.io/biosimulators/biosimulators_gillespy2/gillespy2:1.6.2",
     "format": {
       "namespace": "EDAM",
       "id": "format_3973",
@@ -436,10 +436,12 @@
           ]
         }
       ],
-      "dependentDimensions": [{
-        "namespace": "SIO",
-        "id": "SIO_000418"
-      }],
+      "dependentDimensions": [
+        {
+          "namespace": "SIO",
+          "id": "SIO_000418"
+        }
+      ],
       "dependentVariableTargetPatterns": [
         {
           "variables": "species concentrations",
@@ -663,10 +665,12 @@
           ]
         }
       ],
-      "dependentDimensions": [{
-        "namespace": "SIO",
-        "id": "SIO_000418"
-      }],
+      "dependentDimensions": [
+        {
+          "namespace": "SIO",
+          "id": "SIO_000418"
+        }
+      ],
       "dependentVariableTargetPatterns": [
         {
           "variables": "species concentrations",
@@ -890,10 +894,12 @@
           ]
         }
       ],
-      "dependentDimensions": [{
-        "namespace": "SIO",
-        "id": "SIO_000418"
-      }],
+      "dependentDimensions": [
+        {
+          "namespace": "SIO",
+          "id": "SIO_000418"
+        }
+      ],
       "dependentVariableTargetPatterns": [
         {
           "variables": "species concentrations",
@@ -989,10 +995,12 @@
           ]
         }
       ],
-      "dependentDimensions": [{
-        "namespace": "SIO",
-        "id": "SIO_000418"
-      }],
+      "dependentDimensions": [
+        {
+          "namespace": "SIO",
+          "id": "SIO_000418"
+        }
+      ],
       "dependentVariableTargetPatterns": [
         {
           "variables": "species counts",
@@ -1096,10 +1104,12 @@
           ]
         }
       ],
-      "dependentDimensions": [{
-        "namespace": "SIO",
-        "id": "SIO_000418"
-      }],
+      "dependentDimensions": [
+        {
+          "namespace": "SIO",
+          "id": "SIO_000418"
+        }
+      ],
       "dependentVariableTargetPatterns": [
         {
           "variables": "species counts",
@@ -1208,10 +1218,12 @@
           ]
         }
       ],
-      "dependentDimensions": [{
-        "namespace": "SIO",
-        "id": "SIO_000418"
-      }],
+      "dependentDimensions": [
+        {
+          "namespace": "SIO",
+          "id": "SIO_000418"
+        }
+      ],
       "dependentVariableTargetPatterns": [
         {
           "variables": "species counts",
@@ -1462,10 +1474,12 @@
           ]
         }
       ],
-      "dependentDimensions": [{
-        "namespace": "SIO",
-        "id": "SIO_000418"
-      }],
+      "dependentDimensions": [
+        {
+          "namespace": "SIO",
+          "id": "SIO_000418"
+        }
+      ],
       "dependentVariableTargetPatterns": [
         {
           "variables": "species concentrations",
@@ -1724,10 +1738,12 @@
           ]
         }
       ],
-      "dependentDimensions": [{
-        "namespace": "SIO",
-        "id": "SIO_000418"
-      }],
+      "dependentDimensions": [
+        {
+          "namespace": "SIO",
+          "id": "SIO_000418"
+        }
+      ],
       "dependentVariableTargetPatterns": [
         {
           "variables": "species concentrations",

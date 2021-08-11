@@ -44,5 +44,5 @@ ENV VERBOSE=0 \
     MPLBACKEND=PDF
 
 # Entrypoint
-ENTRYPOINT ["gillespy2"]
+ENTRYPOINT ["biosimulators-gillespy2"]
 CMD []

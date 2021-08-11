@@ -28,7 +28,7 @@ docker pull ghcr.io/biosimulators/gillespy2
 
 ### Local usage
 ```
-usage: gillespy2 [-h] [-d] [-q] -i ARCHIVE [-o OUT_DIR] [-v]
+usage: biosimulators-gillespy2 [-h] [-d] [-q] -i ARCHIVE [-o OUT_DIR] [-v]
 
 BioSimulators-compliant command-line interface to the GillesPy2 <https://stochss.github.io/GillesPy2> simulation program.
 

@@ -7,13 +7,13 @@
 :License: MIT
 """
 
+from . import get_simulator_version
 from ._version import __version__
 from .core import exec_sedml_docs_in_combine_archive
 from biosimulators_utils.simulator.cli import build_cli
-import gillespy2
 
 App = build_cli('biosimulators-gillespy2', __version__,
-                'GillesPy2', gillespy2.__version__, 'https://github.com/StochSS/GillesPy2',
+                'GillesPy2', get_simulator_version(), 'https://github.com/StochSS/GillesPy2',
                 exec_sedml_docs_in_combine_archive)
 
 

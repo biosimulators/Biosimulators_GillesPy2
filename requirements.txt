@@ -1,4 +1,4 @@
-biosimulators_utils[logging] >= 0.1.96
+biosimulators_utils[logging] >= 0.1.104
 gillespy2 >= 1.5.11
 kisao
 lxml # optional dependency of python_libsbml

@@ -56,11 +56,11 @@ class TestCase(unittest.TestCase):
             ),
             simulation=sedml_data_model.UniformTimeCourseSimulation(
                 algorithm=sedml_data_model.Algorithm(
-                    kisao_id='KISAO_0000029',
+                    kisao_id='KISAO_0000088',
                     changes=[
                         sedml_data_model.AlgorithmParameterChange(
-                            kisao_id='KISAO_0000488',
-                            new_value='10',
+                            kisao_id='KISAO_0000211',
+                            new_value='1e-10',
                         ),
                     ],
                 ),
@@ -210,6 +210,9 @@ class TestCase(unittest.TestCase):
                 ),
             ]
 
+            task.simulation.algorithm.kisao_id = 'KISAO_0000088'
+            task.simulation.algorithm.changes[0].kisao_id = 'KISAO_0000211'
+            task.simulation.algorithm.changes[0].new_value = '1e-10'
             variable_results, _ = core.exec_sed_task(task, variables, TaskLog())
 
             self.assertTrue(sorted(variable_results.keys()), sorted([var.id for var in variables]))
@@ -228,11 +231,11 @@ class TestCase(unittest.TestCase):
             ),
             simulation=sedml_data_model.UniformTimeCourseSimulation(
                 algorithm=sedml_data_model.Algorithm(
-                    kisao_id='KISAO_0000029',
+                    kisao_id='KISAO_0000088',
                     changes=[
                         sedml_data_model.AlgorithmParameterChange(
-                            kisao_id='KISAO_0000488',
-                            new_value='10',
+                            kisao_id='KISAO_0000211',
+                            new_value='1e-10',
                         ),
                     ],
                 ),
@@ -282,13 +285,19 @@ class TestCase(unittest.TestCase):
             alg_props = KISAO_ALGORITHM_MAP[alg.kisao_id]
             alg.changes = []
             for param_kisao_id, param_props in alg_props.parameters.items():
-                new_value = param_props.default
+
+                if param_kisao_id == 'KISAO_0000488':
+                    new_value = '1'
+                else:
+                    new_value = param_props.default
+
                 if isinstance(new_value, enum.Enum):
                     new_value = new_value.value
                 if new_value is None:
                     new_value = ''
                 else:
                     new_value = str(new_value)
+
                 alg.changes.append(sedml_data_model.AlgorithmParameterChange(
                     kisao_id=param_kisao_id,
                     new_value=new_value,
@@ -360,11 +369,11 @@ class TestCase(unittest.TestCase):
     def _build_sed_doc(self, algorithm=None):
         if algorithm is None:
             algorithm = sedml_data_model.Algorithm(
-                kisao_id='KISAO_0000029',
+                kisao_id='KISAO_0000088',
                 changes=[
                     sedml_data_model.AlgorithmParameterChange(
-                        kisao_id='KISAO_0000488',
-                        new_value='10',
+                        kisao_id='KISAO_0000211',
+                        new_value='1e-10',
                     ),
                 ],
             )

@@ -134,6 +134,93 @@ class TestCase(unittest.TestCase):
             numpy.full((task.simulation.number_of_points + 1,), 1.)
         )
 
+    def test_exec_sed_task_positive_initial_time(self):
+        task = sedml_data_model.Task(
+            model=sedml_data_model.Model(
+                source=os.path.join(os.path.dirname(__file__), 'fixtures', 'BIOMD0000000297.edited', 'ex1', 'BIOMD0000000297.xml'),
+                language=sedml_data_model.ModelLanguage.SBML.value,
+                changes=[],
+            ),
+            simulation=sedml_data_model.UniformTimeCourseSimulation(
+                algorithm=sedml_data_model.Algorithm(
+                    kisao_id='KISAO_0000088',
+                ),
+                initial_time=10.,
+                output_start_time=10.,
+                output_end_time=30.,
+                number_of_points=20,
+            ),
+        )
+
+        variables = [
+            sedml_data_model.Variable(
+                id='time',
+                symbol=sedml_data_model.Symbol.time,
+                task=task,
+            ),
+            sedml_data_model.Variable(
+                id='BE',
+                target="/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id='BE']",
+                target_namespaces=self.NAMESPACES,
+                task=task,
+            ),
+        ]
+
+        variable_results, _ = core.exec_sed_task(task, variables, TaskLog())
+
+        self.assertTrue(sorted(variable_results.keys()), sorted([var.id for var in variables]))
+        self.assertEqual(variable_results[variables[0].id].shape, (task.simulation.number_of_points + 1,))
+        numpy.testing.assert_almost_equal(
+            variable_results['time'],
+            numpy.linspace(task.simulation.output_start_time, task.simulation.output_end_time, task.simulation.number_of_points + 1),
+        )
+        for variable in variables:
+            self.assertFalse(numpy.any(numpy.isnan(variable_results[variable.id])))
+
+    @unittest.expectedFailure
+    def test_exec_sed_task_negative_initial_time(self):
+        task = sedml_data_model.Task(
+            model=sedml_data_model.Model(
+                source=os.path.join(os.path.dirname(__file__), 'fixtures', 'BIOMD0000000297.edited', 'ex1', 'BIOMD0000000297.xml'),
+                language=sedml_data_model.ModelLanguage.SBML.value,
+                changes=[],
+            ),
+            simulation=sedml_data_model.UniformTimeCourseSimulation(
+                algorithm=sedml_data_model.Algorithm(
+                    kisao_id='KISAO_0000088',
+                ),
+                initial_time=-10.,
+                output_start_time=-10.,
+                output_end_time=10.,
+                number_of_points=20,
+            ),
+        )
+
+        variables = [
+            sedml_data_model.Variable(
+                id='time',
+                symbol=sedml_data_model.Symbol.time,
+                task=task,
+            ),
+            sedml_data_model.Variable(
+                id='BE',
+                target="/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id='BE']",
+                target_namespaces=self.NAMESPACES,
+                task=task,
+            ),
+        ]
+
+        variable_results, _ = core.exec_sed_task(task, variables, TaskLog())
+
+        self.assertTrue(sorted(variable_results.keys()), sorted([var.id for var in variables]))
+        self.assertEqual(variable_results[variables[0].id].shape, (task.simulation.number_of_points + 1,))
+        numpy.testing.assert_almost_equal(
+            variable_results['time'],
+            numpy.linspace(task.simulation.output_start_time, task.simulation.output_end_time, task.simulation.number_of_points + 1),
+        )
+        for variable in variables:
+            self.assertFalse(numpy.any(numpy.isnan(variable_results[variable.id])))
+
     def test_exec_sed_task_errors(self):
         with mock.patch.dict('os.environ', {'ALGORITHM_SUBSTITUTION_POLICY': 'NONE'}):
             task = sedml_data_model.Task()
@@ -150,7 +237,7 @@ class TestCase(unittest.TestCase):
             task.simulation = sedml_data_model.UniformTimeCourseSimulation(
                 id='simulation',
                 algorithm=sedml_data_model.Algorithm(kisao_id='KISAO_0000448'),
-                initial_time=10.,
+                initial_time=-10.,
                 output_start_time=10.,
                 output_end_time=20.1,
                 number_of_points=10,
@@ -178,7 +265,7 @@ class TestCase(unittest.TestCase):
                 core.exec_sed_task(task, variables, TaskLog())
             task.simulation.algorithm.changes[0].new_value = '10'
 
-            with self.assertRaisesRegex(NotImplementedError, 'is not supported. Initial time must be 0'):
+            with self.assertRaisesRegex(NotImplementedError, 'is not supported. Initial time must be >= 0'):
                 core.exec_sed_task(task, variables, TaskLog())
             task.simulation.initial_time = 0.
 

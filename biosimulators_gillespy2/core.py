@@ -173,8 +173,9 @@ def exec_sed_task(task, variables, log=None):
                     warn(msg, BioSimulatorsWarning)
 
     # Validate that start time is 0 because this is the only option that GillesPy2 supports
-    if simulation.initial_time != 0:
-        raise NotImplementedError('Initial simulation time {} is not supported. Initial time must be 0.'.format(simulation.initial_time))
+    if simulation.initial_time < 0:
+        raise NotImplementedError(
+            'Negative initial simulation time {} is not supported. Initial time must be >= 0.'.format(simulation.initial_time))
 
     # set the simulation time span
     number_of_points = (simulation.output_end_time - simulation.initial_time) / \
@@ -182,7 +183,8 @@ def exec_sed_task(task, variables, log=None):
     if number_of_points != math.floor(number_of_points):
         raise NotImplementedError('Time course must specify an integer number of time points')
     number_of_points = int(number_of_points)
-    model.timespan(numpy.linspace(simulation.initial_time, simulation.output_end_time, number_of_points + 1))
+    timespan = numpy.linspace(simulation.initial_time, simulation.output_end_time, number_of_points + 1)
+    model.timespan(timespan)
 
     # determine allowed variable targets
     predicted_ids = list(model.get_all_species().keys()) + list(model.get_all_parameters().keys())

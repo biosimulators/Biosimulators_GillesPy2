@@ -446,6 +446,14 @@
         {
           "variables": "species concentrations",
           "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species"
+        },
+        {
+          "variables": "parameter values",
+          "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfParameters/sbml:parameter"
+        },
+        {
+          "variables": "compartment sizes",
+          "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfCompartments/sbml:compartment"
         }
       ],
       "availableSoftwareInterfaceTypes": [
@@ -675,6 +683,14 @@
         {
           "variables": "species concentrations",
           "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species"
+        },
+        {
+          "variables": "parameter values",
+          "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfParameters/sbml:parameter"
+        },
+        {
+          "variables": "compartment sizes",
+          "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfCompartments/sbml:compartment"
         }
       ],
       "availableSoftwareInterfaceTypes": [
@@ -904,6 +920,14 @@
         {
           "variables": "species concentrations",
           "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species"
+        },
+        {
+          "variables": "parameter values",
+          "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfParameters/sbml:parameter"
+        },
+        {
+          "variables": "compartment sizes",
+          "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfCompartments/sbml:compartment"
         }
       ],
       "availableSoftwareInterfaceTypes": [
@@ -1005,6 +1029,14 @@
         {
           "variables": "species counts",
           "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species"
+        },
+        {
+          "variables": "parameter values",
+          "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfParameters/sbml:parameter"
+        },
+        {
+          "variables": "compartment sizes",
+          "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfCompartments/sbml:compartment"
         }
       ],
       "availableSoftwareInterfaceTypes": [
@@ -1114,6 +1146,14 @@
         {
           "variables": "species counts",
           "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species"
+        },
+        {
+          "variables": "parameter values",
+          "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfParameters/sbml:parameter"
+        },
+        {
+          "variables": "compartment sizes",
+          "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfCompartments/sbml:compartment"
         }
       ],
       "availableSoftwareInterfaceTypes": [
@@ -1228,6 +1268,14 @@
         {
           "variables": "species counts",
           "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species"
+        },
+        {
+          "variables": "parameter values",
+          "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfParameters/sbml:parameter"
+        },
+        {
+          "variables": "compartment sizes",
+          "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfCompartments/sbml:compartment"
         }
       ],
       "availableSoftwareInterfaceTypes": [
@@ -1484,6 +1532,14 @@
         {
           "variables": "species concentrations",
           "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species"
+        },
+        {
+          "variables": "parameter values",
+          "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfParameters/sbml:parameter"
+        },
+        {
+          "variables": "compartment sizes",
+          "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfCompartments/sbml:compartment"
         }
       ],
       "availableSoftwareInterfaceTypes": [
@@ -1748,6 +1804,14 @@
         {
           "variables": "species concentrations",
           "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species"
+        },
+        {
+          "variables": "parameter values",
+          "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfParameters/sbml:parameter"
+        },
+        {
+          "variables": "compartment sizes",
+          "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfCompartments/sbml:compartment"
         }
       ],
       "availableSoftwareInterfaceTypes": [

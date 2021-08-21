@@ -185,7 +185,7 @@ def exec_sed_task(task, variables, log=None):
     model.timespan(numpy.linspace(simulation.initial_time, simulation.output_end_time, number_of_points + 1))
 
     # determine allowed variable targets
-    predicted_ids = list(model.get_all_species().keys())
+    predicted_ids = list(model.get_all_species().keys()) + list(model.get_all_parameters().keys())
     unpredicted_symbols = set()
     unpredicted_targets = set()
     for variable in variables:
@@ -221,12 +221,18 @@ def exec_sed_task(task, variables, log=None):
 
     # transform the results to an instance of :obj:`VariableResults`
     variable_results = VariableResults()
+    parameters = model.get_all_parameters()
     for variable in variables:
         if variable.symbol:
             variable_results[variable.id] = results_dict['time'][-(simulation.number_of_points + 1):]
 
         elif variable.target:
-            variable_results[variable.id] = results_dict[target_x_paths_ids[variable.target]][-(simulation.number_of_points + 1):]
+            sbml_id = target_x_paths_ids[variable.target]
+            dynamics = results_dict.get(sbml_id, None)
+            if dynamics is None:
+                variable_results[variable.id] = numpy.full((simulation.number_of_points + 1,), parameters[sbml_id].value)
+            else:
+                variable_results[variable.id] = dynamics[-(simulation.number_of_points + 1):]
 
     # log action
     log.algorithm = exec_kisao_id

@@ -95,6 +95,24 @@ class TestCase(unittest.TestCase):
                 target_namespaces=self.NAMESPACES,
                 task=task,
             ),
+            sedml_data_model.Variable(
+                id='kswe_prime',
+                target="/sbml:sbml/sbml:model/sbml:listOfParameters/sbml:parameter[@id='kswe_prime']",
+                target_namespaces=self.NAMESPACES,
+                task=task,
+            ),
+            sedml_data_model.Variable(
+                id='kswe',
+                target="/sbml:sbml/sbml:model/sbml:listOfParameters/sbml:parameter[@id='kswe']",
+                target_namespaces=self.NAMESPACES,
+                task=task,
+            ),
+            sedml_data_model.Variable(
+                id='compartment',
+                target="/sbml:sbml/sbml:model/sbml:listOfCompartments/sbml:compartment[@id='compartment']",
+                target_namespaces=self.NAMESPACES,
+                task=task,
+            ),
         ]
 
         variable_results, _ = core.exec_sed_task(task, variables, TaskLog())
@@ -107,6 +125,14 @@ class TestCase(unittest.TestCase):
         )
         for variable in variables:
             self.assertFalse(numpy.any(numpy.isnan(variable_results[variable.id])))
+        numpy.testing.assert_almost_equal(
+            variable_results['kswe_prime'],
+            numpy.full((task.simulation.number_of_points + 1,), 2.)
+        )
+        numpy.testing.assert_almost_equal(
+            variable_results['compartment'],
+            numpy.full((task.simulation.number_of_points + 1,), 1.)
+        )
 
     def test_exec_sed_task_errors(self):
         with mock.patch.dict('os.environ', {'ALGORITHM_SUBSTITUTION_POLICY': 'NONE'}):

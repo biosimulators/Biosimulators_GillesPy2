@@ -61,7 +61,7 @@ docker run \
 ```
 
 ## Documentation
-Documentation is available at https://biosimulators.github.io/Biosimulators_GillesPy2/.
+Documentation is available at https://docs.biosimulators.org/Biosimulators_GillesPy2/.
 
 ## License
 This package is released under the [MIT](LICENSE).

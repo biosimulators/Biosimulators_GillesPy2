@@ -12,6 +12,7 @@ from biosimulators_gillespy2.data_model import KISAO_ALGORITHM_MAP
 from biosimulators_utils.archive.io import ArchiveReader
 from biosimulators_utils.combine import data_model as combine_data_model
 from biosimulators_utils.combine.io import CombineArchiveWriter
+from biosimulators_utils.config import get_config
 from biosimulators_utils.log.data_model import TaskLog
 from biosimulators_utils.report import data_model as report_data_model
 from biosimulators_utils.report.io import ReportReader
@@ -249,7 +250,7 @@ class TestCase(unittest.TestCase):
                 core.exec_sed_task(task, variables, TaskLog())
             task.model.source = os.path.join(os.path.dirname(__file__), 'fixtures', 'BIOMD0000000297.edited', 'ex1', 'BIOMD0000000297.xml')
 
-            with self.assertRaisesRegex(AlgorithmCannotBeSubstitutedException, 'No algorithm can be substituted'):
+            with self.assertRaisesRegex(AlgorithmCannotBeSubstitutedException, 'Algorithms cannot be substituted'):
                 core.exec_sed_task(task, variables, TaskLog())
             task.simulation.algorithm.kisao_id = 'KISAO_0000029'
             task.simulation.algorithm.changes = [
@@ -383,13 +384,15 @@ class TestCase(unittest.TestCase):
         doc, archive_filename = self._build_combine_archive()
 
         out_dir = os.path.join(self.dirname, 'out')
-        core.exec_sedml_docs_in_combine_archive(archive_filename, out_dir,
-                                                report_formats=[
-                                                    report_data_model.ReportFormat.h5,
-                                                    report_data_model.ReportFormat.csv,
-                                                ],
-                                                bundle_outputs=True,
-                                                keep_individual_outputs=True)
+
+        config = get_config()
+        config.REPORT_FORMATS = [report_data_model.ReportFormat.h5, report_data_model.ReportFormat.csv]
+        config.BUNDLE_OUTPUTS = True
+        config.KEEP_INDIVIDUAL_OUTPUTS = True
+
+        _, log = core.exec_sedml_docs_in_combine_archive(archive_filename, out_dir, config=config)
+        if log.exception:
+            raise log.exception
 
         self._assert_combine_archive_outputs(doc, out_dir)
 
@@ -440,13 +443,15 @@ class TestCase(unittest.TestCase):
             doc, archive_filename = self._build_combine_archive(algorithm=alg)
 
             out_dir = os.path.join(self.dirname, alg.kisao_id)
-            core.exec_sedml_docs_in_combine_archive(archive_filename, out_dir,
-                                                    report_formats=[
-                                                        report_data_model.ReportFormat.h5,
-                                                        report_data_model.ReportFormat.csv,
-                                                    ],
-                                                    bundle_outputs=True,
-                                                    keep_individual_outputs=True)
+
+            config = get_config()
+            config.REPORT_FORMATS = [report_data_model.ReportFormat.h5, report_data_model.ReportFormat.csv]
+            config.BUNDLE_OUTPUTS = True
+            config.KEEP_INDIVIDUAL_OUTPUTS = True
+
+            _, log = core.exec_sedml_docs_in_combine_archive(archive_filename, out_dir, config=config)
+            if log.exception:
+                raise log.exception
 
             self._assert_combine_archive_outputs(doc, out_dir)
 
@@ -642,14 +647,16 @@ class TestCase(unittest.TestCase):
 
     def test_more_complex_archive(self):
         archive_filename = os.path.join(os.path.dirname(__file__), 'fixtures', 'BIOMD0000000297.edited.omex')
-        core.exec_sedml_docs_in_combine_archive(archive_filename, self.dirname,
-                                                report_formats=[
-                                                    report_data_model.ReportFormat.csv,
-                                                    report_data_model.ReportFormat.h5,
-                                                ],
-                                                plot_formats=[],
-                                                bundle_outputs=True,
-                                                keep_individual_outputs=True)
+
+        config = get_config()
+        config.REPORT_FORMATS = [report_data_model.ReportFormat.h5, report_data_model.ReportFormat.csv]
+        config.VIZ_FORMATS = []
+        config.BUNDLE_OUTPUTS = True
+        config.KEEP_INDIVIDUAL_OUTPUTS = True
+
+        _, log = core.exec_sedml_docs_in_combine_archive(archive_filename, self.dirname, config=config)
+        if log.exception:
+            raise log.exception
 
         self.assertEqual(set(['reports.zip', 'reports.h5', 'ex1', 'ex2']).difference(set(os.listdir(self.dirname))), set())
         self.assertEqual(set(os.listdir(os.path.join(self.dirname, 'ex1'))), set(['BIOMD0000000297.sedml']))

@@ -9,7 +9,7 @@
 
 from .data_model import KISAO_ALGORITHM_MAP
 from biosimulators_utils.combine.exec import exec_sedml_docs_in_archive
-from biosimulators_utils.config import get_config
+from biosimulators_utils.config import get_config, Config  # noqa: F401
 from biosimulators_utils.log.data_model import CombineArchiveLog, TaskLog  # noqa: F401
 from biosimulators_utils.viz.data_model import VizFormat  # noqa: F401
 from biosimulators_utils.report.data_model import ReportFormat, VariableResults, SedDocumentResults  # noqa: F401
@@ -32,11 +32,7 @@ __all__ = [
 ]
 
 
-def exec_sedml_docs_in_combine_archive(archive_filename, out_dir,
-                                       return_results=False,
-                                       report_formats=None, plot_formats=None,
-                                       bundle_outputs=None, keep_individual_outputs=None,
-                                       raise_exceptions=True):
+def exec_sedml_docs_in_combine_archive(archive_filename, out_dir, config=None):
     """ Execute the SED tasks defined in a COMBINE/OMEX archive and save the outputs
 
     Args:
@@ -48,12 +44,7 @@ def exec_sedml_docs_in_combine_archive(archive_filename, out_dir,
             * HDF5: directory in which to save a single HDF5 file (``{ out_dir }/reports.h5``),
               with reports at keys ``{ relative-path-to-SED-ML-file-within-archive }/{ report.id }`` within the HDF5 file
 
-        return_results (:obj:`bool`, optional): whether to return the result of each output of each SED-ML file
-        report_formats (:obj:`list` of :obj:`ReportFormat`, optional): report format (e.g., csv or h5)
-        plot_formats (:obj:`list` of :obj:`VizFormat`, optional): report format (e.g., pdf)
-        bundle_outputs (:obj:`bool`, optional): if :obj:`True`, bundle outputs into archives for reports and plots
-        keep_individual_outputs (:obj:`bool`, optional): if :obj:`True`, keep individual output files
-        raise_exceptions (:obj:`bool`, optional): whether to raise exceptions
+        config (:obj:`Config`, optional): BioSimulators common configuration
 
     Returns:
         :obj:`tuple`:
@@ -64,21 +55,17 @@ def exec_sedml_docs_in_combine_archive(archive_filename, out_dir,
     sed_doc_executer = functools.partial(exec_sed_doc, exec_sed_task)
     return exec_sedml_docs_in_archive(sed_doc_executer, archive_filename, out_dir,
                                       apply_xml_model_changes=True,
-                                      return_results=return_results,
-                                      report_formats=report_formats,
-                                      plot_formats=plot_formats,
-                                      bundle_outputs=bundle_outputs,
-                                      keep_individual_outputs=keep_individual_outputs,
-                                      raise_exceptions=raise_exceptions)
+                                      config=config)
 
 
-def exec_sed_task(task, variables, log=None):
+def exec_sed_task(task, variables, log=None, config=None):
     ''' Execute a task and save its results
 
     Args:
        task (:obj:`Task`): task
        variables (:obj:`list` of :obj:`Variable`): variables that should be recorded
        log (:obj:`TaskLog`, optional): log for the task
+       config (:obj:`Config`, optional): BioSimulators common configuration
 
     Returns:
         :obj:`tuple`:
@@ -91,9 +78,10 @@ def exec_sed_task(task, variables, log=None):
             could not be recorded
         :obj:`NotImplementedError`: if the task is not of a supported type or involves an unsuported feature
     '''
-    config = get_config()
+    config = config or get_config()
 
-    log = log or TaskLog()
+    if config.LOG and not log:
+        log = TaskLog()
 
     model = task.model
     sim = task.simulation
@@ -125,7 +113,7 @@ def exec_sed_task(task, variables, log=None):
     # Load the algorithm specified by `simulation.algorithm`
     simulation = task.simulation
     algorithm_kisao_id = simulation.algorithm.kisao_id
-    algorithm_substitution_policy = get_algorithm_substitution_policy()
+    algorithm_substitution_policy = get_algorithm_substitution_policy(config=config)
     exec_kisao_id = get_preferred_substitute_algorithm_by_ids(
         algorithm_kisao_id, KISAO_ALGORITHM_MAP.keys(),
         substitution_policy=algorithm_substitution_policy)
@@ -237,11 +225,12 @@ def exec_sed_task(task, variables, log=None):
                 variable_results[variable.id] = dynamics[-(simulation.number_of_points + 1):]
 
     # log action
-    log.algorithm = exec_kisao_id
-    log.simulator_details = {
-        'method': solver.__module__ + '.' + solver.__name__,
-        'arguments': dict(**algorithm.solver_args, **algorithm_params),
-    }
+    if config.LOG:
+        log.algorithm = exec_kisao_id
+        log.simulator_details = {
+            'method': solver.__module__ + '.' + solver.__name__,
+            'arguments': dict(**algorithm.solver_args, **algorithm_params),
+        }
 
     # return results and log
     return variable_results, log

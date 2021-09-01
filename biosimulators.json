@@ -19,6 +19,10 @@
     },
     "operatingSystemType": "Linux"
   },
+  "pythonApi": {
+    "package": "biosimulators-gillespy2",
+    "module": "biosimulators_gillespy2"
+  },
   "authors": [
     {
       "firstName": "Brian",

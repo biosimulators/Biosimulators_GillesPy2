@@ -14,6 +14,12 @@ A simple web application and web service for using GillesPy2 to execute COMBINE/
 
 ## Installation
 
+### Dependencies
+
+* Python >= 3.7
+* pip
+* build-essential
+
 ### Install Python package
 ```
 pip install biosimulators-gillespy2

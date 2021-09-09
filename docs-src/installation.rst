@@ -6,7 +6,7 @@ BioSimulators-GillesPy2 is available as a command-line program and as a command-
 Command-line program
 --------------------
 
-After installing `Python <https://www.python.org/downloads/>`_ (>= 3.7) and `pip <https://pip.pypa.io/>`_, run the following command to install BioSimulators-GillesPy2:
+After installing `Python <https://www.python.org/downloads/>`_ (>= 3.7), `pip <https://pip.pypa.io/>`_, and build-essential run the following command to install BioSimulators-GillesPy2:
 
 .. code-block:: text
 

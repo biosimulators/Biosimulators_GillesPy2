@@ -14,7 +14,7 @@ from biosimulators_utils.log.data_model import CombineArchiveLog, TaskLog, Stand
 from biosimulators_utils.viz.data_model import VizFormat  # noqa: F401
 from biosimulators_utils.report.data_model import ReportFormat, VariableResults, SedDocumentResults  # noqa: F401
 from biosimulators_utils.sedml import validation
-from biosimulators_utils.sedml.data_model import (Task, ModelLanguage, UniformTimeCourseSimulation,  # noqa: F401
+from biosimulators_utils.sedml.data_model import (Task, ModelLanguage, ModelAttributeChange, UniformTimeCourseSimulation,  # noqa: F401
                                                   Variable, Symbol)
 from biosimulators_utils.sedml.exec import exec_sed_doc as base_exec_sed_doc
 from biosimulators_utils.simulator.utils import get_algorithm_substitution_policy
@@ -106,7 +106,7 @@ def exec_sed_task(task, variables, preprocessed_task=None, log=None, config=None
     Args:
         task (:obj:`Task`): task
         variables (:obj:`list` of :obj:`Variable`): variables that should be recorded
-        preprocessed_task (:obj:`object`, optional): preprocessed information about the task, including possible
+        preprocessed_task (:obj:`dict`, optional): preprocessed information about the task, including possible
             model changes and variables. This can be used to avoid repeatedly executing the same initialization
             for repeated calls to this method.
         log (:obj:`TaskLog`, optional): log for the task
@@ -131,18 +131,96 @@ def exec_sed_task(task, variables, preprocessed_task=None, log=None, config=None
     if preprocessed_task is None:
         preprocessed_task = preprocess_sed_task(task, variables, config=config)
 
-    model = task.model
+    sim = task.simulation
+
+    # get model
+    model = preprocessed_task['model']['model']
+
+    # modify model
+    raise_errors_warnings(validation.validate_model_change_types(task.model.changes, (ModelAttributeChange,)),
+                          error_summary='Changes for model `{}` are not supported.'.format(task.model.id))
+    change_target_model_obj_map = preprocessed_task['model']['change_target_model_obj_map']
+    for change in task.model.changes:
+        model_obj = change_target_model_obj_map[change.target]
+        new_value = float(change.new_value)
+        if isinstance(model_obj, gillespy2.core.parameter.Parameter):
+            model_obj.value = new_value
+        else:
+            model_obj.initial_value = new_value
+
+    # Validate that start time is 0 because this is the only option that GillesPy2 supports
+    if sim.initial_time < 0:
+        raise NotImplementedError(
+            'Negative initial simulation time {} is not supported. Initial time must be >= 0.'.format(sim.initial_time))
+
+    # set the simulation time span
+    number_of_points = (sim.output_end_time - sim.initial_time) / \
+        (sim.output_end_time - sim.output_start_time) * sim.number_of_points
+    if number_of_points != math.floor(number_of_points):
+        raise NotImplementedError('Time course must specify an integer number of time points')
+    number_of_points = int(number_of_points)
+    timespan = numpy.linspace(sim.initial_time, sim.output_end_time, number_of_points + 1)
+    model.timespan(timespan)
+
+    # Simulate the model from ``sim.start_time`` to ``sim.output_end_time``
+    # and record ``sim.number_of_points`` + 1 time points
+    solver = preprocessed_task['simulation']['solver']
+    solver_args = preprocessed_task['simulation']['solver_args']
+    results_dict = model.run(solver, **solver_args)[0]
+
+    # transform the results to an instance of :obj:`VariableResults`
+    variable_target_sbml_id_map = preprocessed_task['model']['variable_target_sbml_id_map']
+    variable_results = VariableResults()
+    parameters = model.get_all_parameters()
+    for variable in variables:
+        if variable.symbol:
+            variable_results[variable.id] = results_dict['time'][-(sim.number_of_points + 1):]
+
+        elif variable.target:
+            sbml_id = variable_target_sbml_id_map[variable.target]
+            dynamics = results_dict.get(sbml_id, None)
+            if dynamics is None:
+                variable_results[variable.id] = numpy.full((sim.number_of_points + 1,), parameters[sbml_id].value)
+            else:
+                variable_results[variable.id] = dynamics[-(sim.number_of_points + 1):]
+
+    # log action
+    if config.LOG:
+        log.algorithm = preprocessed_task['simulation']['algorithm_kisao_id']
+        log.simulator_details = {
+            'method': solver.__module__ + '.' + solver.__name__,
+            'arguments': solver_args,
+        }
+
+    # return results and log
+    return variable_results, log
+
+
+def preprocess_sed_task(task, variables, config=None):
+    """ Preprocess a SED task, including its possible model changes and variables. This is useful for avoiding
+    repeatedly initializing tasks on repeated calls of :obj:`exec_sed_task`.
+
+    Args:
+        task (:obj:`Task`): task
+        variables (:obj:`list` of :obj:`Variable`): variables that should be recorded
+        config (:obj:`Config`, optional): BioSimulators common configuration
+
+    Returns:
+        :obj:`dict`: preprocessed information about the task
+    """
+    config = config or get_config()
+
     sim = task.simulation
 
     if config.VALIDATE_SEDML:
         raise_errors_warnings(validation.validate_task(task),
                               error_summary='Task `{}` is invalid.'.format(task.id))
         raise_errors_warnings(validation.validate_model_language(task.model.language, ModelLanguage.SBML),
-                              error_summary='Language for model `{}` is not supported.'.format(model.id))
-        raise_errors_warnings(validation.validate_model_change_types(task.model.changes, ()),
-                              error_summary='Changes for model `{}` are not supported.'.format(model.id))
+                              error_summary='Language for model `{}` is not supported.'.format(task.model.id))
+        raise_errors_warnings(validation.validate_model_change_types(task.model.changes, (ModelAttributeChange,)),
+                              error_summary='Changes for model `{}` are not supported.'.format(task.model.id))
         raise_errors_warnings(*validation.validate_model_changes(task.model),
-                              error_summary='Changes for model `{}` are invalid.'.format(model.id))
+                              error_summary='Changes for model `{}` are invalid.'.format(task.model.id))
         raise_errors_warnings(validation.validate_simulation_type(sim, (UniformTimeCourseSimulation, )),
                               error_summary='{} `{}` is not supported.'.format(sim.__class__.__name__, sim.id))
         raise_errors_warnings(*validation.validate_simulation(sim),
@@ -151,7 +229,8 @@ def exec_sed_task(task, variables, preprocessed_task=None, log=None, config=None
                               error_summary='Data generator variables for task `{}` are invalid.'.format(task.id))
 
     model_etree = lxml.etree.parse(task.model.source)
-    target_x_paths_ids = validation.validate_target_xpaths(variables, model_etree, attr='id')
+    change_target_sbml_id_map = validation.validate_target_xpaths(task.model.changes, model_etree, attr='id')
+    variable_target_sbml_id_map = validation.validate_target_xpaths(variables, model_etree, attr='id')
 
     # Read the SBML-encoded model located at `task.model.source`
     model, errors = gillespy2.import_SBML(task.model.source)
@@ -159,11 +238,33 @@ def exec_sed_task(task, variables, preprocessed_task=None, log=None, config=None
         raise ValueError('Model at {} could not be imported:\n  - {}'.format(
             task.model.source, '\n  - '.join(message for message, code in errors)))
 
+    # preprocess model changes
+    parameters = model.get_all_parameters()
+    species = model.get_all_species()
+    change_target_model_obj_map = {}
+    invalid_changes = []
+    for change in task.model.changes:
+        sbml_id = change_target_sbml_id_map[change.target]
+        model_obj = parameters.get(sbml_id, species.get(sbml_id, None))
+        if model_obj is None:
+            invalid_changes.append(change.target)
+        else:
+            change_target_model_obj_map[change.target] = model_obj
+
+    if invalid_changes:
+        raise ValueError(''.join([
+            'The following model targets cannot be changed:\n  - {}\n\n'.format(
+                '\n  - '.join(sorted(invalid_changes)),
+            ),
+            'Model change targets must have one of the following SBML ids:\n  - {}'.format(
+                '\n  - '.join(sorted(list(parameters.keys()) + list(species.keys()))),
+            ),
+        ]))
+
     # Load the algorithm specified by `sim.algorithm`
-    algorithm_kisao_id = sim.algorithm.kisao_id
     algorithm_substitution_policy = get_algorithm_substitution_policy(config=config)
     exec_kisao_id = get_preferred_substitute_algorithm_by_ids(
-        algorithm_kisao_id, KISAO_ALGORITHM_MAP.keys(),
+        sim.algorithm.kisao_id, KISAO_ALGORITHM_MAP.keys(),
         substitution_policy=algorithm_substitution_policy)
     algorithm = KISAO_ALGORITHM_MAP[exec_kisao_id]
 
@@ -173,7 +274,7 @@ def exec_sed_task(task, variables, preprocessed_task=None, log=None, config=None
 
     # Apply the algorithm parameter changes specified by `sim.algorithm.parameter_changes`
     algorithm_params = {}
-    if exec_kisao_id == algorithm_kisao_id:
+    if exec_kisao_id == sim.algorithm.kisao_id:
         for change in sim.algorithm.changes:
             parameter = algorithm.parameters.get(change.kisao_id, None)
             if parameter:
@@ -208,22 +309,8 @@ def exec_sed_task(task, variables, preprocessed_task=None, log=None, config=None
                     ])
                     warn(msg, BioSimulatorsWarning)
 
-    # Validate that start time is 0 because this is the only option that GillesPy2 supports
-    if sim.initial_time < 0:
-        raise NotImplementedError(
-            'Negative initial simulation time {} is not supported. Initial time must be >= 0.'.format(sim.initial_time))
-
-    # set the simulation time span
-    number_of_points = (sim.output_end_time - sim.initial_time) / \
-        (sim.output_end_time - sim.output_start_time) * sim.number_of_points
-    if number_of_points != math.floor(number_of_points):
-        raise NotImplementedError('Time course must specify an integer number of time points')
-    number_of_points = int(number_of_points)
-    timespan = numpy.linspace(sim.initial_time, sim.output_end_time, number_of_points + 1)
-    model.timespan(timespan)
-
     # determine allowed variable targets
-    predicted_ids = list(model.get_all_species().keys()) + list(model.get_all_parameters().keys())
+    predicted_ids = list(species.keys()) + list(parameters.keys())
     unpredicted_symbols = set()
     unpredicted_targets = set()
     for variable in variables:
@@ -232,7 +319,7 @@ def exec_sed_task(task, variables, preprocessed_task=None, log=None, config=None
                 unpredicted_symbols.add(variable.symbol)
 
         else:
-            if target_x_paths_ids[variable.target] not in predicted_ids:
+            if variable_target_sbml_id_map[variable.target] not in predicted_ids:
                 unpredicted_targets.add(variable.target)
 
     if unpredicted_symbols:
@@ -248,52 +335,21 @@ def exec_sed_task(task, variables, preprocessed_task=None, log=None, config=None
             'The following variable targets could not be recorded:\n  - {}\n\n'.format(
                 '\n  - '.join(sorted(unpredicted_targets)),
             ),
-            'Targets must have one of the following ids:\n  - {}'.format(
+            'Targets must have one of the following SBML ids:\n  - {}'.format(
                 '\n  - '.join(sorted(predicted_ids)),
             ),
         ]))
 
-    # Simulate the model from ``sim.start_time`` to ``sim.output_end_time``
-    # and record ``sim.number_of_points`` + 1 time points
-    results_dict = model.run(solver, **algorithm.solver_args, **algorithm_params)[0]
-
-    # transform the results to an instance of :obj:`VariableResults`
-    variable_results = VariableResults()
-    parameters = model.get_all_parameters()
-    for variable in variables:
-        if variable.symbol:
-            variable_results[variable.id] = results_dict['time'][-(sim.number_of_points + 1):]
-
-        elif variable.target:
-            sbml_id = target_x_paths_ids[variable.target]
-            dynamics = results_dict.get(sbml_id, None)
-            if dynamics is None:
-                variable_results[variable.id] = numpy.full((sim.number_of_points + 1,), parameters[sbml_id].value)
-            else:
-                variable_results[variable.id] = dynamics[-(sim.number_of_points + 1):]
-
-    # log action
-    if config.LOG:
-        log.algorithm = exec_kisao_id
-        log.simulator_details = {
-            'method': solver.__module__ + '.' + solver.__name__,
-            'arguments': dict(**algorithm.solver_args, **algorithm_params),
+    # return preprocessed information about the task
+    return {
+        'model': {
+            'model': model,
+            'change_target_model_obj_map': change_target_model_obj_map,
+            'variable_target_sbml_id_map': variable_target_sbml_id_map,
+        },
+        'simulation': {
+            'algorithm_kisao_id': exec_kisao_id,
+            'solver': solver,
+            'solver_args': dict(**algorithm.solver_args, **algorithm_params),
         }
-
-    # return results and log
-    return variable_results, log
-
-
-def preprocess_sed_task(task, variables, config=None):
-    """ Preprocess a SED task, including its possible model changes and variables. This is useful for avoiding
-    repeatedly initializing tasks on repeated calls of :obj:`exec_sed_task`.
-
-    Args:
-        task (:obj:`Task`): task
-        variables (:obj:`list` of :obj:`Variable`): variables that should be recorded
-        config (:obj:`Config`, optional): BioSimulators common configuration
-
-    Returns:
-        :obj:`object`: preprocessed information about the task
-    """
-    pass
+    }

@@ -249,6 +249,40 @@
           "supportedFeatures": []
         }
       ],
+      "modelChangePatterns": [
+        {
+          "name": "Change component attributes",
+          "types": ["SedAttributeModelChange", "SedComputeAttributeChangeModelChange", "SedSetValueAttributeModelChange"],
+          "target": {
+            "value": "//*/@*",
+            "grammar": "XPath"
+          }
+        },
+        {
+          "name": "Add components",
+          "types": ["SedAddXmlModelChange"],
+          "target": {
+            "value": "//*",
+            "grammar": "XPath"
+          }
+        },
+        {
+          "name": "Remove components",
+          "types": ["SedRemoveXmlModelChange"],
+          "target": {
+            "value": "//*",
+            "grammar": "XPath"
+          }
+        },
+        {
+          "name": "Change components",
+          "types": ["SedChangeXmlModelChange"],
+          "target": {
+            "value": "//*",
+            "grammar": "XPath"
+          }
+        }        
+      ],
       "simulationFormats": [
         {
           "namespace": "EDAM",
@@ -257,6 +291,7 @@
           "supportedFeatures": []
         }
       ],
+      "simulationTypes": ["SedUniformTimeCourseSimulation"],
       "archiveFormats": [
         {
           "namespace": "EDAM",
@@ -441,24 +476,24 @@
           ]
         }
       ],
-      "dependentDimensions": [
+      "outputDimensions": [
         {
           "namespace": "SIO",
           "id": "SIO_000418"
         }
       ],
-      "dependentVariableTargetPatterns": [
+      "outputVariablePatterns": [
         {
-          "variables": "species concentrations",
-          "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species"
+          "name": "species concentrations",
+          "target": {"value": "/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species", "grammar": "XPath"}
         },
         {
-          "variables": "parameter values",
-          "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfParameters/sbml:parameter"
+          "name": "parameter values",
+          "target": {"value": "/sbml:sbml/sbml:model/sbml:listOfParameters/sbml:parameter", "grammar": "XPath"}
         },
         {
-          "variables": "compartment sizes",
-          "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfCompartments/sbml:compartment"
+          "name": "compartment sizes",
+          "target": {"value": "/sbml:sbml/sbml:model/sbml:listOfCompartments/sbml:compartment", "grammar": "XPath"}
         }
       ],
       "availableSoftwareInterfaceTypes": [
@@ -498,6 +533,40 @@
           "supportedFeatures": []
         }
       ],
+      "modelChangePatterns": [
+        {
+          "name": "Change component attributes",
+          "types": ["SedAttributeModelChange", "SedComputeAttributeChangeModelChange", "SedSetValueAttributeModelChange"],
+          "target": {
+            "value": "//*/@*",
+            "grammar": "XPath"
+          }
+        },
+        {
+          "name": "Add components",
+          "types": ["SedAddXmlModelChange"],
+          "target": {
+            "value": "//*",
+            "grammar": "XPath"
+          }
+        },
+        {
+          "name": "Remove components",
+          "types": ["SedRemoveXmlModelChange"],
+          "target": {
+            "value": "//*",
+            "grammar": "XPath"
+          }
+        },
+        {
+          "name": "Change components",
+          "types": ["SedChangeXmlModelChange"],
+          "target": {
+            "value": "//*",
+            "grammar": "XPath"
+          }
+        }        
+      ],
       "simulationFormats": [
         {
           "namespace": "EDAM",
@@ -506,6 +575,7 @@
           "supportedFeatures": []
         }
       ],
+      "simulationTypes": ["SedUniformTimeCourseSimulation"],
       "archiveFormats": [
         {
           "namespace": "EDAM",
@@ -678,24 +748,24 @@
           ]
         }
       ],
-      "dependentDimensions": [
+      "outputDimensions": [
         {
           "namespace": "SIO",
           "id": "SIO_000418"
         }
       ],
-      "dependentVariableTargetPatterns": [
+      "outputVariablePatterns": [
         {
-          "variables": "species concentrations",
-          "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species"
+          "name": "species concentrations",
+          "target": {"value": "/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species", "grammar": "XPath"}
         },
         {
-          "variables": "parameter values",
-          "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfParameters/sbml:parameter"
+          "name": "parameter values",
+          "target": {"value": "/sbml:sbml/sbml:model/sbml:listOfParameters/sbml:parameter", "grammar": "XPath"}
         },
         {
-          "variables": "compartment sizes",
-          "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfCompartments/sbml:compartment"
+          "name": "compartment sizes",
+          "target": {"value": "/sbml:sbml/sbml:model/sbml:listOfCompartments/sbml:compartment", "grammar": "XPath"}
         }
       ],
       "availableSoftwareInterfaceTypes": [
@@ -735,6 +805,40 @@
           "supportedFeatures": []
         }
       ],
+      "modelChangePatterns": [
+        {
+          "name": "Change component attributes",
+          "types": ["SedAttributeModelChange", "SedComputeAttributeChangeModelChange", "SedSetValueAttributeModelChange"],
+          "target": {
+            "value": "//*/@*",
+            "grammar": "XPath"
+          }
+        },
+        {
+          "name": "Add components",
+          "types": ["SedAddXmlModelChange"],
+          "target": {
+            "value": "//*",
+            "grammar": "XPath"
+          }
+        },
+        {
+          "name": "Remove components",
+          "types": ["SedRemoveXmlModelChange"],
+          "target": {
+            "value": "//*",
+            "grammar": "XPath"
+          }
+        },
+        {
+          "name": "Change components",
+          "types": ["SedChangeXmlModelChange"],
+          "target": {
+            "value": "//*",
+            "grammar": "XPath"
+          }
+        }        
+      ],
       "simulationFormats": [
         {
           "namespace": "EDAM",
@@ -743,6 +847,7 @@
           "supportedFeatures": []
         }
       ],
+      "simulationTypes": ["SedUniformTimeCourseSimulation"],
       "archiveFormats": [
         {
           "namespace": "EDAM",
@@ -915,24 +1020,24 @@
           ]
         }
       ],
-      "dependentDimensions": [
+      "outputDimensions": [
         {
           "namespace": "SIO",
           "id": "SIO_000418"
         }
       ],
-      "dependentVariableTargetPatterns": [
+      "outputVariablePatterns": [
         {
-          "variables": "species concentrations",
-          "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species"
+          "name": "species concentrations",
+          "target": {"value": "/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species", "grammar": "XPath"}
         },
         {
-          "variables": "parameter values",
-          "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfParameters/sbml:parameter"
+          "name": "parameter values",
+          "target": {"value": "/sbml:sbml/sbml:model/sbml:listOfParameters/sbml:parameter", "grammar": "XPath"}
         },
         {
-          "variables": "compartment sizes",
-          "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfCompartments/sbml:compartment"
+          "name": "compartment sizes",
+          "target": {"value": "/sbml:sbml/sbml:model/sbml:listOfCompartments/sbml:compartment", "grammar": "XPath"}
         }
       ],
       "availableSoftwareInterfaceTypes": [
@@ -972,6 +1077,40 @@
           "supportedFeatures": []
         }
       ],
+      "modelChangePatterns": [
+        {
+          "name": "Change component attributes",
+          "types": ["SedAttributeModelChange", "SedComputeAttributeChangeModelChange", "SedSetValueAttributeModelChange"],
+          "target": {
+            "value": "//*/@*",
+            "grammar": "XPath"
+          }
+        },
+        {
+          "name": "Add components",
+          "types": ["SedAddXmlModelChange"],
+          "target": {
+            "value": "//*",
+            "grammar": "XPath"
+          }
+        },
+        {
+          "name": "Remove components",
+          "types": ["SedRemoveXmlModelChange"],
+          "target": {
+            "value": "//*",
+            "grammar": "XPath"
+          }
+        },
+        {
+          "name": "Change components",
+          "types": ["SedChangeXmlModelChange"],
+          "target": {
+            "value": "//*",
+            "grammar": "XPath"
+          }
+        }        
+      ],
       "simulationFormats": [
         {
           "namespace": "EDAM",
@@ -980,6 +1119,7 @@
           "supportedFeatures": []
         }
       ],
+      "simulationTypes": ["SedUniformTimeCourseSimulation"],
       "archiveFormats": [
         {
           "namespace": "EDAM",
@@ -1024,24 +1164,24 @@
           ]
         }
       ],
-      "dependentDimensions": [
+      "outputDimensions": [
         {
           "namespace": "SIO",
           "id": "SIO_000418"
         }
       ],
-      "dependentVariableTargetPatterns": [
+      "outputVariablePatterns": [
         {
-          "variables": "species counts",
-          "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species"
+          "name": "species counts",
+          "target": {"value": "/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species", "grammar": "XPath"}
         },
         {
-          "variables": "parameter values",
-          "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfParameters/sbml:parameter"
+          "name": "parameter values",
+          "target": {"value": "/sbml:sbml/sbml:model/sbml:listOfParameters/sbml:parameter", "grammar": "XPath"}
         },
         {
-          "variables": "compartment sizes",
-          "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfCompartments/sbml:compartment"
+          "name": "compartment sizes",
+          "target": {"value": "/sbml:sbml/sbml:model/sbml:listOfCompartments/sbml:compartment", "grammar": "XPath"}
         }
       ],
       "availableSoftwareInterfaceTypes": [
@@ -1073,6 +1213,40 @@
           "supportedFeatures": []
         }
       ],
+      "modelChangePatterns": [
+        {
+          "name": "Change component attributes",
+          "types": ["SedAttributeModelChange", "SedComputeAttributeChangeModelChange", "SedSetValueAttributeModelChange"],
+          "target": {
+            "value": "//*/@*",
+            "grammar": "XPath"
+          }
+        },
+        {
+          "name": "Add components",
+          "types": ["SedAddXmlModelChange"],
+          "target": {
+            "value": "//*",
+            "grammar": "XPath"
+          }
+        },
+        {
+          "name": "Remove components",
+          "types": ["SedRemoveXmlModelChange"],
+          "target": {
+            "value": "//*",
+            "grammar": "XPath"
+          }
+        },
+        {
+          "name": "Change components",
+          "types": ["SedChangeXmlModelChange"],
+          "target": {
+            "value": "//*",
+            "grammar": "XPath"
+          }
+        }        
+      ],
       "simulationFormats": [
         {
           "namespace": "EDAM",
@@ -1081,6 +1255,7 @@
           "supportedFeatures": []
         }
       ],
+      "simulationTypes": ["SedUniformTimeCourseSimulation"],
       "archiveFormats": [
         {
           "namespace": "EDAM",
@@ -1141,24 +1316,24 @@
           ]
         }
       ],
-      "dependentDimensions": [
+      "outputDimensions": [
         {
           "namespace": "SIO",
           "id": "SIO_000418"
         }
       ],
-      "dependentVariableTargetPatterns": [
+      "outputVariablePatterns": [
         {
-          "variables": "species counts",
-          "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species"
+          "name": "species counts",
+          "target": {"value": "/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species", "grammar": "XPath"}
         },
         {
-          "variables": "parameter values",
-          "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfParameters/sbml:parameter"
+          "name": "parameter values",
+          "target": {"value": "/sbml:sbml/sbml:model/sbml:listOfParameters/sbml:parameter", "grammar": "XPath"}
         },
         {
-          "variables": "compartment sizes",
-          "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfCompartments/sbml:compartment"
+          "name": "compartment sizes",
+          "target": {"value": "/sbml:sbml/sbml:model/sbml:listOfCompartments/sbml:compartment", "grammar": "XPath"}
         }
       ],
       "availableSoftwareInterfaceTypes": [
@@ -1190,6 +1365,40 @@
           "supportedFeatures": []
         }
       ],
+      "modelChangePatterns": [
+        {
+          "name": "Change component attributes",
+          "types": ["SedAttributeModelChange", "SedComputeAttributeChangeModelChange", "SedSetValueAttributeModelChange"],
+          "target": {
+            "value": "//*/@*",
+            "grammar": "XPath"
+          }
+        },
+        {
+          "name": "Add components",
+          "types": ["SedAddXmlModelChange"],
+          "target": {
+            "value": "//*",
+            "grammar": "XPath"
+          }
+        },
+        {
+          "name": "Remove components",
+          "types": ["SedRemoveXmlModelChange"],
+          "target": {
+            "value": "//*",
+            "grammar": "XPath"
+          }
+        },
+        {
+          "name": "Change components",
+          "types": ["SedChangeXmlModelChange"],
+          "target": {
+            "value": "//*",
+            "grammar": "XPath"
+          }
+        }        
+      ],
       "simulationFormats": [
         {
           "namespace": "EDAM",
@@ -1198,6 +1407,7 @@
           "supportedFeatures": []
         }
       ],
+      "simulationTypes": ["SedUniformTimeCourseSimulation"],
       "archiveFormats": [
         {
           "namespace": "EDAM",
@@ -1263,24 +1473,24 @@
           ]
         }
       ],
-      "dependentDimensions": [
+      "outputDimensions": [
         {
           "namespace": "SIO",
           "id": "SIO_000418"
         }
       ],
-      "dependentVariableTargetPatterns": [
+      "outputVariablePatterns": [
         {
-          "variables": "species counts",
-          "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species"
+          "name": "species counts",
+          "target": {"value": "/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species", "grammar": "XPath"}
         },
         {
-          "variables": "parameter values",
-          "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfParameters/sbml:parameter"
+          "name": "parameter values",
+          "target": {"value": "/sbml:sbml/sbml:model/sbml:listOfParameters/sbml:parameter", "grammar": "XPath"}
         },
         {
-          "variables": "compartment sizes",
-          "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfCompartments/sbml:compartment"
+          "name": "compartment sizes",
+          "target": {"value": "/sbml:sbml/sbml:model/sbml:listOfCompartments/sbml:compartment", "grammar": "XPath"}
         }
       ],
       "availableSoftwareInterfaceTypes": [
@@ -1312,6 +1522,40 @@
           "supportedFeatures": []
         }
       ],
+      "modelChangePatterns": [
+        {
+          "name": "Change component attributes",
+          "types": ["SedAttributeModelChange", "SedComputeAttributeChangeModelChange", "SedSetValueAttributeModelChange"],
+          "target": {
+            "value": "//*/@*",
+            "grammar": "XPath"
+          }
+        },
+        {
+          "name": "Add components",
+          "types": ["SedAddXmlModelChange"],
+          "target": {
+            "value": "//*",
+            "grammar": "XPath"
+          }
+        },
+        {
+          "name": "Remove components",
+          "types": ["SedRemoveXmlModelChange"],
+          "target": {
+            "value": "//*",
+            "grammar": "XPath"
+          }
+        },
+        {
+          "name": "Change components",
+          "types": ["SedChangeXmlModelChange"],
+          "target": {
+            "value": "//*",
+            "grammar": "XPath"
+          }
+        }        
+      ],
       "simulationFormats": [
         {
           "namespace": "EDAM",
@@ -1320,6 +1564,7 @@
           "supportedFeatures": []
         }
       ],
+      "simulationTypes": ["SedUniformTimeCourseSimulation"],
       "archiveFormats": [
         {
           "namespace": "EDAM",
@@ -1527,24 +1772,24 @@
           ]
         }
       ],
-      "dependentDimensions": [
+      "outputDimensions": [
         {
           "namespace": "SIO",
           "id": "SIO_000418"
         }
       ],
-      "dependentVariableTargetPatterns": [
+      "outputVariablePatterns": [
         {
-          "variables": "species concentrations",
-          "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species"
+          "name": "species concentrations",
+          "target": {"value": "/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species", "grammar": "XPath"}
         },
         {
-          "variables": "parameter values",
-          "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfParameters/sbml:parameter"
+          "name": "parameter values",
+          "target": {"value": "/sbml:sbml/sbml:model/sbml:listOfParameters/sbml:parameter", "grammar": "XPath"}
         },
         {
-          "variables": "compartment sizes",
-          "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfCompartments/sbml:compartment"
+          "name": "compartment sizes",
+          "target": {"value": "/sbml:sbml/sbml:model/sbml:listOfCompartments/sbml:compartment", "grammar": "XPath"}
         }
       ],
       "availableSoftwareInterfaceTypes": [
@@ -1584,6 +1829,40 @@
           "supportedFeatures": []
         }
       ],
+      "modelChangePatterns": [
+        {
+          "name": "Change component attributes",
+          "types": ["SedAttributeModelChange", "SedComputeAttributeChangeModelChange", "SedSetValueAttributeModelChange"],
+          "target": {
+            "value": "//*/@*",
+            "grammar": "XPath"
+          }
+        },
+        {
+          "name": "Add components",
+          "types": ["SedAddXmlModelChange"],
+          "target": {
+            "value": "//*",
+            "grammar": "XPath"
+          }
+        },
+        {
+          "name": "Remove components",
+          "types": ["SedRemoveXmlModelChange"],
+          "target": {
+            "value": "//*",
+            "grammar": "XPath"
+          }
+        },
+        {
+          "name": "Change components",
+          "types": ["SedChangeXmlModelChange"],
+          "target": {
+            "value": "//*",
+            "grammar": "XPath"
+          }
+        }        
+      ],
       "simulationFormats": [
         {
           "namespace": "EDAM",
@@ -1592,6 +1871,7 @@
           "supportedFeatures": []
         }
       ],
+      "simulationTypes": ["SedUniformTimeCourseSimulation"],
       "archiveFormats": [
         {
           "namespace": "EDAM",
@@ -1799,24 +2079,24 @@
           ]
         }
       ],
-      "dependentDimensions": [
+      "outputDimensions": [
         {
           "namespace": "SIO",
           "id": "SIO_000418"
         }
       ],
-      "dependentVariableTargetPatterns": [
+      "outputVariablePatterns": [
         {
-          "variables": "species concentrations",
-          "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species"
+          "name": "species concentrations",
+          "target": {"value": "/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species", "grammar": "XPath"}
         },
         {
-          "variables": "parameter values",
-          "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfParameters/sbml:parameter"
+          "name": "parameter values",
+          "target": {"value": "/sbml:sbml/sbml:model/sbml:listOfParameters/sbml:parameter", "grammar": "XPath"}
         },
         {
-          "variables": "compartment sizes",
-          "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfCompartments/sbml:compartment"
+          "name": "compartment sizes",
+          "target": {"value": "/sbml:sbml/sbml:model/sbml:listOfCompartments/sbml:compartment", "grammar": "XPath"}
         }
       ],
       "availableSoftwareInterfaceTypes": [

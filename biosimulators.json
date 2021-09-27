@@ -19,6 +19,12 @@
     },
     "operatingSystemType": "Linux"
   },
+  "cli": {
+    "packageRepository": "PyPI",
+    "package": "biosimulators-gillespy2",
+    "command": "biosimulators-gillespy2",
+    "installationInstructions": "https://docs.biosimulators.org/Biosimulators_GillesPy2/installation.html"
+  },
   "pythonApi": {
     "package": "biosimulators-gillespy2",
     "module": "biosimulators_gillespy2",

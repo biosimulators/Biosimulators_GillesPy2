@@ -194,7 +194,7 @@ KISAO_ALGORITHM_MAP = collections.OrderedDict([
         'KISAO_0000541': AlgorithmParameter("Beta parameter for stabilised step size control", 'integrator_options.beta', float, 0.),
     })),
 
-    ('KISAO_0000436', Algorithm("dop835", gillespy2.ODESolver, integrator="dop835", parameters={
+    ('KISAO_0000436', Algorithm("dop853", gillespy2.ODESolver, integrator="dop853", parameters={
         'KISAO_0000211': AlgorithmParameter("absolute tolerance", 'integrator_options.atol', float, 1e-12),
         'KISAO_0000209': AlgorithmParameter("relative tolerance", 'integrator_options.rtol', float, 1e-6),
         'KISAO_0000415': AlgorithmParameter("maximum number of steps", 'integrator_options.nsteps', int, 500),

@@ -7,7 +7,11 @@ BioSimulators-GillesPy2 was developed with help from the following people:
 <!-- markdownlint-disable -->
 <table>
   <tr>
-    <td align="center"><a href="https://www.karrlab.org"><img src="https://avatars.githubusercontent.com/u/2848297?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Jonathan Karr</b></sub></a><br /><a href="https://github.com/biosimulators/Biosimulators_utils/commits?author=jonrkarr" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/briandrawert"><img src="https://avatars.githubusercontent.com/u/1413538?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Brian Drawert</b></sub></a><br /><a href="#tool-briandrawert" title="Tools">🔧</a></td>
+    <td align="center"><a href="https://github.com/ethangreen-dev"><img src="https://avatars.githubusercontent.com/u/70916930?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Ethan Green</b></sub></a><br /><a href="#tool-ethangreen-dev" title="Tools">🔧</a></td>
+    <td align="center"><a href="https://www.karrlab.org"><img src="https://avatars.githubusercontent.com/u/2848297?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Jonathan Karr</b></sub></a><br /><a href="https://github.com/biosimulators/Biosimulators_GillesPy2/commits?author=jonrkarr" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/jtcooper10"><img src="https://avatars.githubusercontent.com/u/42880781?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Joshua Cooper</b></sub></a><br /><a href="#tool-jtcooper10" title="Tools">🔧</a></td>
+    <td align="center"><a href="https://github.com/seanebum"><img src="https://avatars.githubusercontent.com/u/22843486?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Sean Matthew</b></sub></a><br /><a href="#tool-seanebum" title="Tools">🔧</a></td>
   </tr>
 </table>
 

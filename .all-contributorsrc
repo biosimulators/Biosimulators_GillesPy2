@@ -13,12 +13,49 @@
       "contributions": [
         "code"
       ]
-    } 
+    },
+    {
+      "login": "briandrawert",
+      "name": "Brian Drawert",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1413538?v=4",
+      "profile": "https://github.com/briandrawert",
+      "contributions": [
+        "tool"
+      ]
+    },
+    {
+      "login": "jtcooper10",
+      "name": "Joshua Cooper",
+      "avatar_url": "https://avatars.githubusercontent.com/u/42880781?v=4",
+      "profile": "https://github.com/jtcooper10",
+      "contributions": [
+        "tool"
+      ]
+    },
+    {
+      "login": "seanebum",
+      "name": "Sean Matthew",
+      "avatar_url": "https://avatars.githubusercontent.com/u/22843486?v=4",
+      "profile": "https://github.com/seanebum",
+      "contributions": [
+        "tool"
+      ]
+    },
+    {
+      "login": "ethangreen-dev",
+      "name": "Ethan Green",
+      "avatar_url": "https://avatars.githubusercontent.com/u/70916930?v=4",
+      "profile": "https://github.com/ethangreen-dev",
+      "contributions": [
+        "tool"
+      ]
+    }
   ],
   "contributorsPerLine": 7,
   "projectName": "Biosimulators_GillesPy2",
   "projectOwner": "biosimulators",
   "repoType": "github",
   "repoHost": "https://github.com",
-  "skipCi": true
+  "skipCi": true,
+  "commitConvention": "none"
 }

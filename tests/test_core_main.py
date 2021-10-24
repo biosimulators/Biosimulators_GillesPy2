@@ -506,8 +506,11 @@ class TestCase(unittest.TestCase):
         self._assert_combine_archive_outputs(doc, out_dir)
 
     def test_exec_sedml_docs_in_combine_archive_with_all_algorithms(self):
-        for alg in gen_algorithms_from_specs(os.path.join(os.path.dirname(__file__), '..', 'biosimulators.json')).values():
+        algorithms = gen_algorithms_from_specs(os.path.join(os.path.dirname(__file__), '..', 'biosimulators.json')).values()
+        for i_alg, alg in enumerate(algorithms):
             alg_props = KISAO_ALGORITHM_MAP[alg.kisao_id]
+            print('Testing algorithm {} of {}: {} ({})'.format(i_alg + 1, len(algorithms), alg_props.name, alg.kisao_id))
+
             alg.changes = []
             for param_kisao_id, param_props in alg_props.parameters.items():
 

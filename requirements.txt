@@ -1,5 +1,5 @@
 biosimulators_utils[logging] >= 0.1.151
-gillespy2 >= 1.6.0
+gillespy2 >= 1.6.0, <= 1.6.6 # 1.6.7 introduces bug
 kisao
 lxml
 numpy
